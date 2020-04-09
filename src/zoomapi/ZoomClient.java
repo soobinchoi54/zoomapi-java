@@ -1,6 +1,6 @@
 package zoomapi;
 
-import zoomapi.util.ApiClient;
+import zoomapi.utils.ApiClient;
 
 public class ZoomClient extends ApiClient {
 }

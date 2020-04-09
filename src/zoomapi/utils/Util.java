@@ -1,4 +1,4 @@
-package zoomapi.util;
+package zoomapi.utils;
 
 import java.util.Date;
 
