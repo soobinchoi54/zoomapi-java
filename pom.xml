@@ -13,5 +13,14 @@
         <maven.compiler.target>1.13</maven.compiler.target>
     </properties>
 
+    <dependencies>
+        <!-- ... -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20160810</version>
+        </dependency>
+        <!-- ... -->
+    </dependencies>
     
 </project>
