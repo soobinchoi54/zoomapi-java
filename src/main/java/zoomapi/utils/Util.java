@@ -34,15 +34,15 @@ public class Util {
         return null;
     }
 
-    public static ? generateJwt(String key, String secret){
-
-    }
-
-    public static ? httpReceiver(String port){
-
-    }
-
-    public static ? getOauthToken(String cid, String client_secret, String port, String redirect_url, String browser_path){
-
-    }
+//    public static ? generateJwt(String key, String secret){
+//
+//    }
+//
+//    public static ? httpReceiver(String port){
+//
+//    }
+//
+//    public static ? getOauthToken(String cid, String client_secret, String port, String redirect_url, String browser_path){
+//
+//    }
 }
