@@ -12,23 +12,21 @@ import org.json.JSONObject;
 
 
 public class ApiClient{
-    private String base_uri = null;
-    private int timeout = 15;
-    private Map<String, Object> config = new HashMap<>();
-    public ApiClient(String ...kwargs){
+    // Zoom Api
+    protected String base_uri = null;
+    protected int timeout = 15;
+    protected Map<String, String> config = new HashMap<>();
 
-    }
-
-    public ApiClient(String base_uri, int timeout, String ...kwargs){
+    protected ApiClient(String base_uri, int timeout, String ...kwargs){
         this.base_uri = base_uri;
         this.timeout = timeout;
     }
 
-    public int getTimeout(){
+    protected int getTimeout(){
         return timeout;
     }
 
-    public void setTimeout(int val){
+    protected void setTimeout(int val){
         try{
             val = (int) val;
         }catch(Exception e){
@@ -37,24 +35,24 @@ public class ApiClient{
         this.timeout = val;
     }
 
-    public String getBaseUri(){
+    protected String getBaseUri(){
         return base_uri;
     }
 
-    public void setBaseUri(String val){
+    protected void setBaseUri(String val){
         if(val != null && val.endsWith("/")){
             val = val.substring(0, val.length()-1);
         }
         this.base_uri = val;
     }
 
-    public String urlFor(String end_point){
+    protected String urlFor(String end_point){
         if(!end_point.startsWith("/")) end_point = String.format("/%s", end_point);
         if(end_point.endsWith("/")) end_point = end_point.substring(0, end_point.length()-1);
         return String.format("%1$s%2$s", base_uri, end_point);
     }
 
-    public JSONObject getRequest(String end_point, Map<String, String> params) throws IOException {
+    protected JSONObject getRequest(String end_point, Map<String, String> params) throws IOException {
         URL url_for_request = new URL(urlFor(end_point));
         HttpURLConnection conn = (HttpURLConnection) url_for_request.openConnection();
         conn.setRequestMethod("GET");
@@ -77,19 +75,19 @@ public class ApiClient{
         return response;
     }
 
-    public JSONObject postRequest(){
+    protected JSONObject postRequest(){
         return null;
     }
 
-    public JSONObject patchRequest(){
+    protected JSONObject patchRequest(){
         return null;
     }
 
-    public JSONObject deleteRequest(){
+    protected JSONObject deleteRequest(){
         return null;
     }
 
-    public JSONObject putRequest(){
+    protected JSONObject putRequest(){
         return null;
     }
 }

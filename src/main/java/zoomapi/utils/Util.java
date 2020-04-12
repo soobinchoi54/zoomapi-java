@@ -15,20 +15,20 @@ public class Util {
         return val instanceof String;
     }
 
-    public static boolean requireKeys(String d, String ...keys){
-        for(String k:keys){
-            if (!d.contains(k))
-                throw new IllegalArgumentException(String.format("%s must be set", k));
+    public static boolean requireKeys(String d, Map<String, String> keys){
+        for(String key: keys.keySet()){
+            if (!d.contains(key))
+                throw new IllegalArgumentException(String.format("%s must be set", key));
         }
         return true;
     }
 
-    public static boolean requireKeys(boolean allow_null, String d, String... keys){
-        for(String k:keys){
-            if (!d.contains(k))
-                throw new IllegalArgumentException(String.format("%s must be set", k));
-            if (!allow_null && k==null)
-                throw new IllegalArgumentException(String.format("%s cannot be null", k));
+    public static boolean requireKeys(String d, Map<String, String> keys, boolean allow_null){
+        for(String key: keys.keySet()){
+            if (!d.contains(key))
+                throw new IllegalArgumentException(String.format("%s must be set", key));
+            if (!allow_null && key==null)
+                throw new IllegalArgumentException(String.format("%s cannot be null", key));
         }
         return true;
     }
