@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.net.URL;
 import java.util.Properties;
 
-public class botm1 extends OauthZoomClient {
+public class botm1{
 
     String client_id;
     String client_secret;
