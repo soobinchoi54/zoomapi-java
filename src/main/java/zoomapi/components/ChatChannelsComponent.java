@@ -4,6 +4,7 @@ import org.json.JSONObject;
 import zoomapi.utils.Util;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 public class ChatChannelsComponent extends BaseComponent{
@@ -27,7 +28,7 @@ public class ChatChannelsComponent extends BaseComponent{
         return this.getRequest(String.format("/chat/channels/%s", params.get("channelId")), params);
     }
 
-    public JSONObject updateChannel(Map<String, String> data) throws IOException {
+    public JSONObject updateChannel(Map<String, String> data) throws IOException, URISyntaxException {
         String[] keys = new String[] {"channelId", "name"};
         Util.requireKeys(data, keys);
         return this.patchRequest(String.format("/chat/channels/%s", data.get("channelId")), data);
