@@ -1,9 +1,16 @@
 package zoomapi.components;
 
+import org.json.JSONObject;
 import zoomapi.utils.ApiClient;
 
-public class UserComponent extends ApiClient{
-    public UserComponent(String base_uri, int timeout){
-        super(base_uri, timeout);
+import java.io.IOException;
+import java.util.Map;
+
+public class UserComponent extends BaseComponent{
+    public UserComponent(String base_uri, Map<String, String> config){
+        super(base_uri, config);
+    }
+    public JSONObject listUser() throws IOException {
+        return this.getRequest("/users/me", null);
     }
 }

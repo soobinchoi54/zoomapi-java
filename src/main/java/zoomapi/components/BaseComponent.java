@@ -2,8 +2,11 @@ package zoomapi.components;
 
 import zoomapi.utils.ApiClient;
 
+import java.util.Map;
+
 public class BaseComponent extends ApiClient{
-    public BaseComponent(String base_uri, int timeout){
-        super(base_uri, timeout);
+    public BaseComponent(String base_uri, Map<String, String> config){
+        super(base_uri, 15);
+        this.config = config;
     }
 }

@@ -17,7 +17,7 @@ public class ApiClient{
     protected int timeout = 15;
     protected Map<String, String> config = new HashMap<>();
 
-    protected ApiClient(String base_uri, int timeout, String ...kwargs){
+    protected ApiClient(String base_uri, int timeout){
         this.base_uri = base_uri;
         this.timeout = timeout;
     }
@@ -53,25 +53,20 @@ public class ApiClient{
     }
 
     protected JSONObject getRequest(String end_point, Map<String, String> params) throws IOException {
-        URL url_for_request = new URL(urlFor(end_point));
+        String url = urlFor((end_point));
+
+        // send GET request
+        URL url_for_request = new URL(url+"?"+Util.parseParams(params));
         HttpURLConnection conn = (HttpURLConnection) url_for_request.openConnection();
         conn.setRequestMethod("GET");
-        conn.setConnectTimeout(this.timeout);
+        conn.setConnectTimeout(150);
+        System.out.println(this.config.get("token"));
         conn.setRequestProperty("Authorization", String.format("Bearer %s", this.config.get("token")));
         conn.setRequestProperty("Content-Type", "application/json; utf-8");
         conn.setRequestProperty("Accept", "application/json");
 
-        if(params != null){
-            conn.setDoOutput(true);
-            DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-            out.writeBytes(Util.parseMapToString(params));
-            out.flush();
-            out.close();
-        }
-
         //read the data
-        InputStream is = new BufferedInputStream(conn.getInputStream());
-        JSONObject response = new JSONObject(is.toString());
+        JSONObject response = Util.readResponse(conn);
         return response;
     }
 

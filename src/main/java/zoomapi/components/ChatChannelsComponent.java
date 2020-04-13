@@ -1,9 +1,16 @@
 package zoomapi.components;
 
-import zoomapi.utils.ApiClient;
+import org.json.JSONObject;
 
-public class ChatChannelsComponent extends ApiClient{
-    public ChatChannelsComponent(String base_uri, int timeout){
-        super(base_uri, timeout);
+import java.io.IOException;
+import java.util.Map;
+
+public class ChatChannelsComponent extends BaseComponent{
+    public ChatChannelsComponent(String base_uri, Map<String, String> config){
+        super(base_uri, config);
+    }
+
+    public JSONObject listChannels() throws IOException {
+        return this.getRequest("/chat/users/me/channels", null);
     }
 }
