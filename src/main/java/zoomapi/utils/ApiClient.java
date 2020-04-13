@@ -1,20 +1,29 @@
 package zoomapi.utils;
 
-import java.io.BufferedInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPatch;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.json.JSONObject;
 
 
 public class ApiClient{
     // Zoom Api
     protected String base_uri = null;
-    protected int timeout = 15;
+    protected int timeout = 150;
     protected Map<String, String> config = new HashMap<>();
 
     protected ApiClient(String base_uri, int timeout){
@@ -59,30 +68,154 @@ public class ApiClient{
         URL url_for_request = new URL(url+"?"+Util.parseParams(params));
         HttpURLConnection conn = (HttpURLConnection) url_for_request.openConnection();
         conn.setRequestMethod("GET");
-        conn.setConnectTimeout(150);
-        System.out.println(this.config.get("token"));
+        conn.setConnectTimeout(1500);
+        // System.out.println(this.config.get("token"));
         conn.setRequestProperty("Authorization", String.format("Bearer %s", this.config.get("token")));
         conn.setRequestProperty("Content-Type", "application/json; utf-8");
         conn.setRequestProperty("Accept", "application/json");
 
         //read the data
         JSONObject response = Util.readResponse(conn);
+        response.put("status_code", conn.getResponseCode());
         return response;
     }
 
-    protected JSONObject postRequest(){
-        return null;
+    protected JSONObject postRequest(String end_point, Map<String, String> data) throws IOException{
+        String url = urlFor((end_point));
+
+        // send POST request
+        URL url_for_request = new URL(url);
+        HttpURLConnection conn = (HttpURLConnection) url_for_request.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setConnectTimeout(1500);
+        // System.out.println(this.config.get("token"));
+        conn.setRequestProperty("Authorization", String.format("Bearer %s", this.config.get("token")));
+        conn.setRequestProperty("Content-Type", "application/json; utf-8");
+        conn.setRequestProperty("Accept", "application/json");
+        if(data!=null){
+            conn.setDoOutput(true);
+
+            // convert data to json object
+            JSONObject body = new JSONObject();
+            for(Map.Entry<String, String> e:data.entrySet()){
+                body.put(e.getKey(), e.getValue());
+            }
+            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+            // send json string
+            wr.write(body.toString());
+            wr.flush();
+            wr.close();
+
+        }
+        //read the data
+        JSONObject response = Util.readResponse(conn);
+        response.put("status_code", conn.getResponseCode());
+        return response;
     }
 
-    protected JSONObject patchRequest(){
-        return null;
+    protected JSONObject patchRequest(String end_point, Map<String, String> data) throws IOException, URISyntaxException {
+        String url = urlFor((end_point));
+
+        JSONObject body = new JSONObject();
+        for(Map.Entry<String, String> e:data.entrySet()){
+            body.put(e.getKey(), e.getValue());
+        }
+
+        RequestConfig config = RequestConfig.custom()
+                .setConnectTimeout(1500)
+                .setConnectionRequestTimeout(1500)
+                .setSocketTimeout(1500).build();
+        CloseableHttpClient client =  HttpClientBuilder.create().setDefaultRequestConfig(config).build();
+        HttpPatch httpPatch = new HttpPatch(new URI(url));
+        httpPatch.setHeader("Authorization", String.format("Bearer %s", this.config.get("token")));
+        httpPatch.addHeader("Content-Type", "application/json");
+        StringEntity response_body = new StringEntity(body.toString());
+        httpPatch.setEntity(response_body);
+        HttpResponse receive = client.execute(httpPatch);
+
+        /****************************************************************************************
+         * Following code is deprecated since HttpURLConnection doesn't support patch method
+         ****************************************************************************************/
+//        // send PATCH request
+//        URL url_for_request = new URL(url);
+//        HttpURLConnection conn = (HttpURLConnection) url_for_request.openConnection();
+//        conn.setRequestProperty("X-HTTP-Method-Override", "PATCH");
+//        conn.setRequestMethod("POST");
+//        conn.setConnectTimeout(1500);
+//        // System.out.println(this.config.get("token"));
+//        conn.setRequestProperty("Authorization", String.format("Bearer %s", this.config.get("token")));
+//        conn.setRequestProperty("Content-Type", "application/json; utf-8");
+//        conn.setRequestProperty("Accept", "application/json");
+//        if(data!=null){
+//            conn.setDoOutput(true);
+//
+//            // convert data to json object
+//            JSONObject body = new JSONObject();
+//            for(Map.Entry<String, String> e:data.entrySet()){
+//                body.put(e.getKey(), e.getValue());
+//            }
+//            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+//            // send json string
+//            wr.write(body.toString());
+//            wr.flush();
+//            wr.close();
+//
+//        }
+        //read the data
+        JSONObject response = new JSONObject();
+        response.put("status_code", receive.getStatusLine().getStatusCode());
+        return response;
     }
 
-    protected JSONObject deleteRequest(){
-        return null;
+    protected JSONObject deleteRequest(String end_point, Map<String, String> params) throws IOException{
+        String url = urlFor((end_point));
+
+        // send DELETE request
+        URL url_for_request = new URL(url+"?"+Util.parseParams(params));
+        HttpURLConnection conn = (HttpURLConnection) url_for_request.openConnection();
+        conn.setRequestMethod("DELETE");
+        conn.setConnectTimeout(1500);
+        // System.out.println(this.config.get("token"));
+        conn.setRequestProperty("Authorization", String.format("Bearer %s", this.config.get("token")));
+        conn.setRequestProperty("Content-Type", "application/json; utf-8");
+        conn.setRequestProperty("Accept", "application/json");
+
+        //read the data
+        JSONObject response = new JSONObject();
+        response.put("status_code", conn.getResponseCode());
+        return response;
     }
 
-    protected JSONObject putRequest(){
-        return null;
+    protected JSONObject putRequest(String end_point, Map<String, String> data) throws IOException{
+        String url = urlFor((end_point));
+
+        // send PUT request
+        URL url_for_request = new URL(url);
+        HttpURLConnection conn = (HttpURLConnection) url_for_request.openConnection();
+        conn.setRequestMethod("PUT");
+        conn.setConnectTimeout(1500);
+        // System.out.println(this.config.get("token"));
+        conn.setRequestProperty("Authorization", String.format("Bearer %s", this.config.get("token")));
+        conn.setRequestProperty("Content-Type", "application/json; utf-8");
+        conn.setRequestProperty("Accept", "application/json");
+        if(data!=null){
+            conn.setDoOutput(true);
+
+            // convert data to json object
+            JSONObject body = new JSONObject();
+            for(Map.Entry<String, String> e:data.entrySet()){
+                body.put(e.getKey(), e.getValue());
+            }
+            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+            // send json string
+            wr.write(body.toString());
+            wr.flush();
+            wr.close();
+
+        }
+        //read the data
+        JSONObject response = new JSONObject();
+        response.put("status_code", conn.getResponseCode());
+        return response;
     }
 }

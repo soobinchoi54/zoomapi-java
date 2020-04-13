@@ -10,7 +10,7 @@ public class ZoomClient extends ApiClient {
     // Zoom api client
     protected Map<String, BaseComponent> components = new HashMap<>();
     protected ZoomClient(String api_key, String api_secret) {
-        super("https://api.zoom.us/v2", 15);
+        super("https://api.zoom.us/v2", 1500);
         this.config.put("api_key", api_key);
         this.config.put("api_secret", api_secret);
         this.config.put("data_type", "json");
