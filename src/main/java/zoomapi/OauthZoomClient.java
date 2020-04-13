@@ -16,10 +16,9 @@ public class OauthZoomClient extends ZoomClient{
         this.config.put("PORT", String.valueOf(PORT));
         this.config.put("redirect_url", redirect_url);
         this.config.put("browser_path", browser_path);
-        this.config.put("token", Util.getOauthToken(this.config.get("client_id"), this.config.get("client_secret"), this.config.get("port"), this.config.get("redirect_url"), this.config.get("browser_path")));
-
-        this.components.put("chat_channels", new ChatChannelsComponent(this.base_uri, this.timeout));
-        this.components.put("chat_messages", new ChatMessagesComponent(this.base_uri, this.timeout));
+        refreshToken();
+        this.components.put("chat_channels", new ChatChannelsComponent(this.base_uri, this.config));
+        this.components.put("chat_messages", new ChatMessagesComponent(this.base_uri, this.config));
     }
 
     public OauthZoomClient(String client_id, String client_secret, int PORT, String redirect_url, String browser_path, String data_type, int time_out){
@@ -29,14 +28,15 @@ public class OauthZoomClient extends ZoomClient{
         this.config.put("PORT", String.valueOf(PORT));
         this.config.put("redirect_url", redirect_url);
         this.config.put("browser_path", browser_path);
-        this.config.put("token", Util.getOauthToken(this.config.get("client_id"), this.config.get("client_secret"), this.config.get("port"), this.config.get("redirect_url"), this.config.get("browser_path")));
-        this.components.put("chat_channels", new ChatChannelsComponent(this.base_uri, this.timeout));
-        this.components.put("chat_messages", new ChatMessagesComponent(this.base_uri, this.timeout));
+        this.config.put("token", Util.getOauthToken(this.config.get("client_id"), this.config.get("client_secret"), this.config.get("PORT"), this.config.get("redirect_url"), this.config.get("browser_path")));
+        this.components.put("chat_channels", new ChatChannelsComponent(this.base_uri, this.config));
+        this.components.put("chat_messages", new ChatMessagesComponent(this.base_uri, this.config));
     }
 
     @Override
     public void refreshToken(){
-        this.config.put("token", Util.getOauthToken(this.config.get("client_id"), this.config.get("client_secret"), this.config.get("port"), this.config.get("redirect_url"), this.config.get("browser_path")));
+        System.out.println(this.config.get("client_id")+this.config.get("client_secret")+this.config.get("port")+this.config.get("redirect_url")+this.config.get("browser_path"));
+        this.config.put("token", Util.getOauthToken(this.config.get("client_id"), this.config.get("client_secret"), this.config.get("PORT"), this.config.get("redirect_url"), this.config.get("browser_path")));
     }
 
     public String getRedirectUrl(){
