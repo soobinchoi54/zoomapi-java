@@ -16,19 +16,19 @@ public class Util {
         return val instanceof String;
     }
 
-    public static boolean requireKeys(String d, Map<String, String> keys){
-        for(String key: keys.keySet()){
-            if (!d.contains(key))
+    public static boolean requireKeys(Map<String, String> data, String[] keys){
+        for(String key: keys){
+            if (!data.containsKey(key))
                 throw new IllegalArgumentException(String.format("%s must be set", key));
         }
         return true;
     }
 
-    public static boolean requireKeys(String d, Map<String, String> keys, boolean allow_null){
-        for(String key: keys.keySet()){
-            if (!d.contains(key))
+    public static boolean requireKeys(Map<String, String> data, String[] keys, boolean allow_null){
+        for(String key: keys){
+            if (!data.containsKey(key))
                 throw new IllegalArgumentException(String.format("%s must be set", key));
-            if (!allow_null && key==null)
+            if (!allow_null && data.get(key)==null)
                 throw new IllegalArgumentException(String.format("%s cannot be null", key));
         }
         return true;
