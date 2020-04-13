@@ -1,42 +1,38 @@
 package zoomapi;
 
+import zoomapi.components.*;
 import zoomapi.utils.ApiClient;
-import zoomapi.components.MeetingComponent;
-import zoomapi.components.RecordingComponent;
-import zoomapi.components.ReportComponent;
-import zoomapi.components.UserComponent;
-import zoomapi.components.WebinarComponent;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ZoomClient extends ApiClient {
     // Zoom api client
-    protected Map<String, Object> components = new HashMap<>();
+    protected Map<String, BaseComponent> components = new HashMap<>();
     protected ZoomClient(String api_key, String api_secret) {
         super("https://api.zoom.us/v2", 15);
-        setApiKey(api_key);
-        setApiSecret(api_secret);
+        this.config.put("api_key", api_key);
+        this.config.put("api_secret", api_secret);
         this.config.put("data_type", "json");
 
-        this.components.put("meeting", new MeetingComponent(this.base_uri, this.timeout));
-        this.components.put("report", new RecordingComponent(this.base_uri, this.timeout));
-        this.components.put("user", new UserComponent(this.base_uri, this.timeout));
-        this.components.put("webinar", new WebinarComponent(this.base_uri, this.timeout));
-        this.components.put("recording", new ReportComponent(this.base_uri, this.timeout));
+        this.components.put("meeting", new MeetingComponent(this.base_uri, this.config));
+        this.components.put("report", new RecordingComponent(this.base_uri, this.config));
+        this.components.put("user", new UserComponent(this.base_uri, this.config));
+        this.components.put("webinar", new WebinarComponent(this.base_uri, this.config));
+        this.components.put("recording", new ReportComponent(this.base_uri, this.config));
 
     }
     protected ZoomClient(String api_key, String api_secret, String data_type, int timeout){
         super("https://api.zoom.us/v2", timeout);
-        setApiKey(api_key);
-        setApiSecret(api_secret);
+        this.config.put("api_key", api_key);
+        this.config.put("api_secret", api_secret);
         this.config.put("data_type", data_type);
 
-        this.components.put("meeting", new MeetingComponent(this.base_uri, this.timeout));
-        this.components.put("report", new RecordingComponent(this.base_uri, this.timeout));
-        this.components.put("user", new UserComponent(this.base_uri, this.timeout));
-        this.components.put("webinar", new WebinarComponent(this.base_uri, this.timeout));
-        this.components.put("recording", new ReportComponent(this.base_uri, this.timeout));
+        this.components.put("meeting", new MeetingComponent(this.base_uri, this.config));
+        this.components.put("report", new RecordingComponent(this.base_uri, this.config));
+        this.components.put("user", new UserComponent(this.base_uri, this.config));
+        this.components.put("webinar", new WebinarComponent(this.base_uri, this.config));
+        this.components.put("recording", new ReportComponent(this.base_uri, this.config));
     }
     protected void refreshToken(){
         // to be implemented
@@ -48,7 +44,7 @@ public class ZoomClient extends ApiClient {
 
     protected void setApiKey(String api_key){
         this.config.put("api_key", api_key);
-        refreshToken();
+        this.refreshToken();
     }
 
     protected String getApiSecret(){
@@ -57,26 +53,26 @@ public class ZoomClient extends ApiClient {
 
     protected void setApiSecret(String api_secret){
         this.config.put("api_secret", api_secret);
-        refreshToken();
+        this.refreshToken();
     }
 
-    public Object getMeeting(){
+    public BaseComponent getMeeting(){
         return this.components.get("meeting");
     }
 
-    public Object getReport(){
+    public BaseComponent getReport(){
         return this.components.get("report");
     }
 
-    public Object getUser(){
+    public BaseComponent getUser(){
         return this.components.get("user");
     }
 
-    public Object getWebinar(){
+    public BaseComponent getWebinar(){
         return this.components.get("webinar");
     }
 
-    public Object getRecording(){
+    public BaseComponent getRecording(){
         return this.components.get("recording");
     }
 }

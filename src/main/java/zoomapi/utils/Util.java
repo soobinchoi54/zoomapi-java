@@ -1,9 +1,10 @@
 package zoomapi.utils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Date;
-import java.util.Map;
+import org.json.JSONObject;
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 public class Util {
 
@@ -41,15 +42,82 @@ public class Util {
         return null;
     }
 
-    public static String httpReceiver(String port){
-        return null;
+    public static String httpReceiver(int port){
+        System.out.println("Listening to port: " + port);
+        String code = "";
+        try{
+            ServerSocket serverSocket = new ServerSocket(port);
+            Socket socket = serverSocket.accept();
+            InputStream input = socket.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            String line = null;
+            while(reader.ready()) {
+                line = reader.readLine();
+                if(line.contains("code")){
+                    code = line.split(" ")[1];
+                }
+            }
+            reader.close();
+            socket.close();
+            serverSocket.close();
+        } catch (IOException e){
+        }
+        System.out.println("Authorization code: " + code);
+        System.out.println("Listening ends");
+        return code;
     }
 
-    public static String getOauthToken(String cid, String client_secret, String port, String redirect_url, String browser_path){
-        return null;
+    public static String getOauthToken(String cid, String client_secret, String port, String redirect_url, String browser_path) {
+        String token = "";
+        try{
+            // define parameters for url request
+            Map<String, String> params = new HashMap<>();
+            params.put("response_type", "code");
+            params.put("client_id", cid);
+            params.put("redirect_uri", redirect_url);
+
+            // send url request through HttpUrlConnection
+            URL url_for_request = new URL("https://zoom.us/oauth/authorize?"+parseParams(params));
+            System.out.println(url_for_request);
+            HttpURLConnection conn = (HttpURLConnection) url_for_request.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Accept", "application/json");
+
+            System.out.println("Status Code: " + conn.getResponseCode());
+            String code = httpReceiver(Integer.valueOf(port)).split("=")[1];
+            System.out.println("Authorization Code: " + code);
+
+            // send another HttpURLConnection to get oauth2.0 token
+            params = new HashMap<>();
+            params.put("grant_type", "authorization_code");
+            params.put("code", code);
+            params.put("redirect_uri", redirect_url);
+
+            URL url_for_token = new URL("https://zoom.us/oauth/token?"+parseParams(params));
+            HttpURLConnection conn2 = (HttpURLConnection) url_for_token.openConnection();
+            conn2.setRequestMethod("POST");
+
+            // encode authentication information
+            String auth = cid + ":" + client_secret;
+            String authentication = Base64.getEncoder().encodeToString(auth.getBytes());
+            conn2.setRequestProperty("Authorization", "Basic " + authentication);
+            conn2.setRequestProperty("Content-Type", "application/json");
+            conn2.setRequestProperty("Accept", "application/json");
+            System.out.println("Status Code:" + conn2.getResponseCode());
+
+            // read response
+            JSONObject response = readResponse(conn2);
+            token = response.getString("access_token");
+        } catch(IOException e){
+            //
+        }
+        System.out.println("Oauth2.0 Token: " + token);
+        return token;
     }
 
-    public static String parseMapToString(Map<String, String> params) throws UnsupportedEncodingException {
+    public static String parseParams(Map<String, String> params) throws UnsupportedEncodingException {
+        if(params == null) return "";
         StringBuilder sb = new StringBuilder();
         for(Map.Entry<String, String> entry : params.entrySet()){
             if(sb.length()>0) sb.append("&");
@@ -58,5 +126,24 @@ public class Util {
             sb.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
         }
         return sb.toString();
+    }
+
+    public static JSONObject readResponse(HttpURLConnection conn){
+        JSONObject response = null;
+        try{
+            // read the response
+            StringBuilder sb = new StringBuilder();
+            BufferedReader reader2 = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line = null;
+            while(reader2.ready()){
+                // reads a line of text
+                line = reader2.readLine();
+                sb.append(line);
+            }
+            response = new JSONObject(sb.toString());
+        } catch(IOException e){
+            System.out.println("Error: " + e);
+        }
+        return response;
     }
 }

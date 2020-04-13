@@ -1,9 +1,16 @@
 package bots;
 
+import org.json.JSONObject;
 import zoomapi.OauthZoomClient;
+import zoomapi.components.ChatChannelsComponent;
+import zoomapi.components.UserComponent;
+import zoomapi.utils.Util;
 
 import java.awt.*;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Properties;
 
@@ -34,15 +41,21 @@ public class botm1{
             System.out.println("id: " + client_id + " browser: " + browser_path);
 
             /********************************************
-             * connect to ngrok tunnel extenrally via url
-             ********************************************/
+            * connect to ngrok tunnel extenrally via url
+            ********************************************/
             Desktop.getDesktop().browse(new URL(redirect_url).toURI());
             client = new OauthZoomClient(client_id, client_secret, PORT, redirect_url, browser_path);
+            UserComponent user = (UserComponent) client.getUser();
+            JSONObject users = user.listUser();
+            System.out.println(users.toString());
 
-        } catch (NumberFormatException ne) {
+
+        } catch (NumberFormatException | FileNotFoundException ne) {
             System.out.println("Number Format Exception: " + ne);
-        } catch (Exception e) {
-            System.out.println("ERROR: " + e);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 }
