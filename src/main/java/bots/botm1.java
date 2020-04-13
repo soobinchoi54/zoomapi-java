@@ -3,6 +3,7 @@ package bots;
 import org.json.JSONObject;
 import zoomapi.OauthZoomClient;
 import zoomapi.components.ChatChannelsComponent;
+import zoomapi.components.ChatMessagesComponent;
 import zoomapi.components.UserComponent;
 import zoomapi.utils.Util;
 
@@ -12,6 +13,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class botm1{
@@ -45,10 +48,34 @@ public class botm1{
             ********************************************/
             Desktop.getDesktop().browse(new URL(redirect_url).toURI());
             client = new OauthZoomClient(client_id, client_secret, PORT, redirect_url, browser_path);
-            UserComponent user = (UserComponent) client.getUser();
-            JSONObject users = user.listUser();
-            System.out.println(users.toString());
+            ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
+            ChatMessagesComponent chat_messages = (ChatMessagesComponent) client.getChatMessages();
+            JSONObject channels = chat_channels.listChannels();
+            System.out.println(channels.toString());
 
+//            Map<String, String> data = new HashMap<>();
+////            data.put("name", "Soob piggy");
+////            data.put("type", "1");
+////            JSONObject response = chat_channels.createChannel(data);
+////            System.out.println(response.toString());
+
+            Map<String, String> data = new HashMap<>();
+            data.put("name", "Soobin Piggyyyyyyy");
+            data.put("channelId", "115dc1f1-c600-458d-9b9d-8bae5b0eab46");
+            JSONObject response = chat_channels.updateChannel(data);
+            System.out.println(response.toString());
+
+//            Map<String, String> params = new HashMap<>();
+//            params.put("channelId", "63e36574-78a7-4d1c-a860-7b52bd3adf91");
+//            JSONObject response2 = chat_channels.deleteChannel(params);
+//            System.out.println(response2.toString());
+
+//            Map<String, String> data = new HashMap<>();
+//            data.put("messageId", "F405F4F0-A494-4A90-A8C1-5BEBB0B7E1E3");
+//            data.put("to_contact", "soobinchoi54+zoombot@gmail.com");
+//            data.put("message", "java fixed message");
+//            JSONObject response = chat_messages.updateMessage(data);
+//            System.out.println(response.toString());
 
         } catch (NumberFormatException | FileNotFoundException ne) {
             System.out.println("Number Format Exception: " + ne);
