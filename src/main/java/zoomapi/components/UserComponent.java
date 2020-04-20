@@ -13,27 +13,27 @@ public class UserComponent extends BaseComponent{
         super(base_uri, config);
     }
 
-    public JSONObject listUsers(Map<String,String> params) throws IOException {
+    public JSONObject listUsers(Map<String,String> params){
         return this.getRequest(String.format("/users"), params);
     }
 
-    public JSONObject createUsers(Map<String,String> params) throws IOException {
+    public JSONObject createUsers(Map<String,String> params){
         return this.postRequest(String.format("/users"), params);
     }
 
-    public JSONObject updateUser(Map<String,String> params) throws IOException, URISyntaxException {
+    public JSONObject updateUser(Map<String,String> params){
         String[] keys = new String[] {"userId"};
         Util.requireKeys(params, keys);
         return this.patchRequest(String.format("/users/%s", params.get("userId")), params);
     }
 
-    public JSONObject deleteUser(Map<String,String> params) throws IOException {
+    public JSONObject deleteUser(Map<String,String> params){
         String[] keys = new String[] {"userId"};
         Util.requireKeys(params, keys);
         return this.deleteRequest(String.format("/users/%s", params.get("userId")), params);
     }
 
-    public JSONObject getUser(Map<String,String> params) throws IOException {
+    public JSONObject getUser(Map<String,String> params){
         String[] keys = new String[] {"userId"};
         Util.requireKeys(params, keys);
         return this.getRequest(String.format("/users/%s", params.get("userId")), params);
