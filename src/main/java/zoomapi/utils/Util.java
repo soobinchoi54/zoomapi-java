@@ -67,6 +67,7 @@ public class Util {
         }
         System.out.println("Authorization code: " + code);
         System.out.println("Listening ends");
+        System.out.println(code);
         return code;
     }
 
@@ -103,6 +104,7 @@ public class Util {
             System.out.println("Status Code: " + conn.getResponseCode());
             String code = httpReceiver(Integer.valueOf(port)).split("=")[1];
             System.out.println("Authorization Code: " + code);
+            conn.disconnect();
 
             // send another HttpURLConnection to get oauth2.0 token
             params = new HashMap<>();
@@ -125,6 +127,7 @@ public class Util {
             // read response
             JSONObject response = readResponse(conn2);
             token = response.getString("access_token");
+            conn2.disconnect();
         } catch(IOException e){
             //
         }
@@ -156,10 +159,23 @@ public class Util {
                 line = reader2.readLine();
                 sb.append(line);
             }
+            reader2.close();
             response = new JSONObject(sb.toString());
         } catch(IOException e){
             System.out.println("Error: " + e);
         }
         return response;
+    }
+
+    public static HttpURLConnection httpRequest(String url, String method, int time_out){
+        try{
+            URL url_for_request = new URL(url);
+            HttpURLConnection conn = (HttpURLConnection) url_for_request.openConnection();
+            conn.setRequestMethod(method);
+            conn.setConnectTimeout(time_out);
+            return conn;
+        } catch(IOException e){
+            return null;
+        }
     }
 }
