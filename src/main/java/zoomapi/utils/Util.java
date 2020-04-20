@@ -1,5 +1,8 @@
 package zoomapi.utils;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -68,7 +71,16 @@ public class Util {
     }
 
     public static String generate_jwt(String api_id, String api_secret){
-        return null;
+        String token = "";
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(api_secret);
+            token = JWT.create()
+                .withIssuer(api_id)
+                .sign(algorithm);
+        } catch (JWTCreationException e){
+            System.out.println("JWT generation failed: " + e);
+        }
+        return token;
     }
 
     public static String getOauthToken(String cid, String client_secret, String port, String redirect_url, String browser_path) {
