@@ -5,11 +5,14 @@ import org.json.JSONObject;
 import zoomapi.OauthZoomClient;
 import zoomapi.components.ChatChannelsComponent;
 import zoomapi.components.ChatMessagesComponent;
+import zoomapi.utils.Util;
 
 import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UTFDataFormatException;
+import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
@@ -36,7 +39,7 @@ public class botm1{
             switch (option) {
                 case "0":
                     stop = true;
-                    break;
+                    return;
                 case "1":
                     listUserChannels(client);
                     break;
@@ -96,8 +99,16 @@ public class botm1{
             client_secret = p.getProperty("client_secret");
             PORT = Integer.parseInt(p.getProperty("port"));
             browser_path = p.getProperty("browser_path");
-            redirect_url = p.getProperty("redirect_url");
+//            redirect_url = p.getProperty("redirect_url");
             System.out.println("id: " + client_id + " browser: " + browser_path);
+
+            String url = "http://localhost:4040/api/tunnels";
+            HttpURLConnection conn = Util.httpRequest(url, "GET", 150);
+            JSONObject response = Util.readResponse(conn);
+            JSONArray arr = response.getJSONArray("tunnels");
+            redirect_url = arr.getJSONObject(0).getString("public_url");
+            System.out.println(redirect_url);
+            conn.disconnect();
 
             /********************************************
              * connect to ngrok tunnel externally via url
@@ -178,12 +189,18 @@ public class botm1{
     private static void getChannel(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String,String> params = new HashMap<>();
+        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        System.out.println("=== All Channels ===");
+        Iterator<Object> it = response.iterator();
+        while (it.hasNext()){
+            System.out.println(it.next());
+        }
         System.out.println("Provide a valid Channel ID to get channel: ");
         Scanner sc = new Scanner(System.in);
         String cid = sc.nextLine();
         params.put("channelId", cid);
-        JSONObject response = chat_channels.getChannel(params);
-        System.out.println(response.toString());
+        JSONObject respone2 = chat_channels.getChannel(params);
+        System.out.println(respone2.toString());
     }
 
     private static void updateChannel(OauthZoomClient client) {
@@ -210,6 +227,12 @@ public class botm1{
     private static void deleteChannel(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> params = new HashMap<>();
+        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        System.out.println("=== All Channels ===");
+        Iterator<Object> it = response.iterator();
+        while (it.hasNext()){
+            System.out.println(it.next());
+        }
         System.out.println("Provide a valid channel ID to delete channel: ");
         Scanner sc = new Scanner(System.in);
         String cid = sc.nextLine();

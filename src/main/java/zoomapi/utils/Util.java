@@ -1,5 +1,8 @@
 package zoomapi.utils;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -64,11 +67,27 @@ public class Util {
         }
         System.out.println("Authorization code: " + code);
         System.out.println("Listening ends");
+        System.out.println(code);
+        if(code.equals(""))
+            try {
+                throw new IllegalAccessException("Zoom Network failed");
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         return code;
     }
 
     public static String generate_jwt(String api_id, String api_secret){
-        return null;
+        String token = "";
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(api_secret);
+            token = JWT.create()
+                .withIssuer(api_id)
+                .sign(algorithm);
+        } catch (JWTCreationException e){
+            System.out.println("JWT generation failed: " + e);
+        }
+        return token;
     }
 
     public static String getOauthToken(String cid, String client_secret, String port, String redirect_url, String browser_path) {
@@ -91,6 +110,7 @@ public class Util {
             System.out.println("Status Code: " + conn.getResponseCode());
             String code = httpReceiver(Integer.valueOf(port)).split("=")[1];
             System.out.println("Authorization Code: " + code);
+            conn.disconnect();
 
             // send another HttpURLConnection to get oauth2.0 token
             params = new HashMap<>();
@@ -113,6 +133,7 @@ public class Util {
             // read response
             JSONObject response = readResponse(conn2);
             token = response.getString("access_token");
+            conn2.disconnect();
         } catch(IOException e){
             //
         }
@@ -144,10 +165,23 @@ public class Util {
                 line = reader2.readLine();
                 sb.append(line);
             }
+            reader2.close();
             response = new JSONObject(sb.toString());
         } catch(IOException e){
             System.out.println("Error: " + e);
         }
         return response;
+    }
+
+    public static HttpURLConnection httpRequest(String url, String method, int time_out){
+        try{
+            URL url_for_request = new URL(url);
+            HttpURLConnection conn = (HttpURLConnection) url_for_request.openConnection();
+            conn.setRequestMethod(method);
+            conn.setConnectTimeout(time_out);
+            return conn;
+        } catch(IOException e){
+            return null;
+        }
     }
 }

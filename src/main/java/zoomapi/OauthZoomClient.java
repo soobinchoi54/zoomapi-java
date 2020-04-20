@@ -36,7 +36,7 @@ public class OauthZoomClient extends ZoomClient{
 
     @Override
     public void refreshToken(){
-        System.out.println(this.config.get("client_id")+this.config.get("client_secret")+this.config.get("port")+this.config.get("redirect_url")+this.config.get("browser_path"));
+        System.out.println(this.config.get("client_id")+" "+this.config.get("client_secret")+" "+this.config.get("PORT")+" "+this.config.get("redirect_url")+" "+this.config.get("browser_path"));
         this.config.put("token", Util.getOauthToken(this.config.get("client_id"), this.config.get("client_secret"), this.config.get("PORT"), this.config.get("redirect_url"), this.config.get("browser_path")));
     }
 
