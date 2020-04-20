@@ -52,7 +52,7 @@ public class ChatChannelsComponent extends BaseComponent{
         return this.postRequest(String.format("/chat/channels/%s/members", data.get("channelId")), data);
     }
 
-    public JSONObject joinChanel(Map<String, String> data){
+    public JSONObject joinChannel(Map<String, String> data){
         String[] keys = new String[] {"channelId"};
         Util.requireKeys(data, keys);
         return this.postRequest(String.format("/chat/channels/%s/members/me", data.get("channelId")), data);
