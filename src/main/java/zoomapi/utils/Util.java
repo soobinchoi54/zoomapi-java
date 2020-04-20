@@ -68,6 +68,12 @@ public class Util {
         System.out.println("Authorization code: " + code);
         System.out.println("Listening ends");
         System.out.println(code);
+        if(code.equals(""))
+            try {
+                throw new IllegalAccessException("Zoom Network failed");
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         return code;
     }
 
