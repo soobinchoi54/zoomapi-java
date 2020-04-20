@@ -67,6 +67,10 @@ public class Util {
         return code;
     }
 
+    public static String generate_jwt(String api_id, String api_secret){
+        return null;
+    }
+
     public static String getOauthToken(String cid, String client_secret, String port, String redirect_url, String browser_path) {
         String token = "";
         try{
