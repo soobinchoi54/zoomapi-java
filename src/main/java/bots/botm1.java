@@ -28,12 +28,11 @@ public class botm1{
         botm1 ini = new botm1();
         ini.parse();
 
-        Scanner sc = new Scanner(System.in);
-        String option = sc.nextLine();
         stop = false;
         while (!stop) {
             printOptions();
-
+            Scanner sc = new Scanner(System.in);
+            String option = sc.nextLine();
             switch (option) {
                 case "0":
                     stop = true;
@@ -84,6 +83,8 @@ public class botm1{
                     System.out.println("Please provide a valid input...\n");
                     break;
             }
+        System.out.println("Press any to continue.");
+        sc.nextLine();
         }
     }
 
@@ -141,40 +142,36 @@ public class botm1{
         System.out.println("0. exit ");
         Scanner sc2 = new Scanner(System.in);
         String type = sc2.nextLine();
-        String members = null;
-        while (true) {
-            if (type.equals("0")) {
-                break;
-            } else if (type.equals("1")||type.equals("2")||type.equals("3")) {
-                data.put("type",type);
-                StringBuilder sb = new StringBuilder();
-                sb.append("{");
-                int member_length = 0;
-                while (member_length < 5) {
-                    System.out.println(String.format("Provide a valid email address to invite members (type 'stop' to stop adding). Current members %s: ", member_length+1));
-                    Scanner sc = new Scanner(System.in);
-                    String member = sc.nextLine();
-                    if (member.toLowerCase().equals("stop")) {
-                        break;
-                    }else {
-                        if(member_length == 0) sb.append("email:"+member);
-                        else sb.append(",email:"+member);
-                        member_length++;
-                    }
+        data.put("type",type);
+        if (type.equals("0")) {
+            return;
+        } else if (type.equals("1")||type.equals("2")||type.equals("3")) {
+            JSONObject members = new JSONObject();
+            int member_length = 0;
+            while (member_length < 5) {
+                System.out.println(String.format("Provide a valid email address to invite members (type 'stop' to stop adding). Current members %s: ", member_length+1));
+                Scanner sc = new Scanner(System.in);
+                String member = sc.nextLine();
+                if (member.toLowerCase().equals("stop")) {
+                    break;
+                }else {
+                    members.put("email", member);
+                    member_length++;
                 }
-                sb.append("}");
-                members = sb.toString();
-                data.put("members", members);
-            } else {
-                System.out.println("Please provide a valid input...");
-                createChannel(client);
             }
-        }
-        if((!members.equals("{}")) || (members != null)) {
-            chat_channels.createChannel(data);
-            System.out.println("Channel created");
+            if(member_length > 0) {
+                data.put("members", members.toString());
+                chat_channels.createChannel(data);
+                System.out.println("Channel created");
+            } else {
+                chat_channels.createChannel(data);
+                System.out.println("Channel created without members.");
+            }
+            return;
         } else {
-            System.out.println("Channel created without members.");
+            System.out.println("Please provide a valid input...");
+            createChannel(client);
+            return;
         }
     }
 
@@ -185,7 +182,7 @@ public class botm1{
         Scanner sc = new Scanner(System.in);
         String cid = sc.nextLine();
         params.put("channelId", cid);
-        JSONObject response = (JSONObject) chat_channels.getChannel(params).get("channelId");
+        JSONObject response = chat_channels.getChannel(params);
         System.out.println(response.toString());
     }
 
@@ -221,7 +218,6 @@ public class botm1{
         Scanner sc = new Scanner(System.in);
         String cid = sc.nextLine();
         params.put("channelId", cid);
-        chat_channels.listChannelMembers(params);
         JSONArray response = (JSONArray)chat_channels.listChannelMembers(params).get("members");
         System.out.println("=== All Members ===");
         Iterator<Object> it = response.iterator();
@@ -309,6 +305,7 @@ public class botm1{
                 Scanner sc1 = new Scanner(System.in);
                 String email = sc1.nextLine();
                 params.put("to_contact", email);
+                params.put("userId", "me");
                 JSONArray response1 = (JSONArray) chat_messages.listMessages(params).get("messages");
                 System.out.println("=== All Messages ===");
                 Iterator<Object> it1 = response1.iterator();
@@ -321,6 +318,7 @@ public class botm1{
                 Scanner sc2 = new Scanner(System.in);
                 String cid = sc2.nextLine();
                 params.put("to_channel", cid);
+                params.put("userId", "me");
                 JSONArray response2 = (JSONArray) chat_messages.listMessages(params).get("messages");
                 System.out.println("=== All Messages ===");
                 Iterator<Object> it2 = response2.iterator();
@@ -389,6 +387,7 @@ public class botm1{
                 Scanner sc1 = new Scanner(System.in);
                 String email = sc1.nextLine();
                 params.put("to_contact", email);
+                params.put("userId", "me");
                 JSONArray response1 = (JSONArray) chat_messages.listMessages(params).get("messages");
                 System.out.println("=== All Messages ===");
                 Iterator<Object> it1 = response1.iterator();
@@ -410,9 +409,10 @@ public class botm1{
                 Scanner sc4 = new Scanner(System.in);
                 String cid = sc4.nextLine();
                 params.put("to_channel", cid);
-                JSONArray respone2 = (JSONArray) chat_messages.listMessages(params).get("messages");
+                params.put("userId", "me");
+                JSONArray response2 = (JSONArray) chat_messages.listMessages(params).get("messages");
                 System.out.println("=== All Messages ===");
-                Iterator<Object> it2 = respone2.iterator();
+                Iterator<Object> it2 = response2.iterator();
                 while (it2.hasNext()){
                     System.out.println(it2.next());
                 }
@@ -448,6 +448,7 @@ public class botm1{
                 Scanner sc1 = new Scanner(System.in);
                 String email = sc1.nextLine();
                 params.put("to_contact", email);
+                params.put("userId", "me");
                 JSONArray response1 = (JSONArray) chat_messages.listMessages(params).get("messages");
                 System.out.println("=== All Messages ===");
                 Iterator<Object> it1 = response1.iterator();
@@ -464,7 +465,8 @@ public class botm1{
                 System.out.println("Enter a channel ID: ");
                 Scanner sc3 = new Scanner(System.in);
                 String cid = sc3.nextLine();
-                params.put("to_contact", cid);
+                params.put("to_channel", cid);
+                params.put("userId", "me");
                 JSONArray response2 = (JSONArray) chat_messages.listMessages(params).get("messages");
                 System.out.println("=== All Messages ===");
                 Iterator<Object> it2 = response2.iterator();

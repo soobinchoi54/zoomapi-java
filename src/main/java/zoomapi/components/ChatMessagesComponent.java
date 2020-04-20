@@ -17,8 +17,8 @@ public class ChatMessagesComponent extends BaseComponent{
         return this.getRequest(String.format("/chat/users/%s/messages", params.get("userId")), params);
     }
     public JSONObject sendMessage(Map<String,String> data){
-        String[] keys1 = new String[] {"messageId", "to_channel"};
-        String[] keys2 = new String[] {"messageId", "to_contact"};
+        String[] keys1 = new String[] {"message", "to_channel"};
+        String[] keys2 = new String[] {"message", "to_contact"};
         if (data.containsKey("to_channel")) Util.requireKeys(data, keys1);
         else Util.requireKeys(data, keys2);
         return this.postRequest(String.format("/chat/users/me/messages"), data);
@@ -35,6 +35,6 @@ public class ChatMessagesComponent extends BaseComponent{
         String[] keys2 = new String[] {"messageId", "to_contact"};
         if (params.containsKey("to_channel")) Util.requireKeys(params, keys1);
         else Util.requireKeys(params, keys2);
-        return this.deleteRequest(String.format("/chat/users/me/messages/s%", params.get("messageId")), params);
+        return this.deleteRequest(String.format("/chat/users/me/messages/%s", params.get("messageId")), params);
     }
 }
