@@ -189,6 +189,12 @@ public class botm1{
     private static void updateChannel(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> data = new HashMap<>();
+        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        System.out.println("=== All Channels ===");
+        Iterator<Object> it = response.iterator();
+        while (it.hasNext()){
+            System.out.println(it.next());
+        }
         System.out.println("Provide a valid channel ID to update channel: ");
         Scanner sc1 = new Scanner(System.in);
         String cid = sc1.nextLine();
@@ -214,21 +220,33 @@ public class botm1{
     private static void listChannelMembers(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> params = new HashMap<>();
+        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        System.out.println("=== All Channels ===");
+        Iterator<Object> it = response.iterator();
+        while (it.hasNext()){
+            System.out.println(it.next());
+        }
         System.out.println("Provide a valid channel ID to list current members: ");
         Scanner sc = new Scanner(System.in);
         String cid = sc.nextLine();
         params.put("channelId", cid);
-        JSONArray response = (JSONArray)chat_channels.listChannelMembers(params).get("members");
+        JSONArray response2 = (JSONArray)chat_channels.listChannelMembers(params).get("members");
         System.out.println("=== All Members ===");
-        Iterator<Object> it = response.iterator();
-        while (it.hasNext()){
-            System.out.println(it.next());
+        Iterator<Object> it2 = response2.iterator();
+        while (it2.hasNext()){
+            System.out.println(it2.next());
         }
     }
 
     private static void inviteChannelMembers(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> params = new HashMap<>();
+        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        System.out.println("=== All Channels ===");
+        Iterator<Object> it = response.iterator();
+        while (it.hasNext()){
+            System.out.println(it.next());
+        }
         System.out.println("Provide a valid channel ID to invite new members: ");
         Scanner sc = new Scanner(System.in);
         String cid = sc.nextLine();
@@ -258,6 +276,12 @@ public class botm1{
     private static void joinChannel(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> data = new HashMap<>();
+        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        System.out.println("=== All Channels ===");
+        Iterator<Object> it = response.iterator();
+        while (it.hasNext()){
+            System.out.println(it.next());
+        }
         System.out.println("Provide a valid channel ID of the channel that you want to join: ");
         Scanner sc = new Scanner(System.in);
         String cid = sc.nextLine();
@@ -268,6 +292,12 @@ public class botm1{
     private static void leaveChannel(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> params = new HashMap<>();
+        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        System.out.println("=== All Channels ===");
+        Iterator<Object> it = response.iterator();
+        while (it.hasNext()){
+            System.out.println(it.next());
+        }
         System.out.println("Provide a valid channel ID of the channel that you want to leave: ");
         Scanner sc = new Scanner(System.in);
         String cid = sc.nextLine();
@@ -278,10 +308,22 @@ public class botm1{
     private static void removeMember(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> params = new HashMap<>();
+        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        System.out.println("=== All Channels ===");
+        Iterator<Object> it = response.iterator();
+        while (it.hasNext()){
+            System.out.println(it.next());
+        }
         System.out.println("Provide a valid channel ID of the channel to remove a member from: ");
         Scanner sc1 = new Scanner(System.in);
         String cid = sc1.nextLine();
         params.put("channelId", cid);
+        JSONArray response2 = (JSONArray)chat_channels.listChannelMembers(params).get("members");
+        System.out.println("=== All Members ===");
+        Iterator<Object> it2 = response2.iterator();
+        while (it2.hasNext()){
+            System.out.println(it2.next());
+        }
         System.out.println("Provide a valid member ID of the member to remove: ");
         Scanner sc2 = new Scanner(System.in);
         String mid = sc2.nextLine();
@@ -291,6 +333,7 @@ public class botm1{
 
     private static void listMessages(OauthZoomClient client) {
         ChatMessagesComponent chat_messages = (ChatMessagesComponent) client.getChatMessages();
+        ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> params = new HashMap<>();
         System.out.println("List messages:");
         System.out.println("1. Between you and a contact");
@@ -314,6 +357,12 @@ public class botm1{
                 }
                 break;
             case "2":
+                JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+                System.out.println("=== All Channels ===");
+                Iterator<Object> it = response.iterator();
+                while (it.hasNext()){
+                    System.out.println(it.next());
+                }
                 System.out.println("Enter a channel ID: ");
                 Scanner sc2 = new Scanner(System.in);
                 String cid = sc2.nextLine();
@@ -334,6 +383,7 @@ public class botm1{
 
     private static void sendMessage(OauthZoomClient client) {
         ChatMessagesComponent chat_messages = (ChatMessagesComponent) client.getChatMessages();
+        ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> params = new HashMap<>();
         System.out.println("List messages:");
         System.out.println("1. Between you and a contact");
@@ -355,6 +405,12 @@ public class botm1{
                 chat_messages.sendMessage(params);
                 break;
             case "2":
+                JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+                System.out.println("=== All Channels ===");
+                Iterator<Object> it = response.iterator();
+                while (it.hasNext()){
+                    System.out.println(it.next());
+                }
                 System.out.println("Enter a channel ID: ");
                 Scanner sc3 = new Scanner(System.in);
                 String cid = sc3.nextLine();
@@ -373,6 +429,7 @@ public class botm1{
 
     private static void updateMessage(OauthZoomClient client) {
         ChatMessagesComponent chat_messages = (ChatMessagesComponent) client.getChatMessages();
+        ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> params = new HashMap<>();
         System.out.println("List messages:");
         System.out.println("1. Between you and a contact");
@@ -405,6 +462,12 @@ public class botm1{
                 chat_messages.updateMessage(params);
                 break;
             case "2":
+                JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+                System.out.println("=== All Channels ===");
+                Iterator<Object> it = response.iterator();
+                while (it.hasNext()){
+                    System.out.println(it.next());
+                }
                 System.out.println("Enter a channel ID: ");
                 Scanner sc4 = new Scanner(System.in);
                 String cid = sc4.nextLine();
@@ -434,6 +497,7 @@ public class botm1{
 
     private static void deleteMessage(OauthZoomClient client) {
         ChatMessagesComponent chat_messages = (ChatMessagesComponent) client.getChatMessages();
+        ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> params = new HashMap<>();
         System.out.println("List messages:");
         System.out.println("1. Between you and a contact");
@@ -462,6 +526,12 @@ public class botm1{
                 chat_messages.deleteMessage(params);
                 break;
             case "2":
+                JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+                System.out.println("=== All Channels ===");
+                Iterator<Object> it = response.iterator();
+                while (it.hasNext()){
+                    System.out.println(it.next());
+                }
                 System.out.println("Enter a channel ID: ");
                 Scanner sc3 = new Scanner(System.in);
                 String cid = sc3.nextLine();
