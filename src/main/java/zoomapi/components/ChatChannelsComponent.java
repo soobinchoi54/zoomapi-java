@@ -41,7 +41,7 @@ public class ChatChannelsComponent extends BaseComponent{
     }
 
     public JSONObject listChannelMembers(Map<String, String> params){
-        String[] keys = new String[] {"channelId", "members"};
+        String[] keys = new String[] {"channelId"};
         Util.requireKeys(params, keys);
         return this.getRequest(String.format("/chat/channels/%s/members", params.get("channelId")), params);
     }
