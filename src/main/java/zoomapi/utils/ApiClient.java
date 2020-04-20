@@ -68,11 +68,8 @@ public class ApiClient{
         String url = urlFor((end_point));
         try{
             // send GET request
-            URL url_for_request = new URL(url+"?"+Util.parseParams(params));
-            HttpURLConnection conn = (HttpURLConnection) url_for_request.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setConnectTimeout(1500);
-            // System.out.println(this.config.get("token"));
+            String url_for_request = url+"?"+Util.parseParams(params);
+            HttpURLConnection conn = Util.httpRequest(url_for_request, "GET", 1500);
             conn.setRequestProperty("Authorization", String.format("Bearer %s", this.config.get("token")));
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
             conn.setRequestProperty("Accept", "application/json");
@@ -80,6 +77,7 @@ public class ApiClient{
             //read the data
             JSONObject response = Util.readResponse(conn);
             response.put("status_code", conn.getResponseCode());
+            conn.disconnect();
             return response;
         } catch(IOException e){
             System.out.println("Get Request failed: " + e);
@@ -94,10 +92,7 @@ public class ApiClient{
         String url = urlFor((end_point));
         try{
             // send POST request
-            URL url_for_request = new URL(url);
-            HttpURLConnection conn = (HttpURLConnection) url_for_request.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setConnectTimeout(1500);
+            HttpURLConnection conn = Util.httpRequest(url, "POST", 1500);
             // System.out.println(this.config.get("token"));
             conn.setRequestProperty("Authorization", String.format("Bearer %s", this.config.get("token")));
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -134,6 +129,7 @@ public class ApiClient{
             //read the data
             JSONObject response = Util.readResponse(conn);
             response.put("status_code", conn.getResponseCode());
+            conn.disconnect();
             return response;
         } catch(IOException e){
             System.out.println("Post Request failed: " + e);
@@ -211,10 +207,8 @@ public class ApiClient{
         String url = urlFor((end_point));
         try{
             // send DELETE request
-            URL url_for_request = new URL(url+"?"+Util.parseParams(params));
-            HttpURLConnection conn = (HttpURLConnection) url_for_request.openConnection();
-            conn.setRequestMethod("DELETE");
-            conn.setConnectTimeout(1500);
+            String url_for_request = url+"?"+Util.parseParams(params);
+            HttpURLConnection conn = Util.httpRequest(url_for_request, "DELETE", 1500);
             // System.out.println(this.config.get("token"));
             conn.setRequestProperty("Authorization", String.format("Bearer %s", this.config.get("token")));
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -223,6 +217,7 @@ public class ApiClient{
             //read the data
             JSONObject response = new JSONObject();
             response.put("status_code", conn.getResponseCode());
+            conn.disconnect();
             return response;
         } catch(IOException e){
             System.out.println("Delete Request failed: " + e);
@@ -236,10 +231,7 @@ public class ApiClient{
         String url = urlFor((end_point));
         try{
             // send PUT request
-            URL url_for_request = new URL(url);
-            HttpURLConnection conn = (HttpURLConnection) url_for_request.openConnection();
-            conn.setRequestMethod("PUT");
-            conn.setConnectTimeout(1500);
+            HttpURLConnection conn = Util.httpRequest(url, "PUT", 1500);
             // System.out.println(this.config.get("token"));
             conn.setRequestProperty("Authorization", String.format("Bearer %s", this.config.get("token")));
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -262,6 +254,7 @@ public class ApiClient{
             //read the data
             JSONObject response = new JSONObject();
             response.put("status_code", conn.getResponseCode());
+            conn.disconnect();
             return response;
         } catch(IOException e){
             System.out.println("Put Request failed: " + e);
