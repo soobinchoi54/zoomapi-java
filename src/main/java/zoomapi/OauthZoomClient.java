@@ -1,5 +1,6 @@
 package zoomapi;
 
+import zoomapi.components.BaseComponent;
 import zoomapi.utils.Util;
 import zoomapi.components.ChatChannelsComponent;
 import zoomapi.components.ChatMessagesComponent;
@@ -48,11 +49,11 @@ public class OauthZoomClient extends ZoomClient{
         refreshToken();
     }
 
-    public Object getChatChannels(){
+    public BaseComponent getChatChannels(){
         return this.components.get("chat_channels");
     }
 
-    public Object getChatMessages(){
+    public BaseComponent getChatMessages(){
         return this.components.get("chat_messages");
     }
 }
