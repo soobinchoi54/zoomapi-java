@@ -146,7 +146,7 @@ public class botm1{
         if (type.equals("0")) {
             return;
         } else if (type.equals("1")||type.equals("2")||type.equals("3")) {
-            JSONObject members = new JSONObject();
+            StringBuilder sb = new StringBuilder();
             int member_length = 0;
             while (member_length < 5) {
                 System.out.println(String.format("Provide a valid email address to invite members (type 'stop' to stop adding). Current members %s: ", member_length+1));
@@ -155,12 +155,12 @@ public class botm1{
                 if (member.toLowerCase().equals("stop")) {
                     break;
                 }else {
-                    members.put("email", member);
+                    sb.append("email:"+member+"###");
                     member_length++;
                 }
             }
             if(member_length > 0) {
-                data.put("members", members.toString());
+                data.put("members", sb.toString());
                 chat_channels.createChannel(data);
                 System.out.println("Channel created");
             } else {
@@ -253,7 +253,7 @@ public class botm1{
         params.put("channelId", cid);
         String members;
         StringBuilder sb = new StringBuilder();
-        sb.append("{");
+//        sb.append("[");
         int member_length = 0;
         while (member_length < 5) {
             System.out.println(String.format("Provide a valid email address to invite members (type 'stop' to stop adding). Current members %s: ", member_length+1));
@@ -262,13 +262,15 @@ public class botm1{
             if (member.toLowerCase().equals("stop")) {
                 break;
             }else {
-                if(member_length == 0) sb.append("email:"+member);
-                else sb.append(",email:"+member);
+//                if(member_length == 0) sb.append("email:"+member);
+//                else sb.append(",{email : "+member+"}");
+                sb.append("email:"+member+"###");
                 member_length++;
             }
         }
-        sb.append("}");
+//        sb.append("]");
         members = sb.toString();
+        // System.out.println(members);
         params.put("members", members);
         chat_channels.inviteChannelMembers(params);
     }
