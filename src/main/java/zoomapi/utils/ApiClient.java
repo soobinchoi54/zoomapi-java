@@ -5,7 +5,9 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
@@ -106,10 +108,24 @@ public class ApiClient{
                 // convert data to json object
                 JSONObject body = new JSONObject();
                 for(Map.Entry<String, String> e:data.entrySet()){
-                    body.put(e.getKey(), e.getValue());
+                    String val = e.getValue();
+                    if(val.contains("###")){ // ### means the data would be a JSON array
+                        String[] items = val.split("###");
+                        List<JSONObject> value = new ArrayList<>();
+                        for(String item: items){
+                            if(item.length()==0)break;
+                            JSONObject i = new JSONObject();
+                            String[] pair = item.split(":");
+                            i.put(pair[0],pair[1]);
+                            value.add(i);
+                        }
+                        body.put(e.getKey(), value);
+                    }
+                    else body.put(e.getKey(), e.getValue());
                 }
                 OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
                 // send json string
+                System.out.println(body.toString());
                 wr.write(body.toString());
                 wr.flush();
                 wr.close();
