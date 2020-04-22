@@ -53,11 +53,16 @@ java bots/botm1.java
 Once the bot runs successfully, you will receive Status Code 200 with a zoom link.<br>
 <br>
 **Click on the link** and the bot application should appear:<br> 
-![Zoom Link](/pics/zoom-link.png)
+<br> ![Zoom Link](/pics/zoom-link.png)
+### Expected Result:
+The expected output in the terminal for a successful run looks like this: 
+<br> ![Success](/pics/run-success.png) 
+<br> Sometimes, the the program will fail to connect to and get a response from Zoom, in which case the output will look like this:
+<br> ![Fail](/pics/run-fail.png)
+<br> Please try rerunning the program to fix the issue. 
 ## Throttle:
 To throttle the call rate at 10 calls per second, we have wrapped all related methods in the Throttle class in the utils folder. The throttle timestamp apparent in the above screenshot is a long-type number calculated using
 ```
 Date().getTime()
 ```
 method and we throttle at the request level.  
-
