@@ -50,9 +50,8 @@ Then, run with:
 ```
 java bots/botm1.java
 ```
-Once the bot runs successfully, you will receive Status Code 200 with a zoom link that looks like this:
+Once the bot runs successfully, you will receive Status Code 200 with a zoom link. Click on it and the bot application should appear:
 <br> ![Zoom Link](/pics/zoom-link.png)
-<br> Click on the link and the bot application should appear.
 ## Throttle:
 To throttle the call rate at 10 calls per second, we have wrapped all related methods in the Throttle class in the utils folder. The throttle timestamp apparent in the above screenshot is a long-type number calculated using
 ```
