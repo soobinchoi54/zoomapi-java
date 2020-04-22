@@ -5,7 +5,7 @@ Zoom API implementation in Java
 This project was based on the python implementation of Zoom API forked from https://github.com/crista/zoomapi and was completed as part of a group project for the SWE262P Programming Styles course at UCI. 
 
 ### Team members:
-Duo Chai
+Duo Chai</br>
 Soobin Choi
 
 ## To build the program:
@@ -50,7 +50,7 @@ Then, run with:
 ```
 java bots/botm1.java
 ```
-Once the bot runs successfully, you will receive Status Code 200 with a zoom link. Click on it and the bot application should appear:
+Once the bot runs successfully, you will receive Status Code 200 with a zoom link. **Click on the link** and the bot application should appear:
 <br> ![Zoom Link](/pics/zoom-link.png)
 ## Throttle:
 To throttle the call rate at 10 calls per second, we have wrapped all related methods in the Throttle class in the utils folder. The throttle timestamp apparent in the above screenshot is a long-type number calculated using
