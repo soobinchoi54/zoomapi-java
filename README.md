@@ -9,16 +9,16 @@ Duo Chai</br>
 Soobin Choi
 
 ## To build the program:
-Open the project in an IDE 
+**MAKE SURE you have java 13 installed and set as default SDK, or please change the maven pom.xml configuration from 13 to your version of java**
 <br> In the root folder, run the following in the terminal to build the project properly in your local repository:
 <br> Run the package goal to compile and package the code in a JAR file: 
 ```
-mvn package
+mvn clean package
 ```
 ![Package Success](/pics/mvn-package.png)
 <br> Install the project's JAR file into the local repository:
 ```
-mvn install
+mvn clean install
 ```
 The output on terminal should look like this: 
 <br> ![Install Success](/pics/mvn-install.png)
@@ -39,16 +39,16 @@ browser_path =
 ## To run the program:
 Open an ngrok tunnel from terminal: 
 ```
-ngrok http 4001
+ngrok http 4000
 ```
-<br>You may change the port number but you will also need to change the port in bot.ini configuration file.
-To run the bot, first navigate to the correct folder: 
+<br>You may change the port number but you will also need to change the port in bot.ini configuration file.<br>
+To run the bot in IDEA, first make sure you are currently in the root folder, then either click the run button from IDEA navigation bar or run it in IDEA terminal<br>
 ```
-cd src/main/java/
+java -cp target/zoomapi-java-0.1.0.jar src/main/java/bots/botm1.java
 ```
-Then, run with:
+To run the bot in terminal, first make sure you are currently in the root folder, then run
 ```
-java bots/botm1.java
+java -cp target/zoomapi-java-0.1.0.jar src/main/java/bots/botm1.java
 ```
 Once the bot runs successfully, you will receive Status Code 200 with a zoom link.<br>
 <br>
