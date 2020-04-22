@@ -10,7 +10,7 @@ Soobin Choi
 
 ## To run the program:
 Open the project in an IDE 
-Run the following in the terminal to build the project properly in your local repository:<br>
+In the root folder, run the following in the terminal to build the project properly in your local repository:<br>
 Run the package goal to compile and package the code in a JAR file: 
 ```
 mvn package
@@ -19,7 +19,11 @@ Install the project's JAR file into the local repository:
 ```
 mvn install
 ```
-To run the bot, type the following in the terminal:
+To run the bot, first navigate to the correct folder: 
+```
+cd src/main/java/
+```
+Then, run with:
 ```
 java bots/botm1.java
 ```
