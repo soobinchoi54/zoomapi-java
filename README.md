@@ -57,7 +57,7 @@ Once the bot runs successfully, you will receive Status Code 200 with a zoom lin
 ### Expected Result:
 The expected output in the terminal for a successful run looks like this: 
 <br> ![Success](/pics/run-success.png) 
-<br> Sometimes, the the program will fail to connect to and get a response from Zoom, in which case the output will look like this:
+<br> Sometimes, the socket we setup cannot receive a response from Zoom due to network issues, in which case we throw an Exception acknowledging the situation, resulting in an output that looks like this:
 <br> ![Fail](/pics/run-fail.png)
 <br> Please try rerunning the program to fix the issue. 
 ## Throttle:
