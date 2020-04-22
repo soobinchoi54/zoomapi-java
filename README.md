@@ -8,17 +8,40 @@ This project was based on the python implementation of Zoom API forked from http
 Duo Chai
 Soobin Choi
 
-## To run the program:
+## To build the program:
 Open the project in an IDE 
-In the root folder, run the following in the terminal to build the project properly in your local repository:<br>
-Run the package goal to compile and package the code in a JAR file: 
+<br> In the root folder, run the following in the terminal to build the project properly in your local repository:
+<br> Run the package goal to compile and package the code in a JAR file: 
 ```
 mvn package
 ```
-Install the project's JAR file into the local repository:
+![Package Success](/pics/mvn-package.jpg)
+<br> Install the project's JAR file into the local repository:
 ```
 mvn install
 ```
+The output on terminal should look like this: 
+<br> ![Install Success](/pics/mvn-install.jpg)
+## To use your client id and secret for configuration: 
+Go to bots/bot.ini
+<br> Insert your credentials in
+```
+client_id =
+```
+and 
+```
+client_secret =
+```
+And your local browser path in
+```
+browser_path =
+```
+## To run the program:
+Open an ngrok tunnel from terminal: 
+```
+ngrok http 4001
+```
+<br>You may change the port number but you will also need to change the port in bot.ini configuration file.
 To run the bot, first navigate to the correct folder: 
 ```
 cd src/main/java/
@@ -27,4 +50,13 @@ Then, run with:
 ```
 java bots/botm1.java
 ```
+Once the bot runs successfully, you will receive Status Code 200 with a zoom link that looks like this:
+<br> ![Zoom Link](/pics/zoom-link.jpg)
+<br> Click on the link and the bot application should appear.
+## Throttle:
+To throttle the call rate at 10 calls per second, we have wrapped all related methods in the Throttle class in the utils folder. The throttle timestamp apparent in the above screenshot is a long-type number calculated using
+```
+Date().getTime()
+```
+method and we throttle at the request level.  
 
