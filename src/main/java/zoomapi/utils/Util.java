@@ -45,9 +45,19 @@ public class Util {
         return null;
     }
 
-    public static String httpReceiver(int port){
+    public static String httpReceiver(int port, int attempt){
+        // Cannot get response from Zoom due to poor network
+        // please try again manually
+        if(attempt == 4){
+            try {
+                throw new IllegalAccessException("Zoom Network failed, try again manually");
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
         System.out.println("Listening to port: " + port);
-        String code = "";
+        String code = null;
         try{
             ServerSocket serverSocket = new ServerSocket(port);
             Socket socket = serverSocket.accept();
@@ -65,16 +75,17 @@ public class Util {
             serverSocket.close();
         } catch (IOException e){
         }
-        System.out.println("Authorization code: " + code);
-        System.out.println("Listening ends");
-        System.out.println(code);
-        if(code.equals(""))
-            try {
-                throw new IllegalAccessException("Zoom Network failed");
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        return code;
+
+        // double check to make sure getting the response
+        // since the Zoom response info may take some time to arrive at our socket port
+        if(code == null){
+            System.out.println("Zoom response receiving failed, trying again...");
+            return httpReceiver(port, attempt + 1);
+        } else{
+            System.out.println("Raw Authorization code: " + code);
+            System.out.println("Listening ends");
+            return code;
+        }
     }
 
     public static String generate_jwt(String api_id, String api_secret){
@@ -108,7 +119,7 @@ public class Util {
             conn.setRequestProperty("Accept", "application/json");
 
             System.out.println("Status Code: " + conn.getResponseCode());
-            String code = httpReceiver(Integer.valueOf(port)).split("=")[1];
+            String code = httpReceiver(Integer.valueOf(port), 1).split("=")[1];
             System.out.println("Authorization Code: " + code);
             conn.disconnect();
 
