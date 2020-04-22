@@ -23,7 +23,7 @@ mvn clean install
 The output on terminal should look like this: 
 <br> ![Install Success](/pics/mvn-install.png)
 ## To use your client id and secret for configuration: 
-Go to bots/bot.ini
+Go to `src/main/java/bots/bot.ini`
 <br> Insert your credentials in
 ```
 client_id =
@@ -41,18 +41,19 @@ Open an ngrok tunnel from terminal:
 ```
 ngrok http 4000
 ```
-<br>You may change the port number but you will also need to change the port in bot.ini configuration file.<br>
-To run the bot in IDEA, first make sure you are currently in the root folder, then either click the run button from IDEA navigation bar or run it in IDEA terminal<br>
-```
-java -cp target/zoomapi-java-0.1.0.jar src/main/java/bots/botm1.java
-```
-To run the bot in terminal, first make sure you are currently in the root folder, then run
+<br>
+You may change the port number but you will also need to change the port in bot.ini configuration file.
+<br>
+
+To run the bot, first make sure you are currently in the root folder, then either click the run button from IDEA navigation bar or run the following in terminal<br>
 ```
 java -cp target/zoomapi-java-0.1.0.jar src/main/java/bots/botm1.java
 ```
 Once the bot runs successfully, you will receive Status Code 200 with a zoom link.<br>
 <br>
-**Click on the link** and the bot application should appear:<br> 
+**Click on the link** (in IDEA) or **copy the Zoom redirect_url and paste it in your browser**.
+<br>
+The bot application should appear as below:<br> 
 <br> ![Zoom Link](/pics/zoom-link.png)
 ### Expected Result:
 The expected output in the terminal for a successful run looks like this: 
