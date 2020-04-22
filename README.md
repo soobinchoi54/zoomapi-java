@@ -1,10 +1,30 @@
 # zoomapi-java
 Zoom API implementation in Java
 
-## Project Description
+### Project Description
 This project was based on the python implementation of Zoom API forked from https://github.com/crista/zoomapi and was completed as part of a group project for the SWE262P Programming Styles course at UCI. 
 
-## Team members:
+### Team members:
 Duo Chai
 Soobin Choi
+
+## To run the program:
+Open the project in an IDE 
+In the root folder, run the following in the terminal to build the project properly in your local repository:<br>
+Run the package goal to compile and package the code in a JAR file: 
+```
+mvn package
+```
+Install the project's JAR file into the local repository:
+```
+mvn install
+```
+To run the bot, first navigate to the correct folder: 
+```
+cd src/main/java/
+```
+Then, run with:
+```
+java bots/botm1.java
+```
 
