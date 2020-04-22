@@ -45,13 +45,14 @@ ngrok http 4000
 You may change the port number but you will also need to change the port in bot.ini configuration file.
 <br>
 
-To run the bot, first make sure you are currently in the root folder, then either click the run button from IDE navigation bar or run the following in terminal<br>
+To run the bot, first make sure you are currently in the root folder<br>
+then either click the run button from IDE navigation bar (you may need to specify the main class as `src/main/java/bots/botm1.java`) or run the following in terminal<br>
 ```
 java -cp target/zoomapi-java-0.1.0.jar src/main/java/bots/botm1.java
 ```
 Once the bot runs successfully, you will receive Status Code 200 with a zoom link.<br>
 <br>
-**Click on the link** (in IDE) or **copy the Zoom redirect_url and paste it in your browser**.
+**Click on the link** (in IDE) or **copy the Zoom redirect_url and paste it in your browser**(Zoom redirect_url starts with https://zoom.us/oauth/authorize?...).
 <br>
 The bot application should appear as below:<br> 
 <br> ![Zoom Link](/pics/zoom-link.png)
