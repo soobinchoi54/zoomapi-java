@@ -15,13 +15,13 @@ Open the project in an IDE
 ```
 mvn package
 ```
-![Package Success](/pics/mvn-package.jpg)
+![Package Success](/pics/mvn-package.png)
 <br> Install the project's JAR file into the local repository:
 ```
 mvn install
 ```
 The output on terminal should look like this: 
-<br> ![Install Success](/pics/mvn-install.jpg)
+<br> ![Install Success](/pics/mvn-install.png)
 ## To use your client id and secret for configuration: 
 Go to bots/bot.ini
 <br> Insert your credentials in
@@ -51,7 +51,7 @@ Then, run with:
 java bots/botm1.java
 ```
 Once the bot runs successfully, you will receive Status Code 200 with a zoom link that looks like this:
-<br> ![Zoom Link](/pics/zoom-link.jpg)
+<br> ![Zoom Link](/pics/zoom-link.png)
 <br> Click on the link and the bot application should appear.
 ## Throttle:
 To throttle the call rate at 10 calls per second, we have wrapped all related methods in the Throttle class in the utils folder. The throttle timestamp apparent in the above screenshot is a long-type number calculated using
