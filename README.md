@@ -10,7 +10,7 @@ Soobin Choi
 
 ## To run the program:
 Open the project in an IDE 
-Run the following in the terminal to build the project properly in your local repository:
+Run the following in the terminal to build the project properly in your local repository:<br>
 Run the package goal to compile and package the code in a JAR file: 
 ```
 mvn package
