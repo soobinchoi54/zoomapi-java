@@ -129,22 +129,10 @@ public class botm3 {
 
     private static void printOptions() {
         System.out.println("Please type in your command with a valid numeric index(0 ~ 14): ");
-        System.out.println("========== Channels ===========");
-        System.out.println("1. List User's Channels");
-        System.out.println("2. Create a Channel");
-        System.out.println("3. Get a Channel");
-        System.out.println("4. Update a Channel");
-        System.out.println("5. Delete a Channel");
-        System.out.println("6. List Channel Members");
-        System.out.println("7. Invite Channel Members");
-        System.out.println("8. Join a Channel");
-        System.out.println("9. Leave a Channel");
-        System.out.println("10. Remove a Member");
-        System.out.println("========== Messages ===========");
-        System.out.println("11. List User's Chat Messages");
-        System.out.println("12. Send a Chat Messages");
-        System.out.println("13. Update a Message");
-        System.out.println("14. Delete a Message");
+        System.out.println("========== Channel Messages ===========");
+        System.out.println("1. Send Chat to a Channel");
+        System.out.println("2. Get Chat History");
+        System.out.println("3. Search an Event");
         System.out.println("0. Exit");
     }
 }
