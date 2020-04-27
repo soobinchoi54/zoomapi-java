@@ -4,6 +4,7 @@ import org.apache.http.client.utils.DateUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import zoomapi.OauthZoomClient;
+import zoomapi.components.ChatChannelsComponent;
 import zoomapi.components.ChatMessagesComponent;
 import zoomapi.components.UserComponent;
 import zoomapi.utils.OauthCondition;
@@ -19,6 +20,7 @@ public class OauthMessage{
     private ChatMessagesComponent chat_messages = null;
     private UserComponent user = null;
     private String userId = "me";
+    private ChatChannelsComponent chat_channels = null;
     public OauthMessage(OauthZoomClient client){
         this.client = client;
         refresh();
@@ -31,22 +33,39 @@ public class OauthMessage{
 
     private void refresh(){
         chat_messages = (ChatMessagesComponent) this.client.getChatMessages();
+        chat_channels = (ChatChannelsComponent) this.client.getChatChannels();
         user = (UserComponent) this.client.getUser();
     }
 
     public boolean sendChatToGivenChannel(String to_channel, String message){
         if(chat_messages == null) throw new IllegalStateException("Uninitialized OauthClient");
+        JSONArray channels = (JSONArray) chat_channels.listChannels().get("channels");
+        String cid = null;
+        for (int i = 0; i<channels.length(); i++) {
+            if(channels.getJSONObject(i).getString("name").equals(to_channel)) cid = channels.getJSONObject(i).getString("id");
+        }
+        if(cid == null) {
+            throw new IllegalArgumentException("Invalid Channel Name");
+        }
         Map<String,String> data = new HashMap<>();
-        data.put("to_channel", to_channel);
+        data.put("to_channel", cid);
         data.put("message", message);
         return (int) chat_messages.sendMessage(data).get("status_code") == 201;
     }
 
     public List<String> getChatHistory(String to_channel) {
         if (chat_messages == null) throw new IllegalStateException("Uninitialized OauthClient");
+        JSONArray channels = (JSONArray) chat_channels.listChannels().get("channels");
+        String cid = null;
+        for (int i = 0; i<channels.length(); i++) {
+            if(channels.getJSONObject(i).getString("name").equals(to_channel)) cid = channels.getJSONObject(i).getString("id");
+        }
+        if(cid == null) {
+            throw new IllegalArgumentException("Invalid Channel Name");
+        }
         Map<String, String> params = new HashMap<>();
         params.put("userId", this.userId);
-        params.put("to_channel", to_channel);
+        params.put("to_channel", cid);
         List<String> history_list = new ArrayList<>();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
