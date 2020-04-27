@@ -6,8 +6,6 @@ import zoomapi.OauthZoomClient;
 import zoomapi.botAPIs.OauthMessage;
 import zoomapi.components.ChatChannelsComponent;
 import zoomapi.components.ChatMessagesComponent;
-import zoomapi.components.UserComponent;
-import zoomapi.utils.OauthEvent;
 import zoomapi.utils.Util;
 
 import java.awt.*;
@@ -62,14 +60,14 @@ public class botm3 {
     }
 
     private static void sendChatToGivenChannel(OauthZoomClient client) {
-        OauthMessage messages = new OauthMessage(client);
+        OauthMessage oauth_message = new OauthMessage(client);
         System.out.println("Enter channel name: ");
         Scanner sc1 = new Scanner(System.in);
         String to_channel = sc1.nextLine();
         System.out.println("Enter message to send: ");
         Scanner sc2 = new Scanner(System.in);
         String message = sc2.nextLine();
-        boolean response = messages.sendChatToGivenChannel(to_channel, message);
+        boolean response = oauth_message.sendChatToGivenChannel(to_channel, message);
         if (response) {
             System.out.println("Message Sent.");
         } else {
@@ -78,15 +76,29 @@ public class botm3 {
     }
 
     private static void getChatHistory(OauthZoomClient client) {
-        OauthMessage message = new OauthMessage(client);
+        OauthMessage oauth_message = new OauthMessage(client);
         System.out.println("Enter chat channel: ");
         Scanner sc = new Scanner(System.in);
         String to_channel = sc.nextLine();
-        List<String> history_list = message.getChatHistory(to_channel);
+        List<String> history_list = oauth_message.getChatHistory(to_channel);
         System.out.println(history_list);
     }
 
     private static void searchEvent(OauthZoomClient client) {
+        OauthMessage oauth_message = new OauthMessage(client);
+        System.out.println("Enter chat channel: ");
+        Scanner sc = new Scanner(System.in);
+        String to_channel = sc.nextLine();
+        List<String> ans1 = oauth_message.searchEvent(to_channel, (message)->{
+            if(message.getString("sender").contains("dive@gmail.com")) return true;
+            else return false;
+        });
+
+        List<String> ans2 = oauth_message.searchEvent(to_channel, (message)->{
+            if(message.getString("message").contains("hello")) return true;
+            else return false;
+        });
+
 
     }
 
