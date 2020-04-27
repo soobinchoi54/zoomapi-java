@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import zoomapi.OauthZoomClient;
 import zoomapi.components.ChatMessagesComponent;
 import zoomapi.components.UserComponent;
-import zoomapi.utils.OauthEvent;
+import zoomapi.utils.OauthCondition;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -61,10 +61,11 @@ public class OauthMessage{
                 params.put("date", String.valueOf(current_date));
                 JSONArray messages = (JSONArray) chat_messages.listMessages(params).get("messages");
                 for (int i = 0; i<messages.length(); i++) {
-                    String message = messages.getJSONObject(i).getString("message");
-                    String date_time = messages.getJSONObject(i).getString("date_time");
-                    String history = date_time + " : " + message;
-                    history_list.add(history);
+//                    String message = messages.getJSONObject(i).getString("message");
+//                    String date_time = messages.getJSONObject(i).getString("date_time");
+//                    String history = date_time + " : " + message;
+                    JSONObject history = messages.getJSONObject(i);
+                    history_list.add(history.toString());
                 }
                 cal.add(Calendar.DATE, -1);
             }
@@ -74,7 +75,13 @@ public class OauthMessage{
         return history_list;
     }
 
-    public List<String> searchEvent(String to_channel, OauthEvent e){
-        return e.happens();
+    public List<String> searchEvent(String to_channel, OauthCondition condition){
+        List<String> history_list = getChatHistory(to_channel);
+        List<String> true_list = new ArrayList<>();
+        for(String history:history_list){
+            JSONObject item = new JSONObject(history);
+            if(condition.isTrue(item.toString())) true_list.add(history);
+        }
+        return true_list;
     }
 }
