@@ -54,6 +54,7 @@ public class Util {
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
+            return null;
         }
 
         System.out.println("Listening to port: " + port);
@@ -79,7 +80,7 @@ public class Util {
         // double check to make sure getting the response
         // since the Zoom response info may take some time to arrive at our socket port
         if(code == null){
-            System.out.println("Zoom response receiving failed, trying again...");
+            System.out.println("Zoom response receiving failed, trying again..." + attempt);
             return httpReceiver(port, attempt + 1);
         } else{
             System.out.println("Raw Authorization code: " + code);
