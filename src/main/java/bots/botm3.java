@@ -90,12 +90,12 @@ public class botm3 {
         Scanner sc = new Scanner(System.in);
         String to_channel = sc.nextLine();
         List<String> ans1 = oauth_message.searchEvent(to_channel, (message)->{
-            if(message.getString("sender").contains("dive@gmail.com")) return true;
+            if(message.get("sender").contains("dive@gmail.com")) return true;
             else return false;
         });
 
         List<String> ans2 = oauth_message.searchEvent(to_channel, (message)->{
-            if(message.getString("message").contains("hello")) return true;
+            if(message.get("message").contains("hello")) return true;
             else return false;
         });
 
@@ -125,6 +125,7 @@ public class botm3 {
              * connect to ngrok tunnel externally via url
              ********************************************/
             Desktop.getDesktop().browse(new URL(redirect_url).toURI());
+            client = new OauthZoomClient(client_id, client_secret, PORT, redirect_url, browser_path);
             ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
             ChatMessagesComponent chat_messages = (ChatMessagesComponent) client.getChatMessages();
             JSONObject channels = chat_channels.listChannels();
