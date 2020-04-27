@@ -80,7 +80,7 @@ public class OauthMessage{
         List<String> true_list = new ArrayList<>();
         for(String history:history_list){
             JSONObject item = new JSONObject(history);
-            if(condition.isTrue(item.toString())) true_list.add(history);
+            if(condition.isTrue(item)) true_list.add(history);
         }
         return true_list;
     }
