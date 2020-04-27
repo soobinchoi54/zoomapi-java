@@ -39,14 +39,7 @@ public class OauthMessage{
 
     public boolean sendChatToGivenChannel(String to_channel, String message){
         if(chat_messages == null) throw new IllegalStateException("Uninitialized OauthClient");
-        JSONArray channels = (JSONArray) chat_channels.listChannels().get("channels");
-        String cid = null;
-        for (int i = 0; i<channels.length(); i++) {
-            if(channels.getJSONObject(i).getString("name").equals(to_channel)) cid = channels.getJSONObject(i).getString("id");
-        }
-        if(cid == null) {
-            throw new IllegalArgumentException("Invalid Channel Name");
-        }
+        String cid = getCid(to_channel);
         Map<String,String> data = new HashMap<>();
         data.put("to_channel", cid);
         data.put("message", message);
@@ -55,14 +48,7 @@ public class OauthMessage{
 
     public List<String> getChatHistory(String to_channel) {
         if (chat_messages == null) throw new IllegalStateException("Uninitialized OauthClient");
-        JSONArray channels = (JSONArray) chat_channels.listChannels().get("channels");
-        String cid = null;
-        for (int i = 0; i<channels.length(); i++) {
-            if(channels.getJSONObject(i).getString("name").equals(to_channel)) cid = channels.getJSONObject(i).getString("id");
-        }
-        if(cid == null) {
-            throw new IllegalArgumentException("Invalid Channel Name");
-        }
+        String cid = getCid(to_channel);
         Map<String, String> params = new HashMap<>();
         params.put("userId", this.userId);
         params.put("to_channel", cid);
@@ -109,5 +95,17 @@ public class OauthMessage{
             if(condition.isTrue(message)) true_list.add(history);
         }
         return true_list;
+    }
+
+    private String getCid(String to_channel){
+        JSONArray channels = (JSONArray) chat_channels.listChannels().get("channels");
+        String cid = null;
+        for (int i = 0; i<channels.length(); i++) {
+            if(channels.getJSONObject(i).getString("name").equals(to_channel)) cid = channels.getJSONObject(i).getString("id");
+        }
+        if(cid == null) {
+            throw new IllegalArgumentException("Invalid Channel Name");
+        }
+        return cid;
     }
 }
