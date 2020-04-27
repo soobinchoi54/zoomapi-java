@@ -1,7 +1,7 @@
 package zoomapi.utils;
 
-import org.json.JSONObject;
+import java.util.Map;
 
 public interface OauthCondition {
-    boolean isTrue(JSONObject message);
+    boolean isTrue(Map<String, String> message);
 }

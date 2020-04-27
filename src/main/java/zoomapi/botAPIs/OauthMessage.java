@@ -48,7 +48,7 @@ public class OauthMessage{
         params.put("userId", this.userId);
         params.put("to_channel", to_channel);
         List<String> history_list = new ArrayList<>();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
         String start_date = String.valueOf(user.getUser(params).get("created_at"));
         String end_date = String.valueOf(chat_messages.listMessages(params).get("date"));
@@ -57,7 +57,7 @@ public class OauthMessage{
             created_at = dateFormat.parse(start_date);
             cal.setTime(dateFormat.parse(end_date));
             Date current_date = dateFormat.parse(end_date);
-            while (created_at.before(current_date)) {
+            while (created_at.compareTo(current_date) <= 0) {
                 params.put("date", String.valueOf(current_date));
                 JSONArray messages = (JSONArray) chat_messages.listMessages(params).get("messages");
                 for (int i = 0; i<messages.length(); i++) {
@@ -68,6 +68,7 @@ public class OauthMessage{
                     history_list.add(history.toString());
                 }
                 cal.add(Calendar.DATE, -1);
+                current_date = cal.getTime();
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -80,7 +81,13 @@ public class OauthMessage{
         List<String> true_list = new ArrayList<>();
         for(String history:history_list){
             JSONObject item = new JSONObject(history);
-            if(condition.isTrue(item)) true_list.add(history);
+            Map<String, String> message = new HashMap();
+            message.put("id", item.getString("id"));
+            message.put("message", item.getString("message"));
+            message.put("sender", item.getString("sender"));
+            message.put("date_time", item.getString("date_time"));
+            message.put("timestamp", String.valueOf(item.getInt("id")));
+            if(condition.isTrue(message)) true_list.add(history);
         }
         return true_list;
     }
