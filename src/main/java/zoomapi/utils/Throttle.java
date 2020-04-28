@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Throttle {
     private long time_stamp;
-    private double INTERVAL = 0.10;
+    private double INTERVAL = 1.5;
     public Throttle(){
         time_stamp = new Date().getTime();
     }
