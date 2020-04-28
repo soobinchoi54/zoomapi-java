@@ -107,7 +107,7 @@ public class botm3 {
         String to_date = sc2.nextLine();
 
         List<String> ans1 = oauth_message.searchEvent(to_channel, from_date, to_date, (message)->{
-            if(message.get("sender").contains("chaiduo123@gmail.com")) return true;
+            if(message.get("sender").contains("soobinchoi54+zoombot@gmail.com")) return true;
             else return false;
         });
 

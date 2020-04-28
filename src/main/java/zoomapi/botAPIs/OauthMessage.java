@@ -59,15 +59,23 @@ public class OauthMessage{
             cal.setTime(from_date_format);
             while (from_date_format.compareTo(to_date_format) <= 0) {
                 params.put("date", from_date);
-                JSONArray messages = (JSONArray) chat_messages.listMessages(params).get("messages");
+                JSONObject response = chat_messages.listMessages(params);
+                JSONArray messages = (JSONArray) response.get("messages");
                 for (int i = 0; i<messages.length(); i++) {
                     JSONObject history = messages.getJSONObject(i);
                     history_list.add(history.toString());
                 }
+                if(response.getString("next_page_token").length()>1){
+                    params.put("next_page_token", response.getString("next_page_token"));
+                }
                 //increment from start_date -> to_date until while loop ends
-                cal.add(Calendar.DATE, 1);
-                from_date_format = cal.getTime();
-                from_date = dateFormat.format(from_date_format);
+                else{
+                    params.remove("next_page_token");
+                    cal.add(Calendar.DATE, 1);
+                    from_date_format = cal.getTime();
+                    from_date = dateFormat.format(from_date_format);
+                }
+//                System.out.println(history_list.size());
             }
         } catch (ParseException e) {
             e.printStackTrace();
