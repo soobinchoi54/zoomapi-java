@@ -104,14 +104,14 @@ public class botm3 {
         String from_date = sc2.nextLine();
         System.out.println("Enter end date (yyyy-mm-dd): ");
         Scanner sc3 = new Scanner(System.in);
-        String to_date = sc2.nextLine();
+        String to_date = sc3.nextLine();
 
         List<String> ans1 = oauth_message.searchEvent(to_channel, from_date, to_date, (message)->{
             if(message.get("sender").contains("soobinchoi54+zoombot@gmail.com")) return true;
             else return false;
         });
 
-        System.out.println("========== Event One ===========");
+        System.out.println("========== Search by Sender ===========");
         for(String event1:ans1){
             System.out.println(event1);
         }
@@ -121,7 +121,7 @@ public class botm3 {
             else return false;
         });
 
-        System.out.println("========== Event Two ===========");
+        System.out.println("========== Search by Message String ===========");
         for(String event2:ans2){
             System.out.println(event2);
         }
