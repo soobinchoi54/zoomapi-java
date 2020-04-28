@@ -82,13 +82,15 @@ public class botm3 {
         String to_channel = sc.nextLine();
         System.out.println("Make sure start date and to date are no more than 5 days apart!");
         System.out.println("Enter start date (yyyy-mm-dd): ");
-        Scanner sc2 = new Scanner(System.in);
-        String from_date = sc2.nextLine();
+        Scanner sc1 = new Scanner(System.in);
+        String from_date = sc1.nextLine();
         System.out.println("Enter end date (yyyy-mm-dd): ");
-        Scanner sc3 = new Scanner(System.in);
+        Scanner sc2 = new Scanner(System.in);
         String to_date = sc2.nextLine();
         List<String> history_list = oauth_message.getChatHistory(to_channel, from_date, to_date);
-        System.out.println(history_list);
+        for(String history:history_list){
+            System.out.println(history);
+        }
     }
 
     private static void searchEvent(OauthZoomClient client) {
@@ -103,17 +105,26 @@ public class botm3 {
         System.out.println("Enter end date (yyyy-mm-dd): ");
         Scanner sc3 = new Scanner(System.in);
         String to_date = sc2.nextLine();
+
         List<String> ans1 = oauth_message.searchEvent(to_channel, from_date, to_date, (message)->{
-            if(message.get("sender").contains("dive@gmail.com")) return true;
+            if(message.get("sender").contains("chaiduo123@gmail.com")) return true;
             else return false;
         });
+
+        System.out.println("========== Event One ===========");
+        for(String event1:ans1){
+            System.out.println(event1);
+        }
 
         List<String> ans2 = oauth_message.searchEvent(to_channel, from_date, to_date, (message)->{
             if(message.get("message").contains("hello")) return true;
             else return false;
         });
 
-
+        System.out.println("========== Event Two ===========");
+        for(String event2:ans2){
+            System.out.println(event2);
+        }
     }
 
     private void parse() {

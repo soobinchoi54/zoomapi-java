@@ -8,6 +8,7 @@ import zoomapi.components.ChatChannelsComponent;
 import zoomapi.components.ChatMessagesComponent;
 import zoomapi.utils.OauthCondition;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -48,14 +49,16 @@ public class OauthMessage{
         Map<String, String> params = new HashMap<>();
         params.put("userId", this.userId);
         params.put("to_channel", cid);
+        params.put("page_size", "50");
         List<String> history_list = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
         try {
             Date from_date_format = new SimpleDateFormat("yyyy-mm-dd").parse(from_date);
             Date to_date_format = new SimpleDateFormat("yyyy-mm-dd").parse(to_date);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
             cal.setTime(from_date_format);
             while (from_date_format.compareTo(to_date_format) <= 0) {
-                params.put("date", to_date);
+                params.put("date", from_date);
                 JSONArray messages = (JSONArray) chat_messages.listMessages(params).get("messages");
                 for (int i = 0; i<messages.length(); i++) {
                     JSONObject history = messages.getJSONObject(i);
@@ -64,6 +67,7 @@ public class OauthMessage{
                 //increment from start_date -> to_date until while loop ends
                 cal.add(Calendar.DATE, 1);
                 from_date_format = cal.getTime();
+                from_date = dateFormat.format(from_date_format);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -81,7 +85,7 @@ public class OauthMessage{
             message.put("message", item.getString("message"));
             message.put("sender", item.getString("sender"));
             message.put("date_time", item.getString("date_time"));
-            message.put("timestamp", String.valueOf(item.getInt("id")));
+            message.put("timestamp", item.getString("id"));
             if(condition.isTrue(message)) true_list.add(history);
         }
         return true_list;
