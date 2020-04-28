@@ -50,6 +50,9 @@ then either click the run button from IDE navigation bar (you may need to specif
 ```
 java -cp target/zoomapi-java-0.1.0.jar src/main/java/bots/botm1.java
 ```
+```
+java -cp target/zoomapi-java-0.1.0.jar src/main/java/bots/botm3.java
+```
 Once the bot runs successfully, you will receive Status Code 200 with a zoom link.<br>
 <br>
 **Click on the link** (in IDE) or **copy the Zoom redirect_url and paste it in your browser**(Zoom redirect_url starts with https://zoom.us/oauth/authorize?...).
