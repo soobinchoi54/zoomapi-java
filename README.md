@@ -70,4 +70,19 @@ To throttle the call rate at 10 calls per second, we have wrapped all related me
 ```
 Date().getTime()
 ```
-method and we throttle at the request level.  
+method and we throttle at the request level. 
+
+## Botm3 Result:
+The expected output in the terminal for a successful run on botm3.java looks like this: 
+<br> ![Success](/pics/m3/botm3-success.png) 
+<br> Once the application shows up in the terminal, you can pick one of the three options:
+<br> 1. Send Chat to a Channel
+<br> 2. Get Chat History
+<br> 3. Search an Event
+<br> The expected output for option 1 looks like this:
+<br> ![Success](/pics/m3/botm3-option1.png) 
+<br> The expected output for option 2 looks like this, with a list of messages from start to end date:
+<br> ![Success](/pics/m3/botm3-option2.png) 
+<br> The expected output for option 3 looks like this, with a list of messages with the specified sender, and another list of messages with the specified messages string:
+<br> ![Success](/pics/m3/botm3-option3.png) 
+
