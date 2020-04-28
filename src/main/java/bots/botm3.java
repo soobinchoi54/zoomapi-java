@@ -80,7 +80,14 @@ public class botm3 {
         System.out.println("Enter chat channel: ");
         Scanner sc = new Scanner(System.in);
         String to_channel = sc.nextLine();
-        List<String> history_list = oauth_message.getChatHistory(to_channel);
+        System.out.println("Make sure start date and to date are no more than 5 days apart!");
+        System.out.println("Enter start date (yyyy-mm-dd): ");
+        Scanner sc2 = new Scanner(System.in);
+        String from_date = sc2.nextLine();
+        System.out.println("Enter end date (yyyy-mm-dd): ");
+        Scanner sc3 = new Scanner(System.in);
+        String to_date = sc2.nextLine();
+        List<String> history_list = oauth_message.getChatHistory(to_channel, from_date, to_date);
         System.out.println(history_list);
     }
 
@@ -89,12 +96,19 @@ public class botm3 {
         System.out.println("Enter chat channel: ");
         Scanner sc = new Scanner(System.in);
         String to_channel = sc.nextLine();
-        List<String> ans1 = oauth_message.searchEvent(to_channel, (message)->{
+        System.out.println("Make sure start date and to date are no more than 5 days apart!");
+        System.out.println("Enter start date (yyyy-mm-dd): ");
+        Scanner sc2 = new Scanner(System.in);
+        String from_date = sc2.nextLine();
+        System.out.println("Enter end date (yyyy-mm-dd): ");
+        Scanner sc3 = new Scanner(System.in);
+        String to_date = sc2.nextLine();
+        List<String> ans1 = oauth_message.searchEvent(to_channel, from_date, to_date, (message)->{
             if(message.get("sender").contains("dive@gmail.com")) return true;
             else return false;
         });
 
-        List<String> ans2 = oauth_message.searchEvent(to_channel, (message)->{
+        List<String> ans2 = oauth_message.searchEvent(to_channel, from_date, to_date, (message)->{
             if(message.get("message").contains("hello")) return true;
             else return false;
         });
