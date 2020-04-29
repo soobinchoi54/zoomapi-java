@@ -1,13 +1,13 @@
 package zoomapi.utils;
 
-public class Messages {
+public class Message {
     private String id;
     private String message;
     private String sender;
     private String date_time;
     private int timestamp;
 
-    public Messages(String id, String message, String sender, String date_time, int timestamp) {
+    public Message(String id, String message, String sender, String date_time, int timestamp) {
         this.id = id;
         this.message = message;
         this.sender = sender;

@@ -1,13 +1,12 @@
 package zoomapi.botAPIs;
 
-import org.apache.http.client.utils.DateUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import zoomapi.OauthZoomClient;
 import zoomapi.components.ChatChannelsComponent;
 import zoomapi.components.ChatMessagesComponent;
-import zoomapi.utils.Messages;
+import zoomapi.utils.Message;
 import zoomapi.utils.OauthCondition;
 
 import java.text.DateFormat;
@@ -45,14 +44,14 @@ public class OauthMessage{
         return (int) chat_messages.sendMessage(data).get("status_code") == 201;
     }
 
-    public List<Messages> getChatHistory(String to_channel, String from_date, String to_date) {
+    public List<Message> getChatHistory(String to_channel, String from_date, String to_date) {
         if (chat_messages == null) throw new IllegalStateException("Uninitialized OauthClient");
         String cid = getCid(to_channel);
         Map<String, String> params = new HashMap<>();
         params.put("userId", this.userId);
         params.put("to_channel", cid);
         params.put("page_size", "50");
-        List<Messages> history_list = new ArrayList<>();
+        List<Message> history_list = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
         try {
             Date from_date_format = new SimpleDateFormat("yyyy-mm-dd").parse(from_date);
@@ -63,14 +62,14 @@ public class OauthMessage{
                 params.put("date", from_date);
                 JSONObject res = chat_messages.listMessages(params);
                 List<JSONObject> listObjs = parseJsonData(res, "messages");
-                Messages m;
+                Message m;
                 for (int i = 0; i<listObjs.size(); i++) {
                     String id = listObjs.get(i).getString("id");
                     String message = listObjs.get(i).getString("message");
                     String sender = listObjs.get(i).getString("sender");
                     String date_time = listObjs.get(i).getString("date_time");
                     int timestamp = listObjs.get(i).getInt("timestamp");
-                    m = new Messages(id, message, sender, date_time, timestamp);
+                    m = new Message(id, message, sender, date_time, timestamp);
                     history_list.add(m);
                 }
                 if(res.getString("next_page_token").length()>1){
@@ -90,10 +89,10 @@ public class OauthMessage{
         return history_list;
     }
 
-    public List<Messages> searchEvent(String to_channel, String from_date, String to_date, OauthCondition condition){
-        List<Messages> history_list = getChatHistory(to_channel, from_date, to_date);
-        List<Messages> true_list = new ArrayList<>();
-        for(Messages history:history_list){
+    public List<Message> searchEvent(String to_channel, String from_date, String to_date, OauthCondition condition){
+        List<Message> history_list = getChatHistory(to_channel, from_date, to_date);
+        List<Message> true_list = new ArrayList<>();
+        for(Message history:history_list){
             JSONObject item = new JSONObject(history);
             Map<String, String> message = new HashMap();
             message.put("id", item.getString("id"));
