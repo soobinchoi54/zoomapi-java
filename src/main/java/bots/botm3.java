@@ -6,6 +6,7 @@ import zoomapi.OauthZoomClient;
 import zoomapi.botAPIs.OauthMessage;
 import zoomapi.components.ChatChannelsComponent;
 import zoomapi.components.ChatMessagesComponent;
+import zoomapi.utils.Messages;
 import zoomapi.utils.Util;
 
 import java.awt.*;
@@ -87,9 +88,11 @@ public class botm3 {
         System.out.println("Enter end date (yyyy-mm-dd): ");
         Scanner sc2 = new Scanner(System.in);
         String to_date = sc2.nextLine();
-        List<String> history_list = oauth_message.getChatHistory(to_channel, from_date, to_date);
-        for(String history:history_list){
-            System.out.println(history);
+        List<Messages> history_list = oauth_message.getChatHistory(to_channel, from_date, to_date);
+        int number = 0;
+        for(Messages m:history_list){
+            number++;
+            System.out.println(number + ". [ID] " + m.getId() + " [MESSAGE] " + m.getMessage() + " [SENDER] " + m.getSender() + " [DATE_TIME] " + m.getDate_time());
         }
     }
 
@@ -106,24 +109,28 @@ public class botm3 {
         Scanner sc3 = new Scanner(System.in);
         String to_date = sc3.nextLine();
 
-        List<String> ans1 = oauth_message.searchEvent(to_channel, from_date, to_date, (message)->{
+        List<Messages> ans1 = oauth_message.searchEvent(to_channel, from_date, to_date, (message)->{
             if(message.get("sender").contains("soobinchoi54+zoombot@gmail.com")) return true;
             else return false;
         });
 
         System.out.println("========== Search by Sender ===========");
-        for(String event1:ans1){
-            System.out.println(event1);
+        int number1 = 0;
+        for(Messages event1:ans1){
+            number1++;
+            System.out.println(number1 + ". [ID] " + event1.getId() + " [MESSAGE] " + event1.getMessage() + " [SENDER] " + event1.getSender() + " [DATE_TIME] " + event1.getDate_time());
         }
 
-        List<String> ans2 = oauth_message.searchEvent(to_channel, from_date, to_date, (message)->{
+        List<Messages> ans2 = oauth_message.searchEvent(to_channel, from_date, to_date, (message)->{
             if(message.get("message").contains("hello")) return true;
             else return false;
         });
 
         System.out.println("========== Search by Message String ===========");
-        for(String event2:ans2){
-            System.out.println(event2);
+        int number2 = 0;
+        for(Messages event2:ans2){
+            number2++;
+            System.out.println(number2 + ". [ID] " + event2.getId() + " [MESSAGE] " + event2.getMessage() + " [SENDER] " + event2.getSender() + " [DATE_TIME] " + event2.getDate_time());
         }
     }
 
