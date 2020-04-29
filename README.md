@@ -81,8 +81,8 @@ The expected output in the terminal for a successful run on botm3.java looks lik
 <br> 3. Search an Event
 <br> The expected output for option 1 looks like this:
 <br> ![Success](/pics/m3/botm3-option1.png) 
-<br> The expected output for option 2 looks like this, with a list of messages from start to end date:
+<br> The expected output for option 2 looks like this, with a list of formatted messages from start to end date:
 <br> ![Success](/pics/m3/botm3-option2.png) 
-<br> The expected output for option 3 looks like this, with a list of messages with the specified sender, and another list of messages with the specified messages string:
+<br> The expected output for option 3 looks like this, with a list of formatted messages with the specified sender, and another list of messages with the specified messages string:
 <br> ![Success](/pics/m3/botm3-option3.png) 
 
