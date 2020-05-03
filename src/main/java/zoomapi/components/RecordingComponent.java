@@ -13,7 +13,7 @@ public class RecordingComponent extends BaseComponent{
     }
 
     public JSONObject listRecording(Map<String,String> params){
-        String[] keys = new String[] {"userId", "from", "to"};
+        String[] keys = new String[] {"userId"};
         Util.requireKeys(params, keys);
         return this.getRequest(String.format("/users/%s/recordings", params.get("userId")), params);
     }
