@@ -10,31 +10,23 @@ public class ChatMessagesComponent extends BaseComponent{
         super(base_uri, config);
     }
     public JSONObject listMessages(Map<String,String> params){
-        String[] keys1 = new String[] {"userId", "to_channel"};
-        String[] keys2 = new String[] {"userId", "to_contact"};
-        if (params.containsKey("to_channel")) Util.requireKeys(params, keys1);
-        else Util.requireKeys(params, keys2);
+        if (params.containsKey("to_channel")) Util.requireKeys(params, new String[] {"userId", "to_channel"});
+        else Util.requireKeys(params, new String[] {"userId", "to_contact"});
         return this.getRequest(String.format("/chat/users/%s/messages", params.get("userId")), params);
     }
     public JSONObject sendMessage(Map<String,String> data){
-        String[] keys1 = new String[] {"message", "to_channel"};
-        String[] keys2 = new String[] {"message", "to_contact"};
-        if (data.containsKey("to_channel")) Util.requireKeys(data, keys1);
-        else Util.requireKeys(data, keys2);
+        if (data.containsKey("to_channel")) Util.requireKeys(data, new String[] {"message", "to_channel"});
+        else Util.requireKeys(data, new String[] {"message", "to_contact"});
         return this.postRequest(String.format("/chat/users/me/messages"), data);
     }
     public JSONObject updateMessage(Map<String, String> data){
-        String[] keys1 = new String[]{"messageId", "to_channel", "message"};
-        String[] keys2 = new String[]{"messageId", "to_contact", "message"};
-        if(data.containsKey("to_channel")) Util.requireKeys(data, keys1);
-        else Util.requireKeys(data, keys2);
+        if(data.containsKey("to_channel")) Util.requireKeys(data, new String[]{"messageId", "to_channel", "message"});
+        else Util.requireKeys(data, new String[]{"messageId", "to_contact", "message"});
         return this.putRequest(String.format("/chat/users/me/messages/%s", data.get("messageId")), data);
     }
     public JSONObject deleteMessage(Map<String,String> params){
-        String[] keys1 = new String[] {"messageId", "to_channel"};
-        String[] keys2 = new String[] {"messageId", "to_contact"};
-        if (params.containsKey("to_channel")) Util.requireKeys(params, keys1);
-        else Util.requireKeys(params, keys2);
+        if (params.containsKey("to_channel")) Util.requireKeys(params, new String[] {"messageId", "to_channel"});
+        else Util.requireKeys(params, new String[] {"messageId", "to_contact"});
         return this.deleteRequest(String.format("/chat/users/me/messages/%s", params.get("messageId")), params);
     }
 }

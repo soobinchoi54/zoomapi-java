@@ -64,7 +64,7 @@ public class ApiClient{
 
     protected JSONObject getRequest(String end_point, Map<String, String> params){
         // throttle the Request to make sure no more then 2 requests will be executed within the same 0.1 sec window
-        this.throttle.throttled();
+        ApiClient.throttle.throttled();
         String url = urlFor((end_point));
         try{
             // send GET request
@@ -88,7 +88,7 @@ public class ApiClient{
 
     protected JSONObject postRequest(String end_point, Map<String, String> data){
         // throttle the Request to make sure no more then 2 requests will be executed within the same 0.1 sec window
-        this.throttle.throttled();
+        ApiClient.throttle.throttled();
         String url = urlFor((end_point));
         try{
             // send POST request
@@ -140,7 +140,7 @@ public class ApiClient{
 
     protected JSONObject patchRequest(String end_point, Map<String, String> data){
         // throttle the Request to make sure no more then 2 requests will be executed within the same 0.1 sec window
-        this.throttle.throttled();
+        ApiClient.throttle.throttled();
         String url = urlFor((end_point));
 
         try{
@@ -203,7 +203,7 @@ public class ApiClient{
 
     protected JSONObject deleteRequest(String end_point, Map<String, String> params){
         // throttle the Request to make sure no more then 2 requests will be executed within the same 0.1 sec window
-        this.throttle.throttled();
+        ApiClient.throttle.throttled();
         String url = urlFor((end_point));
         try{
             // send DELETE request
@@ -227,7 +227,7 @@ public class ApiClient{
 
     protected JSONObject putRequest(String end_point, Map<String, String> data){
         // throttle the Request to make sure no more then 2 requests will be executed within the same 0.1 sec window
-        this.throttle.throttled();
+        ApiClient.throttle.throttled();
         String url = urlFor((end_point));
         try{
             // send PUT request
