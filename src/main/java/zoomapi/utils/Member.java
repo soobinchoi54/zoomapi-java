@@ -1,6 +1,6 @@
 package zoomapi.utils;
 
-public class Member {
+public class Member extends Event{
     private String id;
     private String email;
     private String first_name;
@@ -33,5 +33,9 @@ public class Member {
 
     public String getRole() {
         return role;
+    }
+
+    public String toString(){
+        return ("[ID] " + this.id + " [EMAIL] " + this.email + " [FIRST_NAME] " + this.first_name + " [LAST_NAME] " + this.last_name);
     }
 }

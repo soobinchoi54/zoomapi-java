@@ -2,6 +2,7 @@ package zoomapi.botAPIs.subscribe;
 
 import zoomapi.OauthZoomClient;
 import zoomapi.botAPIs.OauthMessage;
+import zoomapi.utils.Event;
 import zoomapi.utils.Message;
 
 import java.util.HashSet;
@@ -59,7 +60,7 @@ public class ChannelObserver{
     /************************************************
      * call-back method to be called once data changes
      ************************************************/
-    public void update(Message m){
-        System.out.println(observerName + ". [ID] " + m.getId() + " [MESSAGE] " + m.getMessage() + " [SENDER] " + m.getSender() + " [DATE_TIME] " + m.getDate_time());
+    public void update(Event e){
+        System.out.println(observerName + ": " + e.toString());
     }
 }
