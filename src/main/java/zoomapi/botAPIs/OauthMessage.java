@@ -54,9 +54,9 @@ public class OauthMessage{
         List<Message> history_list = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
         try {
-            Date from_date_format = new SimpleDateFormat("yyyy-mm-dd").parse(from_date);
-            Date to_date_format = new SimpleDateFormat("yyyy-mm-dd").parse(to_date);
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date from_date_format = new SimpleDateFormat("yyyy-MM-dd").parse(from_date);
+            Date to_date_format = new SimpleDateFormat("yyyy-MM-dd").parse(to_date);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             cal.setTime(from_date_format);
             while (from_date_format.compareTo(to_date_format) <= 0) {
                 params.put("date", from_date);

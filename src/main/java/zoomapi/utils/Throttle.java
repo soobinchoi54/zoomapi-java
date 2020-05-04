@@ -21,6 +21,6 @@ public class Throttle {
             }
         }
         this.time_stamp = new Date().getTime();
-        System.out.println("Throttled time stamp: " + time_stamp);
+        // System.out.println("Throttled time stamp: " + time_stamp);
     }
 }
