@@ -3,13 +3,13 @@ package zoomapi.utils;
 import java.util.Date;
 
 public class Throttle {
-    private long time_stamp;
+    private volatile long time_stamp;
     private double INTERVAL = 1.5;
     public Throttle(){
         time_stamp = new Date().getTime();
     }
 
-    public void throttled(){
+    public synchronized void throttled(){
         long cur = new Date().getTime();
         long diff = cur - this.time_stamp;
         if(diff < (long) (INTERVAL*1000)){

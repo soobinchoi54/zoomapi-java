@@ -76,10 +76,15 @@ public class botm4 {
             Desktop.getDesktop().browse(new URL(redirect_url).toURI());
             client = new OauthZoomClient(client_id, client_secret, PORT, redirect_url, browser_path);
             SubscribeAgency.initialize();
-            ChannelObserver observer = new ChannelObserver("Soobin", client, "updated channel");
-            ChannelObserver observer2 = new ChannelObserver("Duo", client, "updated channel");
+            ChannelObserver observer = new ChannelObserver("Soobin on new messages", client, "updated channel");
+            ChannelObserver observer2 = new ChannelObserver("Duo on updates", client, "updated channel");
+            ChannelObserver observer3 = new ChannelObserver("Soobin on new members", client, "updated channel");
+            observer.setObservingDate("2020-05-04", "2020-05-04");
             observer.subscribeTo(SubscribeAgency.NOTIFY_NEW_MESSAGES);
-            observer2.subscribeTo(SubscribeAgency.NOTIFY_NEW_MESSAGES);
+            observer2.setObservingDate("2020-05-04", "2020-05-04");
+            observer2.subscribeTo(SubscribeAgency.NOTIFY_MESSAGE_UPDATES);
+            observer3.setObservingDate("2020-05-04", "2020-05-04");
+            observer3.subscribeTo(SubscribeAgency.NOTIFY_NEW_MEMBERS);
 
         } catch (NumberFormatException | FileNotFoundException ne) {
             System.out.println("Number Format Exception: " + ne);

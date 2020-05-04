@@ -1,6 +1,7 @@
 package zoomapi.botAPIs.subscribe;
 
 import zoomapi.OauthZoomClient;
+import zoomapi.utils.Event;
 import zoomapi.utils.Message;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class SubscribeAgency {
      * Array stores the HashMap of specify Event functionality
      * HashMap stores the ChannelName, <T> Event(ChannelName) pair
      */
-    private static List<Map<String, Event>> events;
+    private static List<Map<String, EventHandler>> events;
 
     public static void initialize(){
         events = new ArrayList<>(MAX_EVENT_NUMBER);
@@ -46,7 +47,7 @@ public class SubscribeAgency {
         String fromDate = observer.getObservingDate()[0];
         String toDate = observer.getObservingDate()[1];
         OauthZoomClient client = observer.getClient();
-        Map<String, Event> map = events.get(eventCode);
+        Map<String, EventHandler> map = events.get(eventCode);
         if(map.containsKey(channelName)){
             map.get(channelName).addObserver(observer);
         }else{
@@ -61,24 +62,24 @@ public class SubscribeAgency {
             throw new IllegalArgumentException("Invalid Event Code");
         }
     }
-    private static Event createNewEvent(int eventCode, OauthZoomClient client, String channelName, String fromDate, String toDate){
+    private static EventHandler createNewEvent(int eventCode, OauthZoomClient client, String channelName, String fromDate, String toDate){
         if(eventCode == NOTIFY_NEW_MESSAGES){
-            return new NewMessagesEvent(client,channelName, fromDate, toDate);
+            return new NewMessagesEventHandler(client,channelName, fromDate, toDate);
         }else if(eventCode == NOTIFY_NEW_MEMBERS){
-            return new NewMembersEvent(client, channelName, fromDate, toDate);
+            return new NewMembersEventHandler(client, channelName, fromDate, toDate);
         } else if(eventCode == NOTIFY_MESSAGE_UPDATES){
-            return new UpdatedMessagesEvent(client,channelName, fromDate, toDate);
+            return new UpdatedMessagesEventHandler(client,channelName, fromDate, toDate);
         }else return null;
     }
 
     // will call the call-back method once data changes
-    public static void announce(int eventCode, String channelName, Message message){
-        events.get(eventCode).get(channelName).notifyObservers(message);
+    public static void announce(int eventCode, String channelName, Event e){
+        events.get(eventCode).get(channelName).notifyObservers(e);
     }
 
     public static void unsubscribeFrom(int eventCode, ChannelObserver observer){
         String channelName = observer.getChannelName();
-        Event event = events.get(eventCode).get(channelName);
+        EventHandler event = events.get(eventCode).get(channelName);
         event.deleteObserver(observer);
         if(event.getObservers().size()==0) event.stopWorking();
     }

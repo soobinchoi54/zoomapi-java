@@ -1,5 +1,6 @@
 package zoomapi.botAPIs.subscribe;
 
+import zoomapi.utils.Event;
 import zoomapi.utils.Message;
 
 import java.util.ArrayList;
@@ -8,12 +9,12 @@ import java.util.ArrayList;
  * Singleton Abstract Class Event
  ************************/
 
-public abstract class Event implements Runnable{
+public abstract class EventHandler implements Runnable{
 
     protected Thread thread;
     protected ArrayList<ChannelObserver> observers;
     protected volatile boolean work = false;
-    protected Event(){
+    protected EventHandler(){
         this.observers = new ArrayList<>();
         if(thread == null) this.thread = new Thread(this);
     }
@@ -26,9 +27,9 @@ public abstract class Event implements Runnable{
         observers.remove(observer);
     }
 
-    public synchronized void notifyObservers(Message message){
+    public synchronized void notifyObservers(Event e){
         for(int i = 0; i < observers.size(); i++){
-            observers.get(i).update(message);
+            observers.get(i).update(e);
         }
     }
 
