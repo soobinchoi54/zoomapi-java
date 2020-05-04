@@ -12,6 +12,9 @@ public class ChannelObserver{
     private String channelName;
     private OauthZoomClient client;
     private Set<Integer> subscription;
+    private String fromDate;
+    private String toDate;
+
     public ChannelObserver(String observerName, OauthZoomClient client, String channelName) {
         this.channelName = channelName;
         this.client = client;
@@ -28,7 +31,22 @@ public class ChannelObserver{
         return this.client;
     }
 
+    public void setObservingDate(String fromDate, String toDate){
+        this.fromDate = fromDate;
+        this.toDate = toDate;
+    }
+
+    public String[] getObservingDate(){
+        return new String[]{this.fromDate, this.toDate};
+    }
+
+    private void checkObservingDate(){
+        if(fromDate == null || toDate == null){
+            throw new IllegalStateException("Please specify observing date by setObservingDate()");
+        }
+    }
     public void subscribeTo(int eventCode){
+        checkObservingDate();
         SubscribeAgency.subscribeTo(eventCode, this);
         subscription.add(eventCode);
     }
