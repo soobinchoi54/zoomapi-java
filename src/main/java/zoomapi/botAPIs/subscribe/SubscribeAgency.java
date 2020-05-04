@@ -43,12 +43,14 @@ public class SubscribeAgency {
     public static void subscribeTo(int eventCode, ChannelObserver observer){
         checkValidation(eventCode);
         String channelName = observer.getChannelName();
+        String fromDate = observer.getObservingDate()[0];
+        String toDate = observer.getObservingDate()[1];
         OauthZoomClient client = observer.getClient();
         Map<String, Event> map = events.get(eventCode);
         if(map.containsKey(channelName)){
             map.get(channelName).addObserver(observer);
         }else{
-            map.put(channelName, createNewEvent(eventCode, client, channelName));
+            map.put(channelName, createNewEvent(eventCode, client, channelName, fromDate, toDate));
             map.get(channelName).addObserver(observer);
             map.get(channelName).startWorking();
         }
@@ -59,13 +61,13 @@ public class SubscribeAgency {
             throw new IllegalArgumentException("Invalid Event Code");
         }
     }
-    private static Event createNewEvent(int eventCode, OauthZoomClient client, String channelName){
+    private static Event createNewEvent(int eventCode, OauthZoomClient client, String channelName, String fromDate, String toDate){
         if(eventCode == NOTIFY_NEW_MESSAGES){
-            return new NewMessagesEvent(client,channelName);
+            return new NewMessagesEvent(client,channelName, fromDate, toDate);
         }else if(eventCode == NOTIFY_NEW_MEMBERS){
-            return new NewMembersEvent(client, channelName);
+            return new NewMembersEvent(client, channelName, fromDate, toDate);
         } else if(eventCode == NOTIFY_MESSAGE_UPDATES){
-            return new UpdatedMessagesEvent(client,channelName);
+            return new UpdatedMessagesEvent(client,channelName, fromDate, toDate);
         }else return null;
     }
 

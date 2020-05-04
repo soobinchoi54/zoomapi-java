@@ -17,17 +17,18 @@ import java.util.Set;
 public class NewMessagesEvent extends OauthEvent{
     private String channelName;
     private Set<String> messageIds;
-    private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    public NewMessagesEvent(OauthZoomClient client, String channelName) {
+    private String fromDate;
+    private String toDate;
+    public NewMessagesEvent(OauthZoomClient client, String channelName, String fromDate, String toDate) {
         super(client);
         this.channelName = channelName;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
         messageIds = new HashSet<>();
     }
 
     private void messageIdsInit(){
-        Date currentDate = new Date();
-        String date = dateFormat.format(currentDate);
-        List<Message> messages = oauthMessage.getChatHistory(channelName, date, "2020-05-04");
+        List<Message> messages = oauthMessage.getChatHistory(channelName, this.fromDate, this.toDate);
         for(int i = 0; i < messages.size(); i++){
             Message message = messages.get(i);
             String messageId = message.getId();
@@ -40,9 +41,7 @@ public class NewMessagesEvent extends OauthEvent{
         messageIdsInit();
         while(this.work){
             System.out.println("new message checking");
-            Date currentDate = new Date();
-            String date = dateFormat.format(currentDate);
-            List<Message> messages = oauthMessage.getChatHistory(channelName, date, "2020-05-04");
+            List<Message> messages = oauthMessage.getChatHistory(channelName, this.fromDate, this.toDate);
             for(int i = 0; i < messages.size(); i++){
                 Message message = messages.get(i);
                 String messageId = message.getId();
