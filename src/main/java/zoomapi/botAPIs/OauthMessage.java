@@ -35,52 +35,54 @@ public class OauthMessage{
         chat_channels = (ChatChannelsComponent) this.client.getChatChannels();
     }
 
-    public boolean sendChatToGivenChannel(String to_channel, String message){
+    public boolean sendChatToGivenChannel(String toChannel, String message){
         if(chat_messages == null) throw new IllegalStateException("Uninitialized OauthClient");
-        String cid = getCid(to_channel);
+        String cid = getCid(toChannel);
         Map<String,String> data = new HashMap<>();
-        data.put("to_channel", cid);
+        data.put("toChannel", cid);
         data.put("message", message);
         return (int) chat_messages.sendMessage(data).get("status_code") == 201;
     }
 
-    public List<Message> getChatHistory(String to_channel, String from_date, String to_date) {
+    public List<Message> getChatHistory(String toChannel, String fromDate, String toDate) {
+        checkValidation(fromDate, toDate);
         if (chat_messages == null) throw new IllegalStateException("Uninitialized OauthClient");
-        String cid = getCid(to_channel);
+        String cid = getCid(toChannel);
         Map<String, String> params = new HashMap<>();
         params.put("userId", this.userId);
-        params.put("to_channel", cid);
+        params.put("toChannel", cid);
         params.put("page_size", "50");
         List<Message> history_list = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
         try {
-            Date from_date_format = new SimpleDateFormat("yyyy-MM-dd").parse(from_date);
-            Date to_date_format = new SimpleDateFormat("yyyy-MM-dd").parse(to_date);
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date from_date_format = dateFormat.parse(fromDate);
+            Date to_date_format = dateFormat.parse(toDate);
             cal.setTime(from_date_format);
             while (from_date_format.compareTo(to_date_format) <= 0) {
-                params.put("date", from_date);
+                params.put("date", fromDate);
                 JSONObject res = chat_messages.listMessages(params);
                 List<JSONObject> listObjs = parseJsonData(res, "messages");
                 Message m;
                 for (int i = 0; i<listObjs.size(); i++) {
-                    String id = listObjs.get(i).getString("id");
-                    String message = listObjs.get(i).getString("message");
-                    String sender = listObjs.get(i).getString("sender");
-                    String date_time = listObjs.get(i).getString("date_time");
-                    int timestamp = listObjs.get(i).getInt("timestamp");
+                    JSONObject obj = listObjs.get(i);
+                    String id = obj.getString("id");
+                    String message = obj.getString("message");
+                    String sender = obj.getString("sender");
+                    String date_time = obj.getString("date_time");
+                    int timestamp = obj.getInt("timestamp");
                     m = new Message(id, message, sender, date_time, timestamp);
                     history_list.add(m);
                 }
                 if(res.getString("next_page_token").length()>1){
                     params.put("next_page_token", res.getString("next_page_token"));
                 }
-                //increment from start_date -> to_date until while loop ends
+                //increment from start_date -> toDate until while loop ends
                 else{
                     params.remove("next_page_token");
                     cal.add(Calendar.DATE, 1);
                     from_date_format = cal.getTime();
-                    from_date = dateFormat.format(from_date_format);
+                    fromDate = dateFormat.format(from_date_format);
                 }
             }
         } catch (ParseException e) {
@@ -89,18 +91,23 @@ public class OauthMessage{
         return history_list;
     }
 
-    public List<Message> searchEvent(String to_channel, String from_date, String to_date, OauthCondition condition){
-        List<Message> history_list = getChatHistory(to_channel, from_date, to_date);
+    private void checkValidation(String fromDate, String toDate){
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date from_date_format = dateFormat.parse(fromDate);
+            Date to_date_format = dateFormat.parse(toDate);
+            if(from_date_format.compareTo(to_date_format) > 0) throw new IllegalArgumentException("illegal from/to date input");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public List<Message> searchEvent(String toChannel, String fromDate, String toDate, OauthCondition condition){
+        List<Message> history_list = getChatHistory(toChannel, fromDate, toDate);
         List<Message> true_list = new ArrayList<>();
         for(Message history:history_list){
-            JSONObject item = new JSONObject(history);
-            Map<String, String> message = new HashMap();
-            message.put("id", item.getString("id"));
-            message.put("message", item.getString("message"));
-            message.put("sender", item.getString("sender"));
-            message.put("date_time", item.getString("date_time"));
-            message.put("timestamp", item.getString("id"));
-            if(condition.isTrue(message)) true_list.add(history);
+            if(condition.isTrue(history)) true_list.add(history);
         }
         return true_list;
     }
