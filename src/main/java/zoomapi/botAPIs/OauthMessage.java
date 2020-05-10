@@ -55,9 +55,9 @@ public class OauthMessage{
         List<Message> history_list = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
         try {
-            Date from_date_format = new SimpleDateFormat("yyyy-MM-dd").parse(from_date);
-            Date to_date_format = new SimpleDateFormat("yyyy-MM-dd").parse(to_date);
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date from_date_format = dateFormat.parse(from_date);
+            Date to_date_format = dateFormat.parse(to_date);
             cal.setTime(from_date_format);
             while (from_date_format.compareTo(to_date_format) <= 0) {
                 params.put("date", from_date);
@@ -65,11 +65,12 @@ public class OauthMessage{
                 List<JSONObject> listObjs = parseJsonData(res, "messages");
                 Message m;
                 for (int i = 0; i<listObjs.size(); i++) {
-                    String id = listObjs.get(i).getString("id");
-                    String message = listObjs.get(i).getString("message");
-                    String sender = listObjs.get(i).getString("sender");
-                    String date_time = listObjs.get(i).getString("date_time");
-                    int timestamp = listObjs.get(i).getInt("timestamp");
+                    JSONObject obj = listObjs.get(i);
+                    String id = obj.getString("id");
+                    String message = obj.getString("message");
+                    String sender = obj.getString("sender");
+                    String date_time = obj.getString("date_time");
+                    int timestamp = obj.getInt("timestamp");
                     m = new Message(id, message, sender, date_time, timestamp);
                     history_list.add(m);
                 }
