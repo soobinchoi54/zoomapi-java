@@ -46,7 +46,7 @@ You may change the port number but you will also need to change the port in bot.
 <br>
 
 To run the bot, first make sure you are currently in the root folder<br>
-then either click the run button from IDE navigation bar (you may need to specify the main class as `src/main/java/bots/botm#.java` depending on which bot you want to run) and run the following in terminal<br>
+then either click the run button from IDE navigation bar (you may need to specify the main class as `src/main/java/bots/botm#.java` depending on which bot you want to run) or run the following in terminal<br>
 ```
 java -cp target/zoomapi-java-0.1.0.jar src/main/java/bots/botm1.java
 ```
@@ -92,7 +92,7 @@ The expected output in the terminal for a successful run on botm3.java looks lik
 ## Botm4 Result:
 The expected output in the terminal for a successful run on botm4.java looks like this: 
 <br> ![Success](/pics/m4/m4-result.png) 
-<br> The last three lines indicate the output from the event-based mechanism, where the bot received notification when
+<br> The last three lines indicate the output from the 'event-based subscription' mechanism, where the observers in bot code (Soobin & Duo) received notification when
 <br> 1. A new member was added to the channel;
 <br> 2. A new message was received in the channel; and
 <br> 3. A message in a channel was updated. 
