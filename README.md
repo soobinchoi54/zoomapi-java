@@ -46,12 +46,15 @@ You may change the port number but you will also need to change the port in bot.
 <br>
 
 To run the bot, first make sure you are currently in the root folder<br>
-then either click the run button from IDE navigation bar (you may need to specify the main class as `src/main/java/bots/botm1.java`) or run the following in terminal<br>
+then either click the run button from IDE navigation bar (you may need to specify the main class as `src/main/java/bots/botm#.java` depending on which bot you want to run) and run the following in terminal<br>
 ```
 java -cp target/zoomapi-java-0.1.0.jar src/main/java/bots/botm1.java
 ```
 ```
 java -cp target/zoomapi-java-0.1.0.jar src/main/java/bots/botm3.java
+```
+```
+java -cp target/zoomapi-java-0.1.0.jar src/main/java/bots/botm4.java
 ```
 Once the bot runs successfully, you will receive Status Code 200 with a zoom link.<br>
 <br>
@@ -85,4 +88,12 @@ The expected output in the terminal for a successful run on botm3.java looks lik
 <br> ![Success](/pics/m3/botm3-option2.png) 
 <br> The expected output for option 3 looks like this, with a list of formatted messages with the specified sender, and another list of messages with the specified messages string:
 <br> ![Success](/pics/m3/botm3-option3.png) 
+
+## Botm4 Result:
+The expected output in the terminal for a successful run on botm4.java looks like this: 
+<br> ![Success](/pics/m4/m4-result.png) 
+<br> The last three lines indicate the output from the event-based mechanism, where the bot received notification when
+<br> 1. A new member was added to the channel;
+<br> 2. A new message was received in the channel; and
+<br> 3. A message in a channel was updated. 
 
