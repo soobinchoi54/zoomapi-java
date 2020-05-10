@@ -110,7 +110,7 @@ public class botm3 {
         String to_date = sc3.nextLine();
 
         List<Message> ans1 = oauth_message.searchEvent(to_channel, from_date, to_date, (message)->{
-            if(message.get("sender").contains("soobinchoi54+zoombot@gmail.com")) return true;
+            if(message.getSender().contains("soobinchoi54+zoombot@gmail.com")) return true;
             else return false;
         });
 
@@ -122,7 +122,7 @@ public class botm3 {
         }
 
         List<Message> ans2 = oauth_message.searchEvent(to_channel, from_date, to_date, (message)->{
-            if(message.get("message").contains("hello")) return true;
+            if(message.getMessage().contains("hello")) return true;
             else return false;
         });
 
