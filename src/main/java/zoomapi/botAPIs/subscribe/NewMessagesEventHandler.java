@@ -37,6 +37,7 @@ public class NewMessagesEventHandler extends OauthEventHandler{
             String messageId = message.getId();
             this.messageIds.add(messageId);
         }
+        System.out.println("New messages listener starts working...");
     }
 
     @Override

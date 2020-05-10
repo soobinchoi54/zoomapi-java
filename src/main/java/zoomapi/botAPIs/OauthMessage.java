@@ -63,15 +63,15 @@ public class OauthMessage{
                 params.put("date", from_date);
                 JSONObject res = chat_messages.listMessages(params);
                 List<JSONObject> listObjs = parseJsonData(res, "messages");
-                Message m;
                 for (int i = 0; i<listObjs.size(); i++) {
                     JSONObject obj = listObjs.get(i);
-                    String id = obj.getString("id");
-                    String message = obj.getString("message");
-                    String sender = obj.getString("sender");
-                    String date_time = obj.getString("date_time");
-                    int timestamp = obj.getInt("timestamp");
-                    m = new Message(id, message, sender, date_time, timestamp);
+                    // System.out.println(obj.toString());
+                    String id = obj.has("id") ? obj.getString("id"):null;
+                    String message = obj.has("message") ? obj.getString("message"):null;
+                    String sender = obj.has("sender") ? obj.getString("sender"):null;
+                    String date_time = obj.has("date_time") ? obj.getString("date_time"):null;
+                    int timestamp = obj.has("timestamp") ? obj.getInt("timestamp"):null;
+                    Message m = new Message(id, message, sender, date_time, timestamp);
                     history_list.add(m);
                 }
                 if(res.getString("next_page_token").length()>1){
