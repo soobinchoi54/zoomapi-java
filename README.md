@@ -89,11 +89,14 @@ The expected output in the terminal for a successful run on botm3.java looks lik
 <br> The expected output for option 3 looks like this, with a list of formatted messages with the specified sender, and another list of messages with the specified messages string:
 <br> ![Success](/pics/m3/botm3-option3.png) 
 
-## Botm4 Result:
-The expected output in the terminal for a successful run on botm4.java looks like this: 
-<br> ![Success](/pics/m4/m4-result.png) 
+## Botm4 Set Up and Result:
+This bot exercises events that are subscribed to specific channels, or observables, within a specific time frame. As such, when we initialize the subscribeAgency and instantiate channel observers, we define the channel name in our parameter and call setObservingDate on each observer to specify the start date (fromDate) and end date (toDate) of our observation.
+<br> Keep in mind that the Zoom API treats the timezone as UTC/GMT. Adjust your start and end date accordingly.
+<br> **To run the bot properly, make sure that you pass a valid channel name as the third parameter in the ChannelObserver instantiation. Additionally, ensure that the observation start and end date are valid dates as well.** Below is a sample of the ChannelObserver intialization: 
+<br> ![ChannelObserver](/pics/m4/set-observation.png)
+<br>The expected output in the terminal for a successful run on botm4.java looks like this: 
+<br> ![Success m4](/pics/m4/m4-result.png) 
 <br> The last three lines indicate the output from the 'event-based subscription' mechanism, where the observers in bot code (Soobin & Duo) received notification when
 <br> 1. A new member was added to the channel;
 <br> 2. A new message was received in the channel; and
 <br> 3. A message in a channel was updated. 
-
