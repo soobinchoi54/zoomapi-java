@@ -75,17 +75,19 @@ public class botm4 {
              ********************************************/
             Desktop.getDesktop().browse(new URL(redirect_url).toURI());
             client = new OauthZoomClient(client_id, client_secret, PORT, redirect_url, browser_path);
+
             SubscribeAgency.initialize();
-            ChannelObserver observer = new ChannelObserver("Soobin on new messages", client, "updated channel");
-            observer.setObservingDate("2020-05-10", "2020-05-10");
+
+            ChannelObserver observer = new ChannelObserver("Soobin on new messages", client, "updated channel");// enter valid channelName
+            observer.setObservingDate("2020-05-10", "2020-05-10");// enter valid start and end date
             observer.subscribeTo(SubscribeAgency.NOTIFY_NEW_MESSAGES);
 
-            ChannelObserver observer2 = new ChannelObserver("Duo on updates", client, "updated channel");
-            observer2.setObservingDate("2020-05-10", "2020-05-10");
+            ChannelObserver observer2 = new ChannelObserver("Duo on updates", client, "updated channel");// enter valid channelName
+            observer2.setObservingDate("2020-05-10", "2020-05-10");// enter valid start and end date
             observer2.subscribeTo(SubscribeAgency.NOTIFY_MESSAGE_UPDATES);
 
-            ChannelObserver observer3 = new ChannelObserver("Soobin on new members", client, "updated channel");
-            observer3.setObservingDate("2020-05-10", "2020-05-10");
+            ChannelObserver observer3 = new ChannelObserver("Soobin on new members", client, "updated channel");// enter valid channelName
+            observer3.setObservingDate("2020-05-10", "2020-05-10");// enter valid start and end date
             observer3.subscribeTo(SubscribeAgency.NOTIFY_NEW_MEMBERS);
 
         } catch (NumberFormatException | FileNotFoundException ne) {
