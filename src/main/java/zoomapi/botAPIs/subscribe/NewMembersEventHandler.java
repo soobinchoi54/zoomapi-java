@@ -38,6 +38,7 @@ public class NewMembersEventHandler extends OauthEventHandler {
             String memberId = member.getId();
             this.memberIds.add(memberId);
         }
+        System.out.println("New members listener starts working...");
     }
 
     @Override

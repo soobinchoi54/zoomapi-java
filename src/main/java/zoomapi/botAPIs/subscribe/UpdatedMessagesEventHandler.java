@@ -33,6 +33,7 @@ public class UpdatedMessagesEventHandler extends OauthEventHandler{
             Message message = messages.get(i);
             this.messages.put(message.getId(), message.getMessage());
         }
+        System.out.println("New updates listener starts working...");
     }
     @Override
     public void run() {
