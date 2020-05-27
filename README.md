@@ -94,7 +94,7 @@ This bot exercises events that are subscribed to specific channels, or observabl
 <br> Keep in mind that the Zoom API treats the timezone as UTC/GMT. Adjust your start and end date accordingly.
 <br> **To run the bot properly, make sure that you pass a valid channel name as the third parameter in the ChannelObserver instantiation. Additionally, ensure that the observation start and end date are valid dates as well.** Below is a sample of the ChannelObserver intialization: 
 <br> ![ChannelObserver](/pics/m4/set-observation.png)
-<br>The expected output in the terminal for a successful run on botm4.java looks like this: 
+<br>The expected output in the terminal for a successful run on botm4.java looks like this. Please wait until all event listeners have started working before triggering new events: 
 <br> ![Success m4](/pics/m4/m4-result.png) 
 <br> The last three lines indicate the output from the 'event-based subscription' mechanism, where the observers in bot code (Soobin & Duo) received notification when
 <br> 1. A new member was added to the channel;
