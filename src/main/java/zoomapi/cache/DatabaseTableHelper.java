@@ -1,5 +1,8 @@
 package zoomapi.cache;
 
+import zoomapi.cache.databaseData.Channel;
+import zoomapi.cache.databaseData.ChannelMember;
+import zoomapi.cache.databaseData.ChannelMessage;
 import zoomapi.cache.databaseData.Credential;
 
 import java.io.FileInputStream;
@@ -144,7 +147,7 @@ public class DatabaseTableHelper<T>{
         }
         StringBuilder sb = new StringBuilder();
         sb.append("UPDATE " + this.typeName + " SET ");
-        for(int i = 0; i<conditions.length; i++){
+        for(int i = 0; i<columns.length; i++){
             if(i!=0) sb.append(" , ");
             sb.append(String.format("%1$s = '%2$s' ", columns[i], values[i]));
         }
@@ -198,9 +201,13 @@ public class DatabaseTableHelper<T>{
 
     public static void main(String[] args){
         testCredentialTable();
+        testChannelTable();
+        testChannelMemberTable();
+        testChannelMessageTable();
     }
 
     private static void testCredentialTable(){
+        System.out.println("=====CredentialTable======");
         CredentialTable ct = CredentialTable.getInstance();
         Credential c1 = new Credential();
         Credential c2 = new Credential();
@@ -224,6 +231,121 @@ public class DatabaseTableHelper<T>{
         ct.update("oauthToken", "111", "userId", "danny2");
         ct.delete("userId", "danny2");
         List<Credential> all = ct.getAll();
+        for(int i =0; i < all.size(); i++){
+            System.out.println(all.get(i).toString());
+        }
+    }
+
+    private static void testChannelTable(){
+        System.out.println("=====ChannelTable======");
+        ChannelTable ct = ChannelTable.getInstance();
+//        Channel c1 = new Channel();
+//        Channel c2 = new Channel();
+//        // add one
+//        Map<String, String> values1 = new HashMap<>();
+//        values1.put("id", "1");
+//        values1.put("userId", "danny1");
+//        values1.put("channelId", "channel1_of_danny1");
+//        values1.put("channelName", "test1");
+//        values1.put("channelType", "1");
+//        c1.setValues(values1);
+//        ct.add(c1);
+
+//        // add two
+//        Map<String, String> values2 = new HashMap<>();
+//        values2.put("id", "1");
+//        values2.put("userId", "danny1");
+//        values2.put("channelId", "channel2_of_danny1");
+//        values2.put("channelName", "test2");
+//        values2.put("channelType", "1");
+//        c2.setValues(values2);
+//        ct.add(c2);
+
+//        // update
+//        ct.update(new String[]{"channelName"}, new String[]{"test1_update"}, new String[]{"userId", "channelId"}, new String[]{"danny1", "channel1_of_danny1"});
+//
+        //delete
+//        ct.delete(new String[]{"userId", "channelId"}, new String[]{"danny1", "channel1_of_danny1"});
+        List<Channel> all = ct.getAll();
+        for(int i =0; i < all.size(); i++){
+            System.out.println(all.get(i).toString());
+        }
+    }
+
+    private static void testChannelMemberTable(){
+        System.out.println("=====ChannelMemberTable======");
+        ChannelMemberTable cmt = ChannelMemberTable.getInstance();
+//        ChannelMember c1 = new ChannelMember();
+//        ChannelMember c2 = new ChannelMember();
+//        // add one
+//        Map<String, String> values1 = new HashMap<>();
+//        values1.put("id", "1");
+//        values1.put("userId", "danny1");
+//        values1.put("channelId", "channel1_of_danny1");
+//        values1.put("email", "dchai2@uci.edu");
+//        values1.put("firstName", "Duo");
+//        values1.put("lastName", "Chai");
+//        c1.setValues(values1);
+//        cmt.add(c1);
+//
+//        // add two
+//        Map<String, String> values2 = new HashMap<>();
+//        values2.put("id", "1");
+//        values2.put("userId", "danny1");
+//        values2.put("channelId", "channel1_of_danny1");
+//        values2.put("email", "soobinchoi54@gmail.com");
+//        values2.put("firstName", "Soobin");
+//        values2.put("lastName", "Choi");
+//        c2.setValues(values2);
+//        cmt.add(c2);
+
+//        // update
+//        cmt.update(new String[]{"firstName"}, new String[]{"Duo"}, new String[]{"userId", "channelId", "email"}, new String[]{"danny1", "channel1_of_danny1", "dchai2@uci.edu"});
+//
+////        delete
+//        cmt.delete(new String[]{"userId", "channelId", "email"}, new String[]{"danny1", "channel1_of_danny1", "dchai2@uci.edu"});
+        List<ChannelMember> all = cmt.getAll();
+        for(int i =0; i < all.size(); i++){
+            System.out.println(all.get(i).toString());
+        }
+    }
+
+
+    private static void testChannelMessageTable() {
+        System.out.println("=====ChannelMessageTable======");
+        ChannelMessageTable cmt = ChannelMessageTable.getInstance();
+        ChannelMessage c1 = new ChannelMessage();
+        ChannelMessage c2 = new ChannelMessage();
+        // add one
+        Map<String, String> values1 = new HashMap<>();
+        values1.put("id", "1");
+        values1.put("userId", "danny1");
+        values1.put("channelId", "channel1_of_danny1");
+        values1.put("messageId", "1111");
+        values1.put("message", "hello1");
+        values1.put("sender", "dchai2@uci.edu");
+        values1.put("dateTime", "05-27-2020");
+        c1.setValues(values1);
+        cmt.add(c1);
+
+        // add two
+        Map<String, String> values2 = new HashMap<>();
+        values2.put("id", "1");
+        values2.put("userId", "danny1");
+        values2.put("channelId", "channel1_of_danny1");
+        values2.put("messageId", "2222");
+        values2.put("message", "hello2");
+        values2.put("sender", "dchai2@uci.edu");
+        values2.put("dateTime", "05-27-2020");
+        c2.setValues(values2);
+        cmt.add(c2);
+
+//        // update
+//        cmt.update(new String[]{"firstName"}, new String[]{"Duo"}, new String[]{"userId", "channelId", "email"}, new String[]{"danny1", "channel1_of_danny1", "dchai2@uci.edu"});
+//
+////        delete
+//        cmt.delete(new String[]{"userId", "channelId", "email"}, new String[]{"danny1", "channel1_of_danny1", "dchai2@uci.edu"});
+        List<ChannelMessage> all = cmt.getAll();
         for(int i =0; i < all.size(); i++){
             System.out.println(all.get(i).toString());
         }
