@@ -1,8 +1,7 @@
 package zoomapi.botAPIs.subscribe;
 
 import zoomapi.OauthZoomClient;
-import zoomapi.utils.Event;
-import zoomapi.utils.Message;
+import zoomapi.utils.Unit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,7 +72,7 @@ public class SubscribeAgency {
     }
 
     // will call the call-back method once data changes
-    public static void announce(int eventCode, String channelName, Event e){
+    public static void announce(int eventCode, String channelName, Unit e){
         events.get(eventCode).get(channelName).notifyObservers(e);
     }
 

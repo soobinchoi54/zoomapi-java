@@ -1,5 +1,5 @@
 package zoomapi.utils;
 
-public abstract class Event {
+public abstract class Unit {
     abstract public String toString();
 }
