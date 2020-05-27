@@ -1,6 +1,6 @@
 package zoomapi.utils;
 
-public class Message extends Event{
+public class Message extends Unit {
     private String id;
     private String message;
     private String sender;
@@ -55,6 +55,7 @@ public class Message extends Event{
         return timestamp;
     }
 
+    @Override
     public String toString(){
         return ("[ID] " + this.id + " [MESSAGE] " + this.message + " [SENDER] " + this.sender + " [DATE_TIME] " + this.date_time);
     }

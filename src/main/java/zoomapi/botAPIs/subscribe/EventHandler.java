@@ -1,7 +1,6 @@
 package zoomapi.botAPIs.subscribe;
 
-import zoomapi.utils.Event;
-import zoomapi.utils.Message;
+import zoomapi.utils.Unit;
 
 import java.util.ArrayList;
 
@@ -27,7 +26,7 @@ public abstract class EventHandler implements Runnable{
         observers.remove(observer);
     }
 
-    public synchronized void notifyObservers(Event e){
+    public synchronized void notifyObservers(Unit e){
         for(int i = 0; i < observers.size(); i++){
             observers.get(i).update(e);
         }
