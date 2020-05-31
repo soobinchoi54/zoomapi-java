@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="zoomapi-java" target="1.13" />
+      <module name="zoomapi-java" target="13" />
     </bytecodeTargetLevel>
   </component>
 </project>
