@@ -129,12 +129,13 @@ public class OauthChannel {
             c = new Channel();
             //set value
             String channelId = res.getString("id");
+            String cName = res.getString("name");
             String channelType = String.valueOf(res.getInt("type"));
 
             Map<String, String> values = new HashMap<>();
             values.put("clientId", this.clientId);
             values.put("channelId", channelId);
-            values.put("channelName", channelName);
+            values.put("channelName", cName);
             values.put("channelType", channelType);
 
             c.setValues(values);
