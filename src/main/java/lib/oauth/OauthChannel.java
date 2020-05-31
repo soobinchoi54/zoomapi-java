@@ -142,11 +142,12 @@ public class OauthChannel {
         return c;
     }
 
-    public boolean updateChannel(String cId, String cName) {
+    public boolean updateChannel(String cName, String newCName) {
         if (chatChannels == null) throw new IllegalStateException("Uninitialized OauthClient");
+        String cid = getCid(cName);
         Map<String,String> data = new HashMap<>();
-        data.put("channelId", cId);
-        data.put("channelName", cName);
+        data.put("channelId", cid);
+        data.put("channelName", newCName);
         JSONObject res = chatChannels.updateChannel(data);
         int statusCode = (int) res.get("status_code");
         return (statusCode == 204);
