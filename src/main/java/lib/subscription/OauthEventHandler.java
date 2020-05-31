@@ -1,6 +1,6 @@
-package lib.events;
+package lib.subscription;
 
-import lib.botFacing.clients.OauthZoomClient;
+import lib.clients.OauthZoomClient;
 
 public abstract class OauthEventHandler extends EventHandler {
     protected OauthZoomClient client;

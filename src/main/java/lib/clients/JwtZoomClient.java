@@ -1,4 +1,4 @@
-package lib.botFacing.clients;
+package lib.clients;
 
 import lib.components.BaseComponent;
 import lib.components.ChatChannelsComponent;

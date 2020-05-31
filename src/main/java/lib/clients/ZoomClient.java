@@ -1,4 +1,4 @@
-package lib.botFacing.clients;
+package lib.clients;
 
 import lib.components.*;
 import lib.utils.ApiClient;

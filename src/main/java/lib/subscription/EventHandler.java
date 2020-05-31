@@ -1,6 +1,5 @@
-package lib.events;
+package lib.subscription;
 
-import lib.botFacing.subscription.ChannelObserver;
 import lib.utils.Unit;
 
 import java.util.ArrayList;

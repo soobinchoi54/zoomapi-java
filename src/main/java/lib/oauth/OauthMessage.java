@@ -1,7 +1,7 @@
-package lib.botFacing.oauth;
+package lib.oauth;
 
 import org.json.JSONObject;
-import lib.botFacing.clients.OauthZoomClient;
+import lib.clients.OauthZoomClient;
 import lib.cache.databaseData.ChannelMessage;
 import lib.components.ChatChannelsComponent;
 import lib.components.ChatMessagesComponent;
