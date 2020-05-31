@@ -5,6 +5,8 @@ package lib.utils;
  * Deprecated, no longer being used
  * Use ChannelMember instead
  * **/
+
+@Deprecated
 public class Member extends Unit {
     private String id;
     private String email;
