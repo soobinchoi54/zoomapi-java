@@ -5,6 +5,8 @@ package lib.utils;
  * Deprecated, no longer being used
  * Use ChannelMessage instead
  * ***********/
+
+@Deprecated
 public class Message extends Unit {
     private String id;
     private String message;
