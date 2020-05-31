@@ -1,7 +1,7 @@
-package lib.events;
+package lib.subscription;
 
-import lib.botFacing.clients.OauthZoomClient;
-import lib.botFacing.oauth.OauthChannel;
+import lib.clients.OauthZoomClient;
+import lib.oauth.OauthChannel;
 import lib.cache.databaseData.ChannelMember;
 import java.util.*;
 

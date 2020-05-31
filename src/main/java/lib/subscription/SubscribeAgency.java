@@ -1,7 +1,6 @@
-package lib.events;
+package lib.subscription;
 
-import lib.botFacing.subscription.ChannelObserver;
-import lib.botFacing.clients.OauthZoomClient;
+import lib.clients.OauthZoomClient;
 import lib.utils.Unit;
 
 import java.util.ArrayList;

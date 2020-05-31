@@ -2,8 +2,8 @@ package bots;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import lib.botFacing.clients.OauthZoomClient;
-import lib.botFacing.oauth.OauthMessage;
+import lib.clients.OauthZoomClient;
+import lib.oauth.OauthMessage;
 import lib.cache.databaseData.ChannelMessage;
 import lib.components.ChatChannelsComponent;
 import lib.components.ChatMessagesComponent;

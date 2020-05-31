@@ -1,11 +1,8 @@
-package lib.botFacing.cache;
+package lib.cache;
 
-import lib.botFacing.clients.OauthZoomClient;
-import lib.cache.databaseData.ChannelMessage;
-import lib.cache.tables.ChannelMessageTable;
+import lib.clients.OauthZoomClient;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

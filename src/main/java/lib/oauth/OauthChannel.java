@@ -1,9 +1,7 @@
-package lib.botFacing.oauth;
+package lib.oauth;
 
-import lib.botFacing.cache.CacheHelper;
-import lib.cache.tables.ChannelTable;
 import org.json.JSONObject;
-import lib.botFacing.clients.OauthZoomClient;
+import lib.clients.OauthZoomClient;
 import lib.cache.databaseData.Channel;
 import lib.cache.databaseData.ChannelMember;
 import lib.components.ChatChannelsComponent;

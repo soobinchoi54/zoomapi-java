@@ -1,7 +1,6 @@
-package lib.botFacing.subscription;
+package lib.subscription;
 
-import lib.botFacing.clients.OauthZoomClient;
-import lib.events.SubscribeAgency;
+import lib.clients.OauthZoomClient;
 import lib.utils.Unit;
 
 import java.util.HashSet;

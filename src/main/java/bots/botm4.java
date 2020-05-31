@@ -2,10 +2,10 @@ package bots;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import lib.botFacing.clients.OauthZoomClient;
-import lib.botFacing.oauth.OauthMessage;
-import lib.botFacing.subscription.ChannelObserver;
-import lib.events.SubscribeAgency;
+import lib.clients.OauthZoomClient;
+import lib.oauth.OauthMessage;
+import lib.subscription.ChannelObserver;
+import lib.subscription.SubscribeAgency;
 import lib.utils.Util;
 
 import java.awt.*;
