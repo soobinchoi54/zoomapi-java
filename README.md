@@ -100,3 +100,9 @@ This bot exercises events that are subscribed to specific channels, or observabl
 <br> 1. A new member was added to the channel;
 <br> 2. A new message was received in the channel; and
 <br> 3. A message in a channel was updated. 
+
+## Milestone 5 Project Set Up and Result: 
+### Structural Changes: 
+There was a massive restructuring and refactoring of our project to address the feedback provided in the previous milestones and to optimize the library based on the requirements of the final milestone. <br>The architecture of our final library system is provided in the following diagram. 
+<br> ![Zoom API Architecture](/pics/m5/zoom-api-architecture.png)
+<br> 
