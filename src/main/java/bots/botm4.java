@@ -2,14 +2,11 @@ package bots;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import zoomapi.OauthZoomClient;
-import zoomapi.botAPIs.OauthMessage;
-import zoomapi.botAPIs.subscribe.ChannelObserver;
-import zoomapi.botAPIs.subscribe.SubscribeAgency;
-import zoomapi.components.ChatChannelsComponent;
-import zoomapi.components.ChatMessagesComponent;
-import zoomapi.utils.Message;
-import zoomapi.utils.Util;
+import lib.botFacing.clients.OauthZoomClient;
+import lib.botFacing.oauth.OauthMessage;
+import lib.botFacing.subscription.ChannelObserver;
+import lib.events.SubscribeAgency;
+import lib.utils.Util;
 
 import java.awt.*;
 import java.io.FileInputStream;
@@ -19,7 +16,6 @@ import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
-import java.util.List;
 
 public class botm4 {
 
@@ -75,8 +71,6 @@ public class botm4 {
              ********************************************/
             Desktop.getDesktop().browse(new URL(redirect_url).toURI());
             client = new OauthZoomClient(client_id, client_secret, PORT, redirect_url, browser_path);
-
-            SubscribeAgency.initialize();
 
             ChannelObserver observer = new ChannelObserver("Soobin on new messages", client, "updated channel");// enter valid channelName
             observer.setObservingDate("2020-05-10", "2020-05-10");// enter valid start and end date

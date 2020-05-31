@@ -2,16 +2,15 @@ package bots;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import zoomapi.OauthZoomClient;
-import zoomapi.components.ChatChannelsComponent;
-import zoomapi.components.ChatMessagesComponent;
-import zoomapi.utils.Util;
+import lib.botFacing.clients.OauthZoomClient;
+import lib.components.ChatChannelsComponent;
+import lib.components.ChatMessagesComponent;
+import lib.utils.Util;
 
 import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UTFDataFormatException;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -117,7 +116,7 @@ public class botm1{
             client = new OauthZoomClient(client_id, client_secret, PORT, redirect_url, browser_path);
             ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
             ChatMessagesComponent chat_messages = (ChatMessagesComponent) client.getChatMessages();
-            JSONObject channels = chat_channels.listChannels();
+            JSONObject channels = chat_channels.listChannels(null);
             System.out.println(channels.toString());
 
         } catch (NumberFormatException | FileNotFoundException ne) {
@@ -131,7 +130,7 @@ public class botm1{
 
     private static void listUserChannels(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
-        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
         System.out.println("=== All Channels ===");
         Iterator<Object> it = response.iterator();
         while (it.hasNext()){
@@ -189,7 +188,7 @@ public class botm1{
     private static void getChannel(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String,String> params = new HashMap<>();
-        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
         System.out.println("=== All Channels ===");
         Iterator<Object> it = response.iterator();
         while (it.hasNext()){
@@ -206,7 +205,7 @@ public class botm1{
     private static void updateChannel(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> data = new HashMap<>();
-        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
         System.out.println("=== All Channels ===");
         Iterator<Object> it = response.iterator();
         while (it.hasNext()){
@@ -227,7 +226,7 @@ public class botm1{
     private static void deleteChannel(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> params = new HashMap<>();
-        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
         System.out.println("=== All Channels ===");
         Iterator<Object> it = response.iterator();
         while (it.hasNext()){
@@ -243,7 +242,7 @@ public class botm1{
     private static void listChannelMembers(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> params = new HashMap<>();
-        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
         System.out.println("=== All Channels ===");
         Iterator<Object> it = response.iterator();
         while (it.hasNext()){
@@ -264,7 +263,7 @@ public class botm1{
     private static void inviteChannelMembers(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> params = new HashMap<>();
-        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
         System.out.println("=== All Channels ===");
         Iterator<Object> it = response.iterator();
         while (it.hasNext()){
@@ -301,7 +300,7 @@ public class botm1{
     private static void joinChannel(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> data = new HashMap<>();
-        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
         System.out.println("=== All Channels ===");
         Iterator<Object> it = response.iterator();
         while (it.hasNext()){
@@ -317,7 +316,7 @@ public class botm1{
     private static void leaveChannel(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> params = new HashMap<>();
-        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
         System.out.println("=== All Channels ===");
         Iterator<Object> it = response.iterator();
         while (it.hasNext()){
@@ -333,7 +332,7 @@ public class botm1{
     private static void removeMember(OauthZoomClient client) {
         ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
         Map<String, String> params = new HashMap<>();
-        JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+        JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
         System.out.println("=== All Channels ===");
         Iterator<Object> it = response.iterator();
         while (it.hasNext()){
@@ -382,7 +381,7 @@ public class botm1{
                 }
                 break;
             case "2":
-                JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+                JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
                 System.out.println("=== All Channels ===");
                 Iterator<Object> it = response.iterator();
                 while (it.hasNext()){
@@ -430,7 +429,7 @@ public class botm1{
                 chat_messages.sendMessage(params);
                 break;
             case "2":
-                JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+                JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
                 System.out.println("=== All Channels ===");
                 Iterator<Object> it = response.iterator();
                 while (it.hasNext()){
@@ -487,7 +486,7 @@ public class botm1{
                 chat_messages.updateMessage(params);
                 break;
             case "2":
-                JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+                JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
                 System.out.println("=== All Channels ===");
                 Iterator<Object> it = response.iterator();
                 while (it.hasNext()){
@@ -551,7 +550,7 @@ public class botm1{
                 chat_messages.deleteMessage(params);
                 break;
             case "2":
-                JSONArray response = (JSONArray) chat_channels.listChannels().get("channels");
+                JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
                 System.out.println("=== All Channels ===");
                 Iterator<Object> it = response.iterator();
                 while (it.hasNext()){
