@@ -46,6 +46,6 @@ public class ChannelMessage extends Unit implements CacheUnit {
 
     @Override
     public String toString() {
-        return " clientId: " + this.getClientId() + " channelId: " + this.getChannelId() + " messageId: " + this.getMessageId() + " message: " + this.getMessage() + " sender: " + this.getSender() + " dataTime: " + this.getDateTime();
+        return " clientId: " + this.getClientId() + " channelId: " + this.getChannelId() + " messageId: " + this.getMessageId() + " message: " + this.getMessage() + " sender: " + this.getSender() + " dateTime: " + this.getDateTime();
     }
 }
