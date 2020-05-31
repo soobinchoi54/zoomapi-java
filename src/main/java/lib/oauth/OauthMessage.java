@@ -125,6 +125,7 @@ public class OauthMessage extends OauthChannel{
     public List<ChannelMessage> getChannelMessages(String toChannel, String fromDate, String toDate, boolean usingCache){
         if(!usingCache) return getChannelMessages(toChannel, fromDate, toDate);
 
+        // fetch from cache
         // check validation of Dates
         checkValidation(fromDate, toDate);
         ChannelMessageTable table = ChannelMessageTable.getInstance();
