@@ -2,12 +2,12 @@ package bots;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import zoomapi.OauthZoomClient;
-import zoomapi.botAPIs.OauthMessage;
-import zoomapi.components.ChatChannelsComponent;
-import zoomapi.components.ChatMessagesComponent;
-import zoomapi.utils.Message;
-import zoomapi.utils.Util;
+import lib.botFacing.clients.OauthZoomClient;
+import lib.botFacing.oauth.OauthMessage;
+import lib.cache.databaseData.ChannelMessage;
+import lib.components.ChatChannelsComponent;
+import lib.components.ChatMessagesComponent;
+import lib.utils.Util;
 
 import java.awt.*;
 import java.io.FileInputStream;
@@ -88,11 +88,11 @@ public class botm3 {
         System.out.println("Enter end date (yyyy-mm-dd): ");
         Scanner sc2 = new Scanner(System.in);
         String to_date = sc2.nextLine();
-        List<Message> history_list = oauth_message.getChatHistory(to_channel, from_date, to_date);
+        List<ChannelMessage> history_list = oauth_message.getChannelMessages(to_channel, from_date, to_date);
         int number = 0;
-        for(Message m:history_list){
+        for(ChannelMessage m:history_list){
             number++;
-            System.out.println(number + ". [ID] " + m.getId() + " [MESSAGE] " + m.getMessage() + " [SENDER] " + m.getSender() + " [DATE_TIME] " + m.getDate_time());
+            System.out.println(number + ". " + m.toString());
         }
     }
 
@@ -109,28 +109,28 @@ public class botm3 {
         Scanner sc3 = new Scanner(System.in);
         String to_date = sc3.nextLine();
 
-        List<Message> ans1 = oauth_message.searchEvent(to_channel, from_date, to_date, (message)->{
+        List<ChannelMessage> ans1 = oauth_message.searchEvent(to_channel, from_date, to_date, (message)->{
             if(message.getSender().contains("soobinchoi54+zoombot@gmail.com")) return true;
             else return false;
         });
 
         System.out.println("========== Search by Sender ===========");
         int number1 = 0;
-        for(Message event1:ans1){
+        for(ChannelMessage event1:ans1){
             number1++;
-            System.out.println(number1 + ". [ID] " + event1.getId() + " [MESSAGE] " + event1.getMessage() + " [SENDER] " + event1.getSender() + " [DATE_TIME] " + event1.getDate_time());
+            System.out.println(number1 + ". " + event1.toString());
         }
 
-        List<Message> ans2 = oauth_message.searchEvent(to_channel, from_date, to_date, (message)->{
+        List<ChannelMessage> ans2 = oauth_message.searchEvent(to_channel, from_date, to_date, (message)->{
             if(message.getMessage().contains("hello")) return true;
             else return false;
         });
 
         System.out.println("========== Search by Message String ===========");
         int number2 = 0;
-        for(Message event2:ans2){
+        for(ChannelMessage event2:ans2){
             number2++;
-            System.out.println(number2 + ". [ID] " + event2.getId() + " [MESSAGE] " + event2.getMessage() + " [SENDER] " + event2.getSender() + " [DATE_TIME] " + event2.getDate_time());
+            System.out.println(number2 + ". " + event2.toString());
         }
     }
 
@@ -160,7 +160,7 @@ public class botm3 {
             client = new OauthZoomClient(client_id, client_secret, PORT, redirect_url, browser_path);
             ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
             ChatMessagesComponent chat_messages = (ChatMessagesComponent) client.getChatMessages();
-            JSONObject channels = chat_channels.listChannels();
+            JSONObject channels = chat_channels.listChannels(null);
             System.out.println(channels.toString());
 
         } catch (NumberFormatException | FileNotFoundException ne) {
