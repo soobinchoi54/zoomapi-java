@@ -125,6 +125,7 @@ public class OauthMessage extends OauthChannel{
     public List<ChannelMessage> getChannelMessages(String toChannel, String fromDate, String toDate, boolean usingCache){
         if(!usingCache) return getChannelMessages(toChannel, fromDate, toDate);
 
+        // fetch from cache
         // check validation of Dates
         checkValidation(fromDate, toDate);
         ChannelMessageTable table = ChannelMessageTable.getInstance();
@@ -361,6 +362,12 @@ public class OauthMessage extends OauthChannel{
 
     public List<ChannelMessage> searchEvent(String toChannel, String fromDate, String toDate, OauthCondition condition, boolean usingCache){
         if(!usingCache) return searchEvent(toChannel, fromDate, toDate, condition);
-        return null;
+
+        List<ChannelMessage> historyList = getChannelMessages(toChannel, fromDate, toDate, true);
+        List<ChannelMessage> trueList = new ArrayList<>();
+        for(ChannelMessage history:historyList){
+            if(condition.isTrue(history)) trueList.add(history);
+        }
+        return trueList;
     }
 }
