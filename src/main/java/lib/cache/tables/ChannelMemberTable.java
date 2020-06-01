@@ -25,16 +25,17 @@ public class ChannelMemberTable extends TableHelper<ChannelMember> {
      ****************************************************************/
 
     public void add(ChannelMember toAdd){
-        String sql = "INSERT INTO " + typeName + " (clientId, channelId, channelName, email, firstName, lastName) " +  " VALUES(?,?,?,?,?,?)";
+        String sql = "INSERT INTO " + typeName + " (clientId, channelId, channelName, memberId, email, firstName, lastName) " +  " VALUES(?,?,?,?,?,?,?)";
         try{
             conn = DriverManager.getConnection(databasePath);
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, toAdd.getClientId());
             pstmt.setString(2, toAdd.getChannelId());
             pstmt.setString(3, toAdd.getChannelName());
-            pstmt.setString(4, toAdd.getEmail());
-            pstmt.setString(5, toAdd.getFirstName());
-            pstmt.setString(6, toAdd.getLastName());
+            pstmt.setString(4, toAdd.getMemberId());
+            pstmt.setString(5, toAdd.getEmail());
+            pstmt.setString(6, toAdd.getFirstName());
+            pstmt.setString(7, toAdd.getLastName());
             pstmt.executeUpdate();
             pstmt.clearParameters();
             pstmt.close();
