@@ -44,19 +44,31 @@ public class OauthChannel {
         this.clientId = client.getClientId();
     }
 
-    protected String getCid(String to_channel){
+    protected Channel getCid(String channelName){
         List<Channel> channels = listChannels();
-        String cid = null;
+        Channel ans = null;
         for (int i = 0; i<channels.size(); i++) {
             Channel c = channels.get(i);
-            if(c.getChannelName().equals(to_channel)) cid = c.getChannelId();
+            if(c.getChannelName().equals(channelName)) ans = c;
         }
-        if(cid == null) {
+        if(ans == null) {
             throw new IllegalArgumentException("Invalid Channel Name");
         }
-        return cid;
+        return ans;
     }
 
+    protected Channel getName(String channelId){
+        List<Channel> channels = listChannels();
+        Channel ans = null;
+        for (int i = 0; i<channels.size(); i++) {
+            Channel c = channels.get(i);
+            if(c.getChannelId().equals(channelId)) ans = c;
+        }
+        if(ans == null) {
+            throw new IllegalArgumentException("Invalid Channel Name");
+        }
+        return ans;
+    }
     /***********************************
      * Channel components: Public APIs *
      ***********************************/
@@ -95,9 +107,7 @@ public class OauthChannel {
         if(channelList.size()!=0){
             // update cache strategy: delete all, add all
             CacheHelper<ChannelTable, Channel> cache = new CacheHelper<>(ChannelTable.class);
-            Map<String, String> constraints = new HashMap<>();
-            constraints.put("clientId", clientId);
-            cache.update(constraints, (Channel[]) channelList.toArray(), Channel.class);
+            cache.update(new String[]{"clientId"}, new String[]{this.clientId}, (Channel[]) channelList.toArray(), Channel.class);
         }
 
         return channelList;
@@ -131,10 +141,7 @@ public class OauthChannel {
             c.setValues(values);
             // update cache strategy: delete all, add all
             CacheHelper<ChannelTable, Channel> cache = new CacheHelper<>(ChannelTable.class);
-            Map<String, String> constraints = new HashMap<>();
-            constraints.put("clientId", clientId);
-            constraints.put("channelName", channelName);
-            cache.update(constraints, new Channel[]{c}, Channel.class);
+            cache.update(new String[]{"clientId", "channelName"}, new String[]{this.clientId, channelName}, new Channel[]{c}, Channel.class);
         }
 
         return c;
@@ -142,7 +149,7 @@ public class OauthChannel {
 
     public Channel getChannel(String channelName) {
         if (chatChannels == null) throw new IllegalStateException("Uninitialized OauthClient");
-        String cid = getCid(channelName);
+        String cid = getCid(channelName).getChannelId();
         Map<String,String> params = new HashMap<>();
         params.put("channelId", cid);
         JSONObject res = chatChannels.getChannel(params);
@@ -160,10 +167,11 @@ public class OauthChannel {
             values.put("channelId", channelId);
             values.put("channelName", cName);
             values.put("channelType", channelType);
-
             c.setValues(values);
 
             // update cache
+            CacheHelper<ChannelTable, Channel> cache = new CacheHelper<>(ChannelTable.class);
+            cache.update(new String[]{"clientId", "channelName"}, new String[]{this.clientId, channelName}, new Channel[]{c}, Channel.class);
         }
         return c;
     }
@@ -172,31 +180,60 @@ public class OauthChannel {
         if(!usingCache) getChannel(channelName);
 
         // fetch from cache
-        String channelId = getCid(channelName);
         ChannelTable table = ChannelTable.getInstance().getInstance();
-        List<Channel> channelList = table.get(new String[]{"clientId", "channelId"}, new String[]{this.clientId, channelId});
+        List<Channel> channelList = table.get(new String[]{"clientId", "channelName"}, new String[]{this.clientId, channelName});
         return channelList.size()!=0?channelList.get(0):null;
     }
 
-    public boolean updateChannel(String channelName, String newChannelName) {
+    public Channel updateChannel(String channelName, String newChannelName) {
         if (chatChannels == null) throw new IllegalStateException("Uninitialized OauthClient");
-        String cid = getCid(channelName);
+        Channel target = getCid(channelName);
+        String cid = target.getChannelId();
         Map<String,String> data = new HashMap<>();
         data.put("channelId", cid);
         data.put("channelName", newChannelName);
         JSONObject res = chatChannels.updateChannel(data);
         int statusCode = (int) res.get("status_code");
-        return (statusCode == 204);
+
+        Channel c = null;
+        if (statusCode == 204){
+            c = new Channel();
+            //set value
+            Map<String, String> values = new HashMap<>();
+            values.put("clientId", this.clientId);
+            values.put("channelId", cid);
+            values.put("channelName", newChannelName);
+            values.put("channelType", target.getChannelType());
+            c.setValues(values);
+
+            // update cache
+            CacheHelper<ChannelTable, Channel> cache = new CacheHelper<>(ChannelTable.class);
+            cache.update(new String[]{"clientId", "channelName"}, new String[]{this.clientId, channelName}, new Channel[]{c}, Channel.class);
+        }
+        return c;
     }
 
-    public boolean deleteChannel(String channelName) {
+    public Channel deleteChannel(String channelName) {
         if (chatChannels == null) throw new IllegalStateException("Uninitialized OauthClient");
-        String cid = getCid(channelName);
+        Channel target = getCid(channelName);
+        String cid = target.getChannelId();
         Map<String,String> params = new HashMap<>();
         params.put("channelId" , cid);
         JSONObject res = chatChannels.deleteChannel(params);
         int statusCode = (int) res.get("status_code");
-        return (statusCode == 204);
+        Channel c = null;
+        if (statusCode == 204){
+            c = new Channel();
+            Map<String,String> values = new HashMap<>();
+            values.put("clientId", this.clientId);
+            values.put("channelId", cid);
+            values.put("channelName", channelName);
+            values.put("channelType", target.getChannelType());
+            // update cache
+            CacheHelper<ChannelTable, Channel> cache = new CacheHelper<>(ChannelTable.class);
+            cache.update(new String[]{"clientId", "channelName"}, new String[]{this.clientId, channelName}, new Channel[]{}, Channel.class);
+        }
+        return c;
     }
 
     /**************************************
@@ -205,7 +242,7 @@ public class OauthChannel {
 
     public List<ChannelMember> listChannelMembers(String channelName){
         if (chatChannels == null) throw new IllegalStateException("Uninitialized OauthClient");
-        String cid = getCid(channelName);
+        String cid = getCid(channelName).getChannelId();
         Map<String,String> params = new HashMap<>();
         params.put("channelId", cid);
         List<ChannelMember> memberList = new ArrayList<>();
@@ -223,6 +260,7 @@ public class OauthChannel {
                 Map<String, String> values = new HashMap<>();
                 values.put("clientId", this.clientId);
                 values.put("channelId", cid);
+                values.put("channelName", channelName);
                 values.put("memberId", memberId);
                 values.put("email", email);
                 values.put("firstName", firstName);
@@ -239,6 +277,12 @@ public class OauthChannel {
                 break;
             }
         }
+
+        if(memberList.size()!=0){
+            // update cache strategy: delete all, add all
+            CacheHelper<ChannelMemberTable, ChannelMember> cache = new CacheHelper<>(ChannelMemberTable.class);
+            cache.update(new String[]{"clientId", "channelName"}, new String[]{this.clientId, channelName}, (ChannelMember[]) memberList.toArray(), ChannelMember.class);
+        }
         return memberList;
     }
 
@@ -246,17 +290,17 @@ public class OauthChannel {
         if(!usingCache) return listChannelMembers(channelName);
 
         // fetch from cache
-        String channelId = getCid(channelName);
         ChannelMemberTable table = ChannelMemberTable.getInstance();
-        List<ChannelMember> channelList = table.get(new String[]{"clientId", "channelId"}, new String[]{this.clientId, channelId});
+        List<ChannelMember> channelList = table.get(new String[]{"clientId", "channelName"}, new String[]{this.clientId, channelName});
         return channelList;
     }
 
-    public boolean inviteChannelMembers(String channelName, String[] members) {
+    public List<ChannelMember> inviteChannelMembers(String channelName, String[] members) {
         if(members.length>5) throw new IllegalArgumentException("Invalid input: members");
         if (chatChannels == null) throw new IllegalStateException("Uninitialized OauthClient");
 
-        String cid = getCid(channelName);
+        List<ChannelMember> memberList = null;
+        String cid = getCid(channelName).getChannelId();
         final StringBuilder sb = new StringBuilder();
         for(String member:members){
             sb.append("email:"+member+"###");
@@ -265,39 +309,90 @@ public class OauthChannel {
         data.put("channelId", cid);
         data.put("members", sb.toString());
         JSONObject res = chatChannels.inviteChannelMembers(data);
+
         int statusCode = res.getInt("status_code");
-        return (statusCode == 201);
+        if (statusCode == 201){
+            memberList = new ArrayList<>(members.length);
+            String[] ids = (String[]) res.get("ids");
+            for(int i = 0; i < members.length; i++){
+                ChannelMember cm = new ChannelMember();
+                Map<String, String> values = new HashMap<>();
+                values.put("clientId", this.clientId);
+                values.put("channelId", cid);
+                values.put("channelName", channelName);
+                values.put("memberId", ids[i]);
+                values.put("email", members[i]);
+                cm.setValues(values);
+                memberList.add(cm);
+
+                // update cache
+                CacheHelper<ChannelMemberTable, ChannelMember> cache = new CacheHelper<>(ChannelMemberTable.class);
+                cache.update(new String[]{"clientId", "channelName", "email"}, new String[]{this.clientId, channelName, members[i]}, new ChannelMember[]{cm}, ChannelMember.class);
+            }
+        }
+
+        return memberList;
     }
 
-    public boolean joinChannel(String channelName) {
+    public Channel joinChannel(String channelId) {
         if (chatChannels == null) throw new IllegalStateException("Uninitialized OauthClient");
-        String cid = getCid(channelName);
         Map<String,String> data = new HashMap<>();
-        data.put("channelId", cid);
+        data.put("channelId", channelId);
         JSONObject res = chatChannels.joinChannel(data);
         int statusCode = res.getInt("status_code");
-        return (statusCode == 201);
+        Channel c = null;
+        if (statusCode == 201){
+            c = getName(channelId);
+
+            // update cache
+            CacheHelper<ChannelTable, Channel> cache = new CacheHelper<>(ChannelTable.class);
+            cache.update(new String[]{"clientId", "channelName"}, new String[]{this.clientId, c.getChannelName()}, new Channel[]{c}, Channel.class);
+        }
+        return c;
     }
 
-    public boolean leaveChannel(String channelName) {
+    public Channel leaveChannel(String channelName) {
         if (chatChannels == null) throw new IllegalStateException("Uninitialized OauthClient");
-        String cid = getCid(channelName);
+        Channel target = getCid(channelName);
+        String cid = target.getChannelId();
         Map<String,String> params = new HashMap<>();
         params.put("channelId", cid);
         JSONObject res = chatChannels.leaveChannel(params);
         int statusCode = res.getInt("status_code");
-        return (statusCode == 204);
+        Channel c = null;
+        if (statusCode == 204){
+            c = target;
+            // update cache
+            CacheHelper<ChannelTable, Channel> cache = new CacheHelper<>(ChannelTable.class);
+            cache.update(new String[]{"clientId", "channelName"}, new String[]{this.clientId, c.getChannelName()}, new Channel[]{}, Channel.class);
+        }
+        return c;
     }
 
-    public boolean removeMember(String channelName, String memberId) {
+    public ChannelMember removeMember(String channelName, String email) {
         if (chatChannels == null) throw new IllegalStateException("Uninitialized OauthClient");
-        String cid = getCid(channelName);
+        Channel target = getCid(channelName);
+        String cid = target.getChannelId();
         Map<String,String> params = new HashMap<>();
         params.put("channelId", cid);
-        params.put("memberId", memberId);
+        params.put("memberId", email);
         JSONObject res = chatChannels.removeMember(params);
         int statusCode = res.getInt("status_code");
-        return (statusCode == 204);
+        ChannelMember cm = null;
+        if (statusCode == 204){
+            cm = new ChannelMember();
+            Map<String, String> values = new HashMap<>();
+            values.put("clientId", this.clientId);
+            values.put("channelId", cid);
+            values.put("channelName", channelName);
+            values.put("email", email);
+            cm.setValues(values);
+            // update cache strategy: delete all, add all
+            CacheHelper<ChannelMemberTable, ChannelMember> cache = new CacheHelper<>(ChannelMemberTable.class);
+            cache.update(new String[]{"clientId", "channelName", "email"}, new String[]{this.clientId, channelName, email}, new ChannelMember[]{}, ChannelMember.class);
+        }
+
+        return cm;
     }
 }
 
