@@ -302,7 +302,7 @@ public class OauthChannel {
     }
 
     public List<ChannelMember> inviteChannelMembers(String channelName, String[] members) {
-        if(members.length>5) throw new IllegalArgumentException("Invalid input: members");
+        if(members==null||members.length>5||members.length==0) return null;
         if (chatChannels == null) throw new IllegalStateException("Uninitialized OauthClient");
 
         List<ChannelMember> memberList = null;
@@ -317,9 +317,9 @@ public class OauthChannel {
         JSONObject res = chatChannels.inviteChannelMembers(data);
         int statusCode = res.getInt("status_code");
         System.out.println(statusCode);
-        if (statusCode == 201){
+        if (statusCode == 200){
             memberList = new ArrayList<>(members.length);
-            String[] ids = (String[]) res.get("ids");
+            String[] ids = res.getString("ids").split(",");
             for(int i = 0; i < members.length; i++){
                 ChannelMember cm = new ChannelMember();
                 Map<String, String> values = new HashMap<>();
