@@ -216,19 +216,6 @@ public class TableHelper<T>{
     private static void testCredentialTable(){
         System.out.println("=====CredentialTable======");
         CredentialTable ct = CredentialTable.getInstance();
-//        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-//        Date now = new Date();
-//        Credential c1 = new Credential();
-//        // add one
-//        Map<String, String> values1 = new HashMap<>();
-//        values1.put("clientId", "soobin");
-//        values1.put("userSecret", "1234");
-//        values1.put("oauthToken", "111");
-//        values1.put("timeStamp", df.format(now));
-//        c1.setValues(values1);
-//        ct.add(c1);
-//
-//        ct.update("oauthToken", "123asdf123asdf", "clientId", "soobin");
         List<Credential> all = ct.getAll();
         for(int i =0; i < all.size(); i++){
             System.out.println(all.get(i).toString());
@@ -238,31 +225,6 @@ public class TableHelper<T>{
     private static void testChannelTable(){
         System.out.println("=====ChannelTable======");
         ChannelTable ct = ChannelTable.getInstance();
-//        Channel c1 = new Channel();
-//        Channel c2 = new Channel();
-//        // add one
-//        Map<String, String> values1 = new HashMap<>();
-//        values1.put("clientId", "soobin");
-//        values1.put("channelId", "channel1_of_soobin");
-//        values1.put("channelName", "test1");
-//        values1.put("channelType", "1");
-//        c1.setValues(values1);
-//        ct.add(c1);
-//
-//        // add two
-//        Map<String, String> values2 = new HashMap<>();
-//        values2.put("clientId", "soobin");
-//        values2.put("channelId", "channel2_of_soobin");
-//        values2.put("channelName", "test2");
-//        values2.put("channelType", "1");
-//        c2.setValues(values2);
-//        ct.add(c2);
-
-//        // update
-//        ct.update(new String[]{"channelName"}, new String[]{"test1_update"}, new String[]{"clientId", "channelId"}, new String[]{"soobin", "channel1_of_soobin"});
-//
-        //delete
-//        ct.delete(new String[]{"clientId", "channelId"}, new String[]{"soobin", "channel1_of_soobin"});
         List<Channel> all = ct.getAll();
         for(int i =0; i < all.size(); i++){
             System.out.println(all.get(i).toString());
@@ -272,33 +234,6 @@ public class TableHelper<T>{
     private static void testChannelMemberTable(){
         System.out.println("=====ChannelMemberTable======");
         ChannelMemberTable cmt = ChannelMemberTable.getInstance();
-//        ChannelMember c1 = new ChannelMember();
-//        ChannelMember c2 = new ChannelMember();
-//        // add one
-//        Map<String, String> values1 = new HashMap<>();
-//        values1.put("clientId", "soobin");
-//        values1.put("channelId", "channel1_of_soobin");
-//        values1.put("email", "dchai2@uci.edu");
-//        values1.put("firstName", "Duo");
-//        values1.put("lastName", "Chai");
-//        c1.setValues(values1);
-//        cmt.add(c1);
-//
-//        // add two
-//        Map<String, String> values2 = new HashMap<>();
-//        values2.put("clientId", "soobin");
-//        values2.put("channelId", "channel1_of_soobin");
-//        values2.put("email", "soobinchoi54@gmail.com");
-//        values2.put("firstName", "Soobin");
-//        values2.put("lastName", "Choi");
-//        c2.setValues(values2);
-//        cmt.add(c2);
-
-//        // update
-//        cmt.update(new String[]{"firstName"}, new String[]{"Duo"}, new String[]{"clientId", "channelId", "email"}, new String[]{"soobin", "channel1_of_soobin", "dchai2@uci.edu"});
-//
-////        delete
-//        cmt.delete(new String[]{"clientId", "channelId", "email"}, new String[]{"soobin", "channel1_of_soobin", "dchai2@uci.edu"});
         List<ChannelMember> all = cmt.getAll();
         for(int i =0; i < all.size(); i++){
             System.out.println(all.get(i).toString());
@@ -309,35 +244,6 @@ public class TableHelper<T>{
     private static void testChannelMessageTable() {
         System.out.println("=====ChannelMessageTable======");
         ChannelMessageTable cmt = ChannelMessageTable.getInstance();
-//        ChannelMessage c1 = new ChannelMessage();
-//        ChannelMessage c2 = new ChannelMessage();
-//        // add one
-//        Map<String, String> values1 = new HashMap<>();
-//        values1.put("clientId", "soobin");
-//        values1.put("channelId", "channel1_of_soobin");
-//        values1.put("messageId", "1111");
-//        values1.put("message", "hello1");
-//        values1.put("sender", "dchai2@uci.edu");
-//        values1.put("dateTime", "05-27-2020");
-//        c1.setValues(values1);
-//        cmt.add(c1);
-//
-//        // add two
-//        Map<String, String> values2 = new HashMap<>();
-//        values2.put("clientId", "soobin");
-//        values2.put("channelId", "channel1_of_soobin");
-//        values2.put("messageId", "2222");
-//        values2.put("message", "hello2");
-//        values2.put("sender", "dchai2@uci.edu");
-//        values2.put("dateTime", "05-27-2020");
-//        c2.setValues(values2);
-//        cmt.add(c2);
-
-//        // update
-//        cmt.update(new String[]{"firstName"}, new String[]{"Duo"}, new String[]{"clientId", "channelId", "email"}, new String[]{"soobin", "channel1_of_soobin", "dchai2@uci.edu"});
-//
-////        delete
-//        cmt.delete(new String[]{"clientId", "channelId", "email"}, new String[]{"soobin", "channel1_of_soobin", "dchai2@uci.edu"});
         List<ChannelMessage> all = cmt.getAll();
         for(int i =0; i < all.size(); i++){
             System.out.println(all.get(i).toString());

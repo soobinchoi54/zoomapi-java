@@ -1,5 +1,6 @@
 package lib.subscription;
 
+import lib.cache.databaseData.CacheUnit;
 import lib.cache.databaseData.Unit;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public abstract class EventHandler implements Runnable{
         observers.remove(observer);
     }
 
-    public synchronized void notifyObservers(Unit e){
+    public synchronized void notifyObservers(CacheUnit e){
         for(int i = 0; i < observers.size(); i++){
             observers.get(i).update(e);
         }
