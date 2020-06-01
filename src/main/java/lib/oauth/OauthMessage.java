@@ -62,7 +62,7 @@ public class OauthMessage extends OauthChannel{
         checkValidation(fromDate, toDate);
 
         if (chatMessages == null) throw new IllegalStateException("Uninitialized OauthClient");
-        String cid = getCid(toChannel);
+        String cid = getCid(toChannel).getChannelId();
         Map<String, String> params = new HashMap<>();
         params.put("userId", this.userId);
         params.put("to_channel", cid);
@@ -100,6 +100,10 @@ public class OauthMessage extends OauthChannel{
                     values.put("dateTime", dateTime);
                     ChannelMessage m = new ChannelMessage();
                     m.setValues(values);
+
+                    // update cache strategy: delete all, add all
+                    CacheHelper<ChannelMessageTable, ChannelMessage> cache = new CacheHelper<>(ChannelMessageTable.class);
+                    cache.update(new String[]{"clientId", "channelName", "messageId"}, new String[]{clientId, toChannel, messageId}, new ChannelMessage[]{m}, ChannelMessage.class);
                     historyList.add(m);
                 }
                 if(res.getString("next_page_token").length()>1){
@@ -116,13 +120,6 @@ public class OauthMessage extends OauthChannel{
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        if(historyList.size()!=0){
-            // update cache strategy: delete all, add all
-            CacheHelper<ChannelMessageTable, ChannelMessage> cache = new CacheHelper<>(ChannelMessageTable.class);
-            cache.update(new String[]{"clientId", "channelName", "messageId"}, new String[]{clientId, toChannel, messageId}, (ChannelMessage[]) historyList.toArray(), ChannelMessage.class);
-        }
-        // fix date
 
         return historyList;
     }
@@ -168,7 +165,7 @@ public class OauthMessage extends OauthChannel{
         checkValidation(fromDate, toDate);
 
         if (chatMessages == null) throw new IllegalStateException("Uninitialized OauthClient");
-        String cid = getCid(toMember);
+        String cid = getCid(toMember).getChannelId();
         Map<String, String> params = new HashMap<>();
         params.put("userId", this.userId);
         params.put("to_contact", cid);
@@ -265,7 +262,7 @@ public class OauthMessage extends OauthChannel{
      ************************************/
     public ChannelMessage sendChatToChannel(String toChannel, String message){
         if(chatMessages == null) throw new IllegalStateException("Uninitialized OauthClient");
-        String cid = getCid(toChannel);
+        String cid = getCid(toChannel).getChannelId();
         Map<String,String> data = new HashMap<>();
         data.put("to_channel", cid);
         data.put("message", message);
@@ -318,7 +315,7 @@ public class OauthMessage extends OauthChannel{
     public ChannelMessage updateMessageFromChannel(String toChannel, String messageId, String message){
         if(chatMessages == null) throw new IllegalStateException("Uninitialized OauthClient");
         Map<String,String> data = new HashMap<>();
-        String cid = getCid(toChannel);
+        String cid = getCid(toChannel).getChannelId();
         data.put("to_channel", cid);
         data.put("messageId", messageId);
         data.put("message", message);
@@ -363,7 +360,7 @@ public class OauthMessage extends OauthChannel{
     public ChannelMessage deleteMessageFromChannel(String toChannel, String messageId){
         if(chatMessages == null) throw new IllegalStateException("Uninitialized OauthClient");
         Map<String,String> data = new HashMap<>();
-        String cid = getCid(toChannel);
+        String cid = getCid(toChannel).getChannelId();
         data.put("to_channel", cid);
         data.put("messageId", messageId);
         JSONObject res = chatMessages.updateMessage(data);
