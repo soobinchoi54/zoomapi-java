@@ -4,6 +4,7 @@ import lib.cache.databaseData.ChannelMessage;
 import lib.cache.tables.ChannelMemberTable;
 import lib.cache.tables.ChannelMessageTable;
 import lib.cache.tables.ChannelTable;
+import lib.cache.utils.CacheHelper;
 import org.json.JSONObject;
 import lib.clients.OauthZoomClient;
 import lib.cache.databaseData.Channel;
@@ -92,7 +93,11 @@ public class OauthChannel {
         }
 
         if(channelList.size()!=0){
-            // update cache
+            // update cache strategy: delete all, add all
+            CacheHelper<ChannelTable, Channel> cache = new CacheHelper<>(ChannelTable.class);
+            Map<String, String> constraints = new HashMap<>();
+            constraints.put("clientId", clientId);
+            cache.update(constraints, (Channel[]) channelList.toArray(), Channel.class);
         }
 
         return channelList;
@@ -107,14 +112,32 @@ public class OauthChannel {
         return channelList;
     }
 
-    public boolean createChannel(String channelName, String channelType) {
+    public Channel createChannel(String channelName, String channelType) {
         if (chatChannels == null) throw new IllegalStateException("Uninitialized OauthClient");
         Map<String, String> data = new HashMap<>();
         data.put("channelName", channelName);
         data.put("channelType", channelType);
         JSONObject res = chatChannels.createChannel(data);
         int statusCode = res.getInt("status_code");
-        return (statusCode == 201);
+
+        Channel c = null;
+        if(statusCode == 201){
+            c = new Channel();
+            Map<String, String> values = new HashMap<>();
+            values.put("clientId", this.clientId);
+            values.put("channelId", res.getString("id"));
+            values.put("channelName", res.getString("name"));
+            values.put("channelType", String.valueOf(res.getInt("type")));
+            c.setValues(values);
+            // update cache strategy: delete all, add all
+            CacheHelper<ChannelTable, Channel> cache = new CacheHelper<>(ChannelTable.class);
+            Map<String, String> constraints = new HashMap<>();
+            constraints.put("clientId", clientId);
+            constraints.put("channelName", channelName);
+            cache.update(constraints, new Channel[]{c}, Channel.class);
+        }
+
+        return c;
     }
 
     public Channel getChannel(String channelName) {

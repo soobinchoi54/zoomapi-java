@@ -1,5 +1,6 @@
 package lib.subscription;
 
+import lib.cache.databaseData.CacheUnit;
 import lib.clients.OauthZoomClient;
 import lib.cache.databaseData.Unit;
 
@@ -82,7 +83,7 @@ public class SubscribeAgency {
     }
 
     // will call the call-back method once data changes
-    public static void announce(int eventCode, String channelName, Unit e){
+    public static void announce(int eventCode, String channelName, CacheUnit e){
         events.get(eventCode).get(channelName).notifyObservers(e);
     }
 

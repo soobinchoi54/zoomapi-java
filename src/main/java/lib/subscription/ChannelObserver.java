@@ -1,5 +1,6 @@
 package lib.subscription;
 
+import lib.cache.databaseData.CacheUnit;
 import lib.clients.OauthZoomClient;
 import lib.cache.databaseData.Unit;
 
@@ -59,7 +60,7 @@ public class ChannelObserver{
     /************************************************
      * call-back method to be called once data changes
      ************************************************/
-    public void update(Unit e){
+    public void update(CacheUnit e){
         System.out.println(observerName + ": " + e.toString());
     }
 }
