@@ -103,6 +103,10 @@ This bot exercises events that are subscribed to specific channels, or observabl
 
 ## Milestone 5 Project Set Up and Result: 
 ### Structural Changes: 
-There was a massive restructuring and refactoring of our project to address the feedback provided in the previous milestones and to optimize the library based on the requirements of the final milestone. <br>The architecture of our final library system is provided in the following diagram. 
-<br> ![Zoom API Architecture](/pics/m5/zoom-api-architecture.png)
-<br> 
+There was a major restructuring and refactoring of our project to address the feedback provided in the previous milestones and to optimize the library based on the requirements of the final milestone. <br>The architecture of our final library system is provided in the following diagram. 
+<br> ![Zoom API Architecture](/pics/m5/zoom-api-architectureREPLACE.png)
+<br> For the final milestone, we modified one of our previous bots, botm1, by integrating a cache system to our library. Instead of executing HTTP requests each time we want to test our zoom Channel and Message comoponents, we cache the queried data in a local cache memory organized into 4 different tables (Credentials, Channel, ChannelMember, and ChannelMessage). Below is a screenshot of our TableHelper.java class, which is a generically typed helper class that each of the four tables extends to implement its own table.  
+<br> ![Cache Table](/pics/m5/table_helper.png)
+<br> The botm1 application provides options to exercise each of the Channel and Message components, but with an additional option to query directly from local cache in relevant cases. By testing the application, you will notice that the response time is significantly reduced.
+<br> Below is what a successful request looks like.
+<br> ![Successful Query](/pics/m5/successful_query.png)
