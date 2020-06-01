@@ -234,8 +234,10 @@ public class botm1{
                 member_length++;
             }
         }
-        List<ChannelMember> res = oc.inviteChannelMembers(cName, (String[])members.toArray());
+        String[] emails = new String[members.size()];
+        List<ChannelMember> res = oc.inviteChannelMembers(cName, members.toArray(emails));
         if(res!=null){
+            System.out.println("Succeeded");
             for(int i = 0; i<res.size();i++){
                 System.out.println(res.get(i).toString());
             }
@@ -251,7 +253,7 @@ public class botm1{
         String cid = sc.nextLine();
         Channel c = oc.joinChannel(cid);
         if(c!=null){
-            System.out.println("Succeed");
+            System.out.println("Succeeded");
             System.out.println(c.toString());
         }else{
             System.out.println("Failed");
@@ -265,7 +267,7 @@ public class botm1{
         String name = sc.nextLine();
         Channel c = oc.leaveChannel(name);
         if(c!=null){
-            System.out.println("Succeed");
+            System.out.println("Succeeded");
             System.out.println(c.toString());
         }else{
             System.out.println("Failed");
@@ -282,7 +284,7 @@ public class botm1{
         String email = sc.nextLine();
         ChannelMember cm = oc.removeMember(cName, email);
         if(cm!=null){
-            System.out.println("Succeed");
+            System.out.println("Succeeded");
             System.out.println(cm.toString());
         }else{
             System.out.println("Failed");
