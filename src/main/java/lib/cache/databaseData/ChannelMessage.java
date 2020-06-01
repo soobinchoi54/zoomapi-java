@@ -2,7 +2,7 @@ package lib.cache.databaseData;
 
 import java.util.Map;
 
-public class ChannelMessage extends Unit implements CacheUnit {
+public class ChannelMessage implements CacheUnit {
     private String id;
     private String clientId;
     private String channelId;

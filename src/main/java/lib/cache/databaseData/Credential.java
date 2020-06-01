@@ -2,7 +2,7 @@ package lib.cache.databaseData;
 
 import java.util.Map;
 
-public class Credential extends Unit {
+public class Credential {
     private String id;
     private String clientId;
     private String userSecret;
