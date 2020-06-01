@@ -15,6 +15,7 @@ import lib.utils.Util;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
 
 public class OauthMessage extends OauthChannel{
@@ -74,6 +75,9 @@ public class OauthMessage extends OauthChannel{
             Date fromDateFormat = dateFormat.parse(fromDate);
             Date toDateFormat = dateFormat.parse(toDate);
             cal.setTime(fromDateFormat);
+
+            // yyyy=MM-ddTHH:mm:ssZ in HTTP
+            DateFormat zoomFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
             while (fromDateFormat.compareTo(toDateFormat) <= 0) {
                 params.put("date", fromDate);
                 JSONObject res = chatMessages.listMessages(params);
@@ -89,11 +93,16 @@ public class OauthMessage extends OauthChannel{
                     String message = obj.has("message") ? obj.getString("message"):null;
                     String sender = obj.has("sender") ? obj.getString("sender"):null;
                     String dateTime = obj.has("date_time") ? obj.getString("date_time"):null;
+                    if(dateTime!=null) {
+                        Date zoomTime = zoomFormat.parse(dateTime);
+                        dateTime = dateFormat.format(zoomTime);
+                    }
 
                     // set values for ADS
                     Map<String, String> values = new HashMap<>();
                     values.put("clientId", this.clientId);
                     values.put("channelId", cid);
+                    values.put("channelName", toChannel);
                     values.put("messageId", messageId);
                     values.put("message", message);
                     values.put("sender", sender);
@@ -159,16 +168,16 @@ public class OauthMessage extends OauthChannel{
      * List Messages sent to a Member `fromDate` `toDate`
      * fromDate format: yyyy-MM-dd
      * toDate format: yyyy-MM-dd
+     * In cache, we treat a member as a special channel
      * **************************************************/
     public List<ChannelMessage> getMemberMessages(String toMember, String fromDate, String toDate) {
         // check validation of Dates
         checkValidation(fromDate, toDate);
 
         if (chatMessages == null) throw new IllegalStateException("Uninitialized OauthClient");
-        String cid = getCid(toMember).getChannelId();
         Map<String, String> params = new HashMap<>();
         params.put("userId", this.userId);
-        params.put("to_contact", cid);
+        params.put("to_contact", toMember);
         params.put("page_size", "50");
         List<ChannelMessage> historyList = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
@@ -177,6 +186,9 @@ public class OauthMessage extends OauthChannel{
             Date fromDateFormat = dateFormat.parse(fromDate);
             Date toDateFormat = dateFormat.parse(toDate);
             cal.setTime(fromDateFormat);
+
+            // yyyy=MM-ddTHH:mm:ssZ in HTTP
+            DateFormat zoomFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
             while (fromDateFormat.compareTo(toDateFormat) <= 0) {
                 params.put("date", fromDate);
                 JSONObject res = chatMessages.listMessages(params);
@@ -192,17 +204,26 @@ public class OauthMessage extends OauthChannel{
                     String message = obj.has("message") ? obj.getString("message"):null;
                     String sender = obj.has("sender") ? obj.getString("sender"):null;
                     String dateTime = obj.has("date_time") ? obj.getString("date_time"):null;
+                    if(dateTime!=null) {
+                        Date zoomTime = zoomFormat.parse(dateTime);
+                        dateTime = dateFormat.format(zoomTime);
+                    }
 
                     // set values for ADS
                     Map<String, String> values = new HashMap<>();
                     values.put("clientId", this.clientId);
-                    values.put("channelId", cid);
+                    values.put("channelId", toMember);
+                    values.put("channelName", toMember);
                     values.put("messageId", messageId);
                     values.put("message", message);
                     values.put("sender", sender);
                     values.put("dateTime", dateTime);
                     ChannelMessage m = new ChannelMessage();
                     m.setValues(values);
+
+                    // update cache strategy: delete all, add all
+                    CacheHelper<ChannelMessageTable, ChannelMessage> cache = new CacheHelper<>(ChannelMessageTable.class);
+                    cache.update(new String[]{"clientId", "channelName", "messageId"}, new String[]{clientId, toMember, messageId}, new ChannelMessage[]{m}, ChannelMessage.class);
                     historyList.add(m);
                 }
                 if(res.getString("next_page_token").length()>1){
@@ -223,37 +244,34 @@ public class OauthMessage extends OauthChannel{
         return historyList;
     }
 
-    /********************
-     * Coming Soon
-     * ******************/
     public List<ChannelMessage> getMemberMessages(String toMember, String fromDate, String toDate, boolean usingCache){
         if(!usingCache) return getMemberMessages(toMember, fromDate, toDate);
-        return null;
-//        // check validation of Dates
-//        checkValidation(fromDate, toDate);
-//        ChannelMessageTable table = ChannelMessageTable.getInstance();
-//        List<ChannelMessage> historyList = new ArrayList<>();
-//        Calendar cal = Calendar.getInstance();
-//
-//        try {
-//            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//            Date fromDateFormat = dateFormat.parse(fromDate);
-//            Date toDateFormat = dateFormat.parse(toDate);
-//            cal.setTime(fromDateFormat);
-//            while (fromDateFormat.compareTo(toDateFormat) <= 0) {
-//                List<ChannelMessage> messages = table.get(new String[]{"clientId", "contactId", "dateTime"}, new String[]{this.clientId, toMember, fromDate});
-//                historyList.addAll(messages);
-//
-//                // update fromDate++
-//                cal.add(Calendar.DATE, 1);
-//                fromDateFormat = cal.getTime();
-//                fromDate = dateFormat.format(fromDateFormat);
-//            }
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return historyList;
+
+        // check validation of Dates
+        checkValidation(fromDate, toDate);
+        ChannelMessageTable table = ChannelMessageTable.getInstance();
+        List<ChannelMessage> historyList = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date fromDateFormat = dateFormat.parse(fromDate);
+            Date toDateFormat = dateFormat.parse(toDate);
+            cal.setTime(fromDateFormat);
+            while (fromDateFormat.compareTo(toDateFormat) <= 0) {
+                List<ChannelMessage> messages = table.get(new String[]{"clientId", "channelName", "dateTime"}, new String[]{this.clientId, toMember, fromDate});
+                historyList.addAll(messages);
+
+                // update fromDate++
+                cal.add(Calendar.DATE, 1);
+                fromDateFormat = cal.getTime();
+                fromDate = dateFormat.format(fromDateFormat);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return historyList;
     }
 
     /************************************
@@ -304,6 +322,20 @@ public class OauthMessage extends OauthChannel{
         ChannelMessage cm = null;
         if (statusCode == 201) {
             cm = new ChannelMessage();
+
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            Date now = new Date();
+            Map<String, String> values = new HashMap<>();
+            values.put("clientId", this.clientId);
+            values.put("channelId", toMember);
+            values.put("channelName", toMember);
+            values.put("messageId", res.getString("id"));
+            values.put("message", message);
+            values.put("dateTime", df.format(now));
+            cm.setValues(values);
+
+            CacheHelper<ChannelMessageTable, ChannelMessage> cache = new CacheHelper<>(ChannelMessageTable.class);
+            cache.update(new String[]{"clientId", "channelName", "message"}, new String[]{clientId, toMember, message}, new ChannelMessage[]{cm}, ChannelMessage.class);
         }
         return cm;
     }
@@ -323,12 +355,15 @@ public class OauthMessage extends OauthChannel{
         int statusCode = res.getInt("status_code");
         ChannelMessage cm = null;
         if (statusCode == 204) {
+            cm = new ChannelMessage();
+
             ChannelMessageTable table = ChannelMessageTable.getInstance();
             List<ChannelMessage> lists = table.get(new String[]{"clientId", "channelName", "messageId"}, new String[]{this.clientId, toChannel, messageId});
             if(lists.size()!=0) {
                 cm = lists.get(0);
                 // if we have this ChannelMessage in cache, we update
-                // if we don't have, we do nothing
+                // if we don't have, we do nothing, since there is not way to know the dateTime of that message
+                // Not even from the http response from the Zoom server
                 table.update(new String[]{"message"}, new String[]{message}, new String[]{"clientId", "channelName", "messageId"}, new String[]{this.clientId, toChannel, messageId});
             }
         }
@@ -349,7 +384,17 @@ public class OauthMessage extends OauthChannel{
         JSONObject res = chatMessages.updateMessage(data);
         int statusCode = res.getInt("status_code");
         ChannelMessage cm = null;
-        if (statusCode == 204) cm = new ChannelMessage();
+        if (statusCode == 204) {
+            cm = new ChannelMessage();
+            ChannelMessageTable table = ChannelMessageTable.getInstance();
+            List<ChannelMessage> lists = table.get(new String[]{"clientId", "channelName", "messageId"}, new String[]{this.clientId, toMember, messageId});
+            if(lists.size()!=0) {
+                cm = lists.get(0);
+                // if we have this ChannelMessage in cache, we update
+                // if we don't have, we do nothing
+                table.update(new String[]{"message"}, new String[]{message}, new String[]{"clientId", "channelName", "messageId"}, new String[]{this.clientId, toMember, messageId});
+            }
+        }
         return cm;
     }
 
@@ -363,7 +408,7 @@ public class OauthMessage extends OauthChannel{
         String cid = getCid(toChannel).getChannelId();
         data.put("to_channel", cid);
         data.put("messageId", messageId);
-        JSONObject res = chatMessages.updateMessage(data);
+        JSONObject res = chatMessages.deleteMessage(data);
         int statusCode = res.getInt("status_code");
         ChannelMessage cm = null;
         if (statusCode == 204) {
@@ -392,10 +437,22 @@ public class OauthMessage extends OauthChannel{
         Map<String,String> data = new HashMap<>();
         data.put("to_contact", toMember);
         data.put("messageId", messageId);
-        JSONObject res = chatMessages.updateMessage(data);
+        JSONObject res = chatMessages.deleteMessage(data);
         int statusCode = res.getInt("status_code");
         ChannelMessage cm = null;
-        if (statusCode == 204) cm = new ChannelMessage();
+        if (statusCode == 204) {
+            cm = new ChannelMessage();
+
+            Map<String, String> values = new HashMap<>();
+            values.put("clientId", this.clientId);
+            values.put("channelId", toMember);
+            values.put("channelName", toMember);
+            values.put("messageId", messageId);
+            cm.setValues(values);
+
+            CacheHelper<ChannelMessageTable, ChannelMessage> cache = new CacheHelper<>(ChannelMessageTable.class);
+            cache.update(new String[]{"clientId", "channelName", "messageId"}, new String[]{clientId, toMember, messageId}, new ChannelMessage[]{}, ChannelMessage.class);
+        }
         return cm;
     }
 
