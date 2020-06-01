@@ -3,9 +3,12 @@ package lib.cache.databaseData;
 import java.util.Map;
 
 public class ChannelMessage implements CacheUnit {
+    // unique keys
     private String id;
     private String clientId;
     private String channelId;
+    private String channelName;
+
     private String messageId;
     private String message;
     private String sender;
@@ -18,6 +21,7 @@ public class ChannelMessage implements CacheUnit {
         this.id = values.getOrDefault("id", null);
         this.clientId = values.getOrDefault("clientId", null);
         this.channelId = values.getOrDefault("channelId", null);
+        this.channelName = values.getOrDefault("channelName", null);
         this.messageId = values.getOrDefault("messageId", null);
         this.message = values.getOrDefault("message", null);
         this.sender = values.getOrDefault("sender", null);
@@ -34,6 +38,8 @@ public class ChannelMessage implements CacheUnit {
 
     public String getChannelId(){return this.channelId;}
 
+    public String getChannelName() {return this.channelName;}
+
     public String getMessageId(){return this.messageId;}
 
     public String getMessage(){return this.message;}
@@ -44,6 +50,6 @@ public class ChannelMessage implements CacheUnit {
 
     @Override
     public String toString() {
-        return " clientId: " + this.getClientId() + " channelId: " + this.getChannelId() + " messageId: " + this.getMessageId() + " message: " + this.getMessage() + " sender: " + this.getSender() + " dateTime: " + this.getDateTime();
+        return " clientId: " + this.getClientId() + " channelId: " + this.getChannelId() + " channelName: " + this.getChannelName() + " messageId: " + this.getMessageId() + " message: " + this.getMessage() + " sender: " + this.getSender() + " dateTime: " + this.getDateTime();
     }
 }

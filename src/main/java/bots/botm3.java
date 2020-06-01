@@ -68,7 +68,7 @@ public class botm3 {
         System.out.println("Enter message to send: ");
         Scanner sc2 = new Scanner(System.in);
         String message = sc2.nextLine();
-        boolean response = oauth_message.sendChatToChannel(to_channel, message);
+        boolean response = oauth_message.sendChatToChannel(to_channel, message)!=null;
         if (response) {
             System.out.println("Message Sent.");
         } else {
