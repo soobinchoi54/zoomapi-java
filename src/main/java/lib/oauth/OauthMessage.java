@@ -1,6 +1,9 @@
 package lib.oauth;
 
+import lib.cache.databaseData.Channel;
 import lib.cache.tables.ChannelMessageTable;
+import lib.cache.tables.ChannelTable;
+import lib.cache.utils.CacheHelper;
 import org.json.JSONObject;
 import lib.clients.OauthZoomClient;
 import lib.cache.databaseData.ChannelMessage;
@@ -114,10 +117,12 @@ public class OauthMessage extends OauthChannel{
             e.printStackTrace();
         }
 
-        if(historyList.size() != 0){
-            // update cache
-            // ...
+        if(historyList.size()!=0){
+            // update cache strategy: delete all, add all
+            CacheHelper<ChannelMessageTable, ChannelMessage> cache = new CacheHelper<>(ChannelMessageTable.class);
+            cache.update(new String[]{"clientId", "channelName", "messageId"}, new String[]{clientId, toChannel, messageId}, (ChannelMessage[]) historyList.toArray(), ChannelMessage.class);
         }
+        // fix date
 
         return historyList;
     }
@@ -138,7 +143,7 @@ public class OauthMessage extends OauthChannel{
             Date toDateFormat = dateFormat.parse(toDate);
             cal.setTime(fromDateFormat);
             while (fromDateFormat.compareTo(toDateFormat) <= 0) {
-                List<ChannelMessage> messages = table.get(new String[]{"clientId", "channelId", "dateTime"}, new String[]{this.clientId, toChannel, fromDate});
+                List<ChannelMessage> messages = table.get(new String[]{"clientId", "channelName", "dateTime"}, new String[]{this.clientId, toChannel, fromDate});
                 historyList.addAll(messages);
 
                 // update fromDate++
@@ -218,11 +223,6 @@ public class OauthMessage extends OauthChannel{
             e.printStackTrace();
         }
 
-        if(historyList.size() != 0){
-            // update cache
-            // ...
-        }
-
         return historyList;
     }
 
@@ -263,88 +263,143 @@ public class OauthMessage extends OauthChannel{
      * Send a chat message to a Channel
      * `toChannel`: name of the channel
      ************************************/
-    public boolean sendChatToChannel(String toChannel, String message){
+    public ChannelMessage sendChatToChannel(String toChannel, String message){
         if(chatMessages == null) throw new IllegalStateException("Uninitialized OauthClient");
         String cid = getCid(toChannel);
         Map<String,String> data = new HashMap<>();
         data.put("to_channel", cid);
         data.put("message", message);
         JSONObject res = chatMessages.sendMessage(data);
+        int statusCode = res.getInt("status_code");
+        ChannelMessage cm = null;
+        if (statusCode == 201) {
+            cm = new ChannelMessage();
 
-        return (int)res.get("status_code")==201;
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            Date now = new Date();
+            Map<String, String> values = new HashMap<>();
+            values.put("clientId", this.clientId);
+            values.put("channelId", cid);
+            values.put("channelName", toChannel);
+            values.put("messageId", res.getString("id"));
+            values.put("message", message);
+            values.put("dateTime", df.format(now));
+            cm.setValues(values);
+
+            CacheHelper<ChannelMessageTable, ChannelMessage> cache = new CacheHelper<>(ChannelMessageTable.class);
+            cache.update(new String[]{"clientId", "channelName", "message"}, new String[]{clientId, toChannel, message}, new ChannelMessage[]{cm}, ChannelMessage.class);
+        }
+        return cm;
     }
 
     /************************************
      * Send a chat message to a Member
      * `toMember`: email of the Member
+     * No table for MemberMessage, return empty Object for now
      ************************************/
-    public boolean sendChatToMember(String toMember, String message){
+    public ChannelMessage sendChatToMember(String toMember, String message){
         if(chatMessages == null) throw new IllegalStateException("Uninitialized OauthClient");
-
         Map<String,String> data = new HashMap<>();
         data.put("to_contact", toMember);
         data.put("message", message);
         JSONObject res = chatMessages.sendMessage(data);
-
-        return (int)res.get("status_code")==201;
+        int statusCode = res.getInt("status_code");
+        ChannelMessage cm = null;
+        if (statusCode == 201) {
+            cm = new ChannelMessage();
+        }
+        return cm;
     }
 
     /***************************************
      * Update a chat message sent to Channel
      * `toChannel`: name of the channel
      ***************************************/
-    public boolean updateMessageFromChannel(String toChannel, String messageId, String message){
+    public ChannelMessage updateMessageFromChannel(String toChannel, String messageId, String message){
         if(chatMessages == null) throw new IllegalStateException("Uninitialized OauthClient");
         Map<String,String> data = new HashMap<>();
-        data.put("to_channel", toChannel);
+        String cid = getCid(toChannel);
+        data.put("to_channel", cid);
         data.put("messageId", messageId);
         data.put("message", message);
         JSONObject res = chatMessages.updateMessage(data);
-
-        return (int)res.get("status_code")==204;
+        int statusCode = res.getInt("status_code");
+        ChannelMessage cm = null;
+        if (statusCode == 204) {
+            ChannelMessageTable table = ChannelMessageTable.getInstance();
+            List<ChannelMessage> lists = table.get(new String[]{"clientId", "channelName", "messageId"}, new String[]{this.clientId, toChannel, messageId});
+            if(lists.size()!=0) {
+                cm = lists.get(0);
+                // if we have this ChannelMessage in cache, we update
+                // if we don't have, we do nothing
+                table.update(new String[]{"message"}, new String[]{message}, new String[]{"clientId", "channelName", "messageId"}, new String[]{this.clientId, toChannel, messageId});
+            }
+        }
+        return cm;
     }
 
     /***************************************
      * Update a chat message sent to Member
      * `toMember`: email of the Member
+     * No table for MemberMessage, return empty Object for now
      ***************************************/
-    public boolean updateMessageSentToMember(String toMember, String messageId, String message){
+    public ChannelMessage updateMessageSentToMember(String toMember, String messageId, String message){
         if(chatMessages == null) throw new IllegalStateException("Uninitialized OauthClient");
         Map<String,String> data = new HashMap<>();
         data.put("to_contact", toMember);
         data.put("messageId", messageId);
         data.put("message", message);
         JSONObject res = chatMessages.updateMessage(data);
-
-        return (int)res.get("status_code")==204;
+        int statusCode = res.getInt("status_code");
+        ChannelMessage cm = null;
+        if (statusCode == 204) cm = new ChannelMessage();
+        return cm;
     }
 
     /***************************************
      * Delete a chat message sent to Channel
      * `toChannel`: name of the channel
      ***************************************/
-    public boolean deleteMessageFromChannel(String toChannel, String messageId){
+    public ChannelMessage deleteMessageFromChannel(String toChannel, String messageId){
         if(chatMessages == null) throw new IllegalStateException("Uninitialized OauthClient");
         Map<String,String> data = new HashMap<>();
-        data.put("to_channel", toChannel);
+        String cid = getCid(toChannel);
+        data.put("to_channel", cid);
         data.put("messageId", messageId);
         JSONObject res = chatMessages.updateMessage(data);
+        int statusCode = res.getInt("status_code");
+        ChannelMessage cm = null;
+        if (statusCode == 204) {
+            cm = new ChannelMessage();
 
-        return (int)res.get("status_code")==204;
+            Map<String, String> values = new HashMap<>();
+            values.put("clientId", this.clientId);
+            values.put("channelId", cid);
+            values.put("channelName", toChannel);
+            values.put("messageId", messageId);
+            cm.setValues(values);
+
+            CacheHelper<ChannelMessageTable, ChannelMessage> cache = new CacheHelper<>(ChannelMessageTable.class);
+            cache.update(new String[]{"clientId", "channelName", "messageId"}, new String[]{clientId, toChannel, messageId}, new ChannelMessage[]{}, ChannelMessage.class);
+        }
+        return cm;
     }
 
     /***************************************
      * Delete a chat message sent to Member
      * `toMember`: email of the Member
+     * No table for MemberMessage, return empty Object for now
      ***************************************/
-    public boolean deleteMessageSentToMember(String toMember, String messageId){
+    public ChannelMessage deleteMessageSentToMember(String toMember, String messageId){
         if(chatMessages == null) throw new IllegalStateException("Uninitialized OauthClient");
         Map<String,String> data = new HashMap<>();
         data.put("to_contact", toMember);
         data.put("messageId", messageId);
         JSONObject res = chatMessages.updateMessage(data);
-
-        return (int)res.get("status_code")==204;
+        int statusCode = res.getInt("status_code");
+        ChannelMessage cm = null;
+        if (statusCode == 204) cm = new ChannelMessage();
+        return cm;
     }
 
     /************************************************************************
