@@ -19,23 +19,19 @@ public class CacheHelper<T, S>{
         this.type = cls;
     }
 
-    public boolean update(Map<String, String> constraints, S[] toAdd, Class<S> klass){
-        if(!constraints.containsKey("clientId")){
-            System.out.println("Please specify clientId.");
+    private boolean checkValidation(String [] conditions){
+        for(String condition: conditions){
+            if(condition.equals("clientId")) return true;
+        }
+        return false;
+    }
+    public boolean update(String[] conditions, String[] keys, S[] toAdd, Class<S> klass){
+        if(conditions.length != keys.length){
+            System.out.println("Input don't match with each other");
             return false;
         }
-        String[] conditions = new String[constraints.size()];
-        String[] keys = new String[constraints.size()];
-
-        int index = 0;
-        for(Map.Entry<String, String> entry:constraints.entrySet()){
-            conditions[index] = entry.getKey();
-            keys[index] = entry.getValue();
-            index++;
-        }
-
-        if(index!=constraints.size()) {
-            System.out.println("Invalid constraints input.");
+        if(!checkValidation(conditions)) {
+            System.out.println("Please specify clientId");
             return false;
         }
 
