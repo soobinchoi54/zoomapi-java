@@ -51,7 +51,7 @@ public class OauthZoomClient extends ZoomClient{
 
         // get cache
         CredentialTable table = CredentialTable.getInstance();
-        List<Credential> data = table.get(this.config.get("client_id"), this.config.get("client_secret"));
+        List<Credential> data = table.get(new String[]{"clientId", "userSecret"}, new String[]{this.config.get("client_id"), this.config.get("client_secret")});
         if(data.size()!=0){
             // compare timeStamp
             Credential user =  data.get(0);
