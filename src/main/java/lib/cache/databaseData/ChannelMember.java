@@ -3,9 +3,12 @@ package lib.cache.databaseData;
 import java.util.Map;
 
 public class ChannelMember implements CacheUnit {
+    // unique keys
     private String id;
     private String clientId;
     private String channelId;
+    private String channelName;
+
     private String memberId;
     private String email;
     private String firstName;
@@ -26,6 +29,8 @@ public class ChannelMember implements CacheUnit {
 
     public String getChannelId(){return this.channelId;}
 
+    public String getChannelName() {return this.channelName;}
+
     public String getMemberId(){return this.memberId;}
 
     public String getEmail(){return this.email;}
@@ -39,6 +44,7 @@ public class ChannelMember implements CacheUnit {
         this.id = values.getOrDefault("id", null);
         this.clientId = values.getOrDefault("clientId", null);
         this.channelId = values.getOrDefault("channelId", null);
+        this.channelName = values.getOrDefault("channelName", null);
         this.memberId = values.getOrDefault("memberId", null);
         this.email = values.getOrDefault("email", null);
         this.firstName = values.getOrDefault("firstName", null);
@@ -47,6 +53,6 @@ public class ChannelMember implements CacheUnit {
 
     @Override
     public String toString() {
-        return " clientId: " + this.getClientId() + " channelId: " + this.getChannelId() + " memberId: " + this.getMemberId() + " email: " + this.getEmail() + " firstName: " + this.getFirstName() + " lastName: " + this.getLastName();
+        return " clientId: " + this.getClientId() + " channelId: " + this.getChannelId() + " channelName: " + this.getChannelName()+ " memberId: " + this.getMemberId() + " email: " + this.getEmail() + " firstName: " + this.getFirstName() + " lastName: " + this.getLastName();
     }
 }
