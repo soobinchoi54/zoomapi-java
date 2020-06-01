@@ -106,8 +106,9 @@ public class OauthChannel {
 
         if(channelList.size()!=0){
             // update cache strategy: delete all, add all
+            Channel[] channels = new Channel[channelList.size()];
             CacheHelper<ChannelTable, Channel> cache = new CacheHelper<>(ChannelTable.class);
-            cache.update(new String[]{"clientId"}, new String[]{this.clientId}, (Channel[]) channelList.toArray(), Channel.class);
+            cache.update(new String[]{"clientId"}, new String[]{this.clientId}, channelList.toArray(channels), Channel.class);
         }
 
         return channelList;
@@ -125,13 +126,14 @@ public class OauthChannel {
     public Channel createChannel(String channelName, String channelType) {
         if (chatChannels == null) throw new IllegalStateException("Uninitialized OauthClient");
         Map<String, String> data = new HashMap<>();
-        data.put("channelName", channelName);
-        data.put("channelType", channelType);
+        data.put("name", channelName);
+        data.put("type", channelType);
         JSONObject res = chatChannels.createChannel(data);
         int statusCode = res.getInt("status_code");
-
         Channel c = null;
-        if(statusCode == 201){
+        System.out.println(statusCode);
+        // websites says 201, while it is giving me 200 :)
+        if(statusCode == 200){
             c = new Channel();
             Map<String, String> values = new HashMap<>();
             values.put("clientId", this.clientId);
@@ -155,6 +157,7 @@ public class OauthChannel {
         JSONObject res = chatChannels.getChannel(params);
         int statusCode = (int) res.get("status_code");
         Channel c = null;
+        System.out.println(statusCode);
         if (statusCode == 200) {
             c = new Channel();
             //set value
@@ -191,10 +194,10 @@ public class OauthChannel {
         String cid = target.getChannelId();
         Map<String,String> data = new HashMap<>();
         data.put("channelId", cid);
-        data.put("channelName", newChannelName);
+        data.put("name", newChannelName);
         JSONObject res = chatChannels.updateChannel(data);
         int statusCode = (int) res.get("status_code");
-
+        System.out.println(statusCode);
         Channel c = null;
         if (statusCode == 204){
             c = new Channel();
@@ -222,6 +225,7 @@ public class OauthChannel {
         JSONObject res = chatChannels.deleteChannel(params);
         int statusCode = (int) res.get("status_code");
         Channel c = null;
+        System.out.println(statusCode);
         if (statusCode == 204){
             c = new Channel();
             Map<String,String> values = new HashMap<>();
@@ -229,6 +233,7 @@ public class OauthChannel {
             values.put("channelId", cid);
             values.put("channelName", channelName);
             values.put("channelType", target.getChannelType());
+            c.setValues(values);
             // update cache
             CacheHelper<ChannelTable, Channel> cache = new CacheHelper<>(ChannelTable.class);
             cache.update(new String[]{"clientId", "channelName"}, new String[]{this.clientId, channelName}, new Channel[]{}, Channel.class);
@@ -280,8 +285,9 @@ public class OauthChannel {
 
         if(memberList.size()!=0){
             // update cache strategy: delete all, add all
+            ChannelMember[] members = new ChannelMember[memberList.size()];
             CacheHelper<ChannelMemberTable, ChannelMember> cache = new CacheHelper<>(ChannelMemberTable.class);
-            cache.update(new String[]{"clientId", "channelName"}, new String[]{this.clientId, channelName}, (ChannelMember[]) memberList.toArray(), ChannelMember.class);
+            cache.update(new String[]{"clientId", "channelName"}, new String[]{this.clientId, channelName}, memberList.toArray(members), ChannelMember.class);
         }
         return memberList;
     }
@@ -309,8 +315,8 @@ public class OauthChannel {
         data.put("channelId", cid);
         data.put("members", sb.toString());
         JSONObject res = chatChannels.inviteChannelMembers(data);
-
         int statusCode = res.getInt("status_code");
+        System.out.println(statusCode);
         if (statusCode == 201){
             memberList = new ArrayList<>(members.length);
             String[] ids = (String[]) res.get("ids");
@@ -341,9 +347,10 @@ public class OauthChannel {
         JSONObject res = chatChannels.joinChannel(data);
         int statusCode = res.getInt("status_code");
         Channel c = null;
-        if (statusCode == 201){
+        System.out.println(statusCode);
+        // websites says 201, while it is giving me 200 :)
+        if (statusCode == 200){
             c = getName(channelId);
-
             // update cache
             CacheHelper<ChannelTable, Channel> cache = new CacheHelper<>(ChannelTable.class);
             cache.update(new String[]{"clientId", "channelName"}, new String[]{this.clientId, c.getChannelName()}, new Channel[]{c}, Channel.class);
@@ -360,6 +367,7 @@ public class OauthChannel {
         JSONObject res = chatChannels.leaveChannel(params);
         int statusCode = res.getInt("status_code");
         Channel c = null;
+        System.out.println(statusCode);
         if (statusCode == 204){
             c = target;
             // update cache
@@ -378,6 +386,7 @@ public class OauthChannel {
         params.put("memberId", email);
         JSONObject res = chatChannels.removeMember(params);
         int statusCode = res.getInt("status_code");
+        System.out.println(statusCode);
         ChannelMember cm = null;
         if (statusCode == 204){
             cm = new ChannelMember();
