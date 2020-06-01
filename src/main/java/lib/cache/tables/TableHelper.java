@@ -70,6 +70,23 @@ public class TableHelper<T>{
      * Public APIs
      ****************************************************************/
 
+    public void clearCache(){
+        if(this.fields.length == 0) return;
+        String drop = "DROP TABLE IF EXISTS " + this.typeName;
+        try{
+            this.conn = DriverManager.getConnection(databasePath);
+            Statement stmt = conn.createStatement();
+            // create a new table
+            stmt.execute(drop);
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+        createTableIfAbsent();
+    }
+
     public List<T> get(String condition, String key){
         return get(new String[]{condition}, new String[]{key});
     }

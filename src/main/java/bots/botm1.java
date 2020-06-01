@@ -64,16 +64,16 @@ public class botm1{
                     removeMember(bot1);
                     break;
                 case "11":
-                    // listMessages(bot1);
+                    listMessages(bot1);
                     break;
                 case "12":
-                    // sendMessage(bot1);
+                    sendMessage(bot1);
                     break;
                 case "13":
-                    // updateMessage(bot1);
+                    updateMessage(bot1);
                     break;
                 case "14":
-                    // deleteMessage(bot1);
+                    deleteMessage(bot1);
                     break;
                 default:
                     System.out.println("Please provide a valid input...\n");
@@ -87,12 +87,12 @@ public class botm1{
     private static void listUserChannels(OauthBot bot) {
         OauthChannel oc = bot.getChannel();
         List<Channel> channels = null;
-        System.out.println("Using cache? (1. no 2. yes)");
+        System.out.println("Use cache? (Y/N)");
         Scanner sc = new Scanner(System.in);
         String option = sc.nextLine();
 
-        if(option.equals("1")) channels = oc.listChannels();
-        else if(option.equals("2")) channels = oc.listChannels(true);
+        if(option.toLowerCase().equals("n")) channels = oc.listChannels();
+        else if(option.toLowerCase().equals("y")) channels = oc.listChannels(true);
         else {
             System.out.println("Please provide a valid input...");
             listUserChannels(bot);
@@ -141,12 +141,12 @@ public class botm1{
         System.out.println("Provide a valid Channel Name to get channel: ");
         Scanner sc = new Scanner(System.in);
         String name = sc.nextLine();
-        System.out.println("Using cache? (1. no 2. yes)");
+        System.out.println("Use cache? (Y/N)");
         String option = sc.nextLine();
         Channel c = null;
-        if(option.equals("1")){
+        if(option.toLowerCase().equals("n")){
             c = oc.getChannel(name);
-        }else if(option.equals("2")){
+        }else if(option.toLowerCase().equals("y")){
             c = oc.getChannel(name, true);
         }else {
             System.out.println("Please provide a valid input...");
@@ -195,12 +195,12 @@ public class botm1{
         System.out.println("Provide a valid channel name to list current members: ");
         Scanner sc = new Scanner(System.in);
         String name = sc.nextLine();
-        System.out.println("Using cache? (1. no 2. yes)");
+        System.out.println("Use cache? (Y/N)");
         String option = sc.nextLine();
         List<ChannelMember> members = null;
-        if(option.equals("1")){
+        if(option.toLowerCase().equals("n")){
             members = oc.listChannelMembers(name);
-        }else if(option.equals("2")){
+        }else if(option.toLowerCase().equals("y")){
             members = oc.listChannelMembers(name, true);
         }else {
             System.out.println("Please provide a valid input...");
@@ -290,224 +290,178 @@ public class botm1{
             System.out.println("Failed");
         }
     }
-//    private static void listMessages(OauthBot bot) {
-//        OauthMessage om = bot.getMessage();
-//        System.out.println("List messages:");
-//        System.out.println("1. Between you and a contact");
-//        System.out.println("2. In a chat channel");
-//        System.out.println("0. Exit");
-//        Scanner sc = new Scanner(System.in);
-//        String input = sc.nextLine();
-//        switch (input) {
-//            case "0": break;
-//            case "1":
-//                System.out.println("Enter a contact email: ");
-//                String email = sc.nextLine();
-//                System.out.println("Use cache? (1. no 2. yes) ");
-//                String option = sc.nextLine();
-//                List<ChannelMessage> messages = null;
-//                if(option.equals("1")) messages = om.getChannelMessages()
-//                System.out.println("=== All Messages ===");
-//
-//                break;
-//            case "2":
-//                JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
-//                System.out.println("=== All Channels ===");
-//                Iterator<Object> it = response.iterator();
-//                while (it.hasNext()){
-//                    System.out.println(it.next());
-//                }
-//                System.out.println("Enter a channel ID: ");
-//                Scanner sc2 = new Scanner(System.in);
-//                String cid = sc2.nextLine();
-//                params.put("to_channel", cid);
-//                params.put("userId", "me");
-//                JSONArray response2 = (JSONArray) chat_messages.listMessages(params).get("messages");
-//                System.out.println("=== All Messages ===");
-//                Iterator<Object> it2 = response2.iterator();
-//                while (it2.hasNext()){
-//                    System.out.println(it2.next());
-//                }
-//                break;
-//            default:
-//                System.out.println("Pick from available options");
-//                listMessages(client);
-//        }
-//    }
-//
-//    private static void sendMessage(OauthBot bot) {
-//        ChatMessagesComponent chat_messages = (ChatMessagesComponent) client.getChatMessages();
-//        ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
-//        Map<String, String> params = new HashMap<>();
-//        System.out.println("List messages:");
-//        System.out.println("1. Between you and a contact");
-//        System.out.println("2. In a chat channel");
-//        System.out.println("0. Exit");
-//        Scanner sc = new Scanner(System.in);
-//        String input = sc.nextLine();
-//        switch (input) {
-//            case "0": break;
-//            case "1":
-//                System.out.println("Enter a contact email: ");
-//                Scanner sc1 = new Scanner(System.in);
-//                String email = sc1.nextLine();
-//                params.put("to_contact", email);
-//                System.out.println("Enter message: ");
-//                Scanner sc2 = new Scanner(System.in);
-//                String msg1 = sc2.nextLine();
-//                params.put("message", msg1);
-//                chat_messages.sendMessage(params);
-//                break;
-//            case "2":
-//                JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
-//                System.out.println("=== All Channels ===");
-//                Iterator<Object> it = response.iterator();
-//                while (it.hasNext()){
-//                    System.out.println(it.next());
-//                }
-//                System.out.println("Enter a channel ID: ");
-//                Scanner sc3 = new Scanner(System.in);
-//                String cid = sc3.nextLine();
-//                params.put("to_channel", cid);
-//                System.out.println("Enter message: ");
-//                Scanner sc4 = new Scanner(System.in);
-//                String msg2 = sc4.nextLine();
-//                params.put("message", msg2);
-//                chat_messages.sendMessage(params);
-//                break;
-//            default:
-//                System.out.println("Pick from available options");
-//                sendMessage(client);
-//        }
-//    }
-//
-//    private static void updateMessage(OauthBot bot) {
-//        ChatMessagesComponent chat_messages = (ChatMessagesComponent) client.getChatMessages();
-//        ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
-//        Map<String, String> params = new HashMap<>();
-//        System.out.println("List messages:");
-//        System.out.println("1. Between you and a contact");
-//        System.out.println("2. In a chat channel");
-//        System.out.println("0. Exit");
-//        Scanner sc = new Scanner(System.in);
-//        String input = sc.nextLine();
-//        switch (input) {
-//            case "0": break;
-//            case "1":
-//                System.out.println("Enter a contact email: ");
-//                Scanner sc1 = new Scanner(System.in);
-//                String email = sc1.nextLine();
-//                params.put("to_contact", email);
-//                params.put("userId", "me");
-//                JSONArray response1 = (JSONArray) chat_messages.listMessages(params).get("messages");
-//                System.out.println("=== All Messages ===");
-//                Iterator<Object> it1 = response1.iterator();
-//                while (it1.hasNext()){
-//                    System.out.println(it1.next());
-//                }
-//                System.out.println("Enter message ID to edit a message: ");
-//                Scanner sc2 = new Scanner(System.in);
-//                String mid1 = sc2.nextLine();
-//                params.put("messageId", mid1);
-//                System.out.println("Enter message: ");
-//                Scanner sc3 = new Scanner(System.in);
-//                String msg1 = sc3.nextLine();
-//                params.put("message", msg1);
-//                chat_messages.updateMessage(params);
-//                break;
-//            case "2":
-//                JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
-//                System.out.println("=== All Channels ===");
-//                Iterator<Object> it = response.iterator();
-//                while (it.hasNext()){
-//                    System.out.println(it.next());
-//                }
-//                System.out.println("Enter a channel ID: ");
-//                Scanner sc4 = new Scanner(System.in);
-//                String cid = sc4.nextLine();
-//                params.put("to_channel", cid);
-//                params.put("userId", "me");
-//                JSONArray response2 = (JSONArray) chat_messages.listMessages(params).get("messages");
-//                System.out.println("=== All Messages ===");
-//                Iterator<Object> it2 = response2.iterator();
-//                while (it2.hasNext()){
-//                    System.out.println(it2.next());
-//                }
-//                System.out.println("Enter message ID to edit a message: ");
-//                Scanner sc5 = new Scanner(System.in);
-//                String mid2 = sc5.nextLine();
-//                params.put("messageId", mid2);
-//                System.out.println("Enter message: ");
-//                Scanner sc6 = new Scanner(System.in);
-//                String msg2 = sc6.nextLine();
-//                params.put("message", msg2);
-//                chat_messages.updateMessage(params);
-//                break;
-//            default:
-//                System.out.println("Pick from available options");
-//                updateMessage(client);
-//        }
-//    }
-//
-//    private static void deleteMessage(OauthBot bot) {
-//        ChatMessagesComponent chat_messages = (ChatMessagesComponent) client.getChatMessages();
-//        ChatChannelsComponent chat_channels = (ChatChannelsComponent) client.getChatChannels();
-//        Map<String, String> params = new HashMap<>();
-//        System.out.println("List messages:");
-//        System.out.println("1. Between you and a contact");
-//        System.out.println("2. In a chat channel");
-//        System.out.println("0. Exit");
-//        Scanner sc = new Scanner(System.in);
-//        String input = sc.nextLine();
-//        switch (input) {
-//            case "0": break;
-//            case "1":
-//                System.out.println("Enter a contact email: ");
-//                Scanner sc1 = new Scanner(System.in);
-//                String email = sc1.nextLine();
-//                params.put("to_contact", email);
-//                params.put("userId", "me");
-//                JSONArray response1 = (JSONArray) chat_messages.listMessages(params).get("messages");
-//                System.out.println("=== All Messages ===");
-//                Iterator<Object> it1 = response1.iterator();
-//                while (it1.hasNext()){
-//                    System.out.println(it1.next());
-//                }
-//                System.out.println("Enter message ID to delete a message: ");
-//                Scanner sc2 = new Scanner(System.in);
-//                String mid1 = sc2.nextLine();
-//                params.put("messageId", mid1);
-//                chat_messages.deleteMessage(params);
-//                break;
-//            case "2":
-//                JSONArray response = (JSONArray) chat_channels.listChannels(null).get("channels");
-//                System.out.println("=== All Channels ===");
-//                Iterator<Object> it = response.iterator();
-//                while (it.hasNext()){
-//                    System.out.println(it.next());
-//                }
-//                System.out.println("Enter a channel ID: ");
-//                Scanner sc3 = new Scanner(System.in);
-//                String cid = sc3.nextLine();
-//                params.put("to_channel", cid);
-//                params.put("userId", "me");
-//                JSONArray response2 = (JSONArray) chat_messages.listMessages(params).get("messages");
-//                System.out.println("=== All Messages ===");
-//                Iterator<Object> it2 = response2.iterator();
-//                while (it2.hasNext()){
-//                    System.out.println(it2.next());
-//                }
-//                System.out.println("Enter message ID to delete a message: ");
-//                Scanner sc4 = new Scanner(System.in);
-//                String mid2 = sc4.nextLine();
-//                params.put("messageId", mid2);
-//                chat_messages.deleteMessage(params);
-//                break;
-//            default:
-//                System.out.println("Pick from available options");
-//                deleteChannel(client);
-//        }
-//    }
+
+    private static void listMessages(OauthBot bot) {
+        OauthMessage om = bot.getMessage();
+        System.out.println("List messages:");
+        System.out.println("1. In a chat channel");
+        System.out.println("2. Between you and a contact");
+        System.out.println("0. Exit");
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        System.out.println("Make sure start date and to date are no more than 5 days apart!");
+        System.out.println("Enter start date (yyyy-mm-dd): ");
+        String fromDate = sc.nextLine();
+        System.out.println("Enter end date (yyyy-mm-dd): ");
+        String toDate = sc.nextLine();
+        List<ChannelMessage> historyList = null;
+        switch (input) {
+            case "0": break;
+            case "1": ;
+                System.out.println("Enter chat channel: ");
+                String toChannel = sc.nextLine();
+                System.out.println("Use cache? (Y/N)");
+                String option = sc.nextLine();
+                if(option.toLowerCase().equals("n")) historyList = om.getChannelMessages(toChannel, fromDate, toDate);
+                else if(option.toLowerCase().equals("y")) historyList = om.getChannelMessages(toChannel,fromDate,toDate,true);
+                int number = 0;
+                for(ChannelMessage m:historyList){
+                    number++;
+                    System.out.println(number + ". " + m.toString());
+                }
+                break;
+            case "2":
+                System.out.println("Enter contact email: ");
+                String toContact = sc.nextLine();
+                System.out.println("Use cache? (Y/N)");
+                String option2 = sc.nextLine();
+                if(option2.toLowerCase().equals("n")) historyList = om.getMemberMessages(toContact, fromDate, toDate);
+                else if(option2.toLowerCase().equals("y")) historyList = om.getMemberMessages(toContact,fromDate,toDate,true);
+                int member = 0;
+                for(ChannelMessage m:historyList){
+                    member++;
+                    System.out.println(member + ". " + m.toString());
+                }
+                break;
+            default:
+                System.out.println("Pick from available options");
+                return;
+        }
+    }
+
+    private static void sendMessage(OauthBot bot) {
+        OauthMessage om = bot.getMessage();
+        System.out.println("Send messages:");
+        System.out.println("1. In a chat channel");
+        System.out.println("2. Between you and a contact");
+        System.out.println("0. Exit");
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        switch (input) {
+            case "0": break;
+            case "1":
+                System.out.println("Enter channel name: ");
+                String toChannel = sc.nextLine();
+                System.out.println("Enter message to send: ");
+                String message = sc.nextLine();
+                boolean response = om.sendChatToChannel(toChannel, message)!=null;
+                if (response) {
+                    System.out.println("Message Sent.");
+                } else {
+                    System.out.println("Message Not Sent.");
+                }
+                break;
+            case "2":
+                System.out.println("Enter contact email: ");
+                String toContact = sc.nextLine();
+                System.out.println("Enter message to send: ");
+                String message2 = sc.nextLine();
+                boolean response2 = om.sendChatToMember(toContact, message2)!=null;
+                if (response2) {
+                    System.out.println("Message Sent.");
+                } else {
+                    System.out.println("Message Not Sent.");
+                }
+                break;
+            default:
+                System.out.println("Pick from available options");
+                return;
+        }
+    }
+
+    private static void updateMessage(OauthBot bot) {
+        OauthMessage om = bot.getMessage();
+        System.out.println("Update messages:");
+        System.out.println("1. In a chat channel");
+        System.out.println("2. Between you and a contact");
+        System.out.println("0. Exit");
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        switch (input) {
+            case "0": break;
+            case "1":
+                System.out.println("Enter channel name: ");
+                String toChannel = sc.nextLine();
+                System.out.println("Enter messageId to update: ");
+                String messageId = sc.nextLine();
+                System.out.println("Enter message to update: ");
+                String message = sc.nextLine();
+                boolean response = om.updateMessageFromChannel(toChannel, messageId, message)!=null;
+                if (response) {
+                    System.out.println("Message Update Succeeded.");
+                } else {
+                    System.out.println("Message Update Failed.");
+                }
+                break;
+            case "2":
+                System.out.println("Enter contact email: ");
+                String toContact = sc.nextLine();
+                System.out.println("Enter messageId to update: ");
+                String messageId2 = sc.nextLine();
+                System.out.println("Enter message to update: ");
+                String message2 = sc.nextLine();
+                boolean response2 = om.updateMessageSentToMember(toContact, messageId2, message2)!=null;
+                if (response2) {
+                    System.out.println("Message Update Succeeded.");
+                } else {
+                    System.out.println("Message Update Failed.");
+                }
+                break;
+            default:
+                System.out.println("Pick from available options");
+                return;
+        }
+    }
+
+    private static void deleteMessage(OauthBot bot) {
+        OauthMessage om = bot.getMessage();
+        System.out.println("Delete messages:");
+        System.out.println("1. In a chat channel");
+        System.out.println("2. Between you and a contact");
+        System.out.println("0. Exit");
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        switch (input) {
+            case "0": break;
+            case "1":
+                System.out.println("Enter channel name: ");
+                String toChannel = sc.nextLine();
+                System.out.println("Enter messageId to delete: ");
+                String messageId = sc.nextLine();
+                boolean response = om.deleteMessageFromChannel(toChannel, messageId)!=null;
+                if (response) {
+                    System.out.println("Message Delete Succeeded.");
+                } else {
+                    System.out.println("Message Delete Failed.");
+                }
+                break;
+            case "2":
+                System.out.println("Enter contact email: ");
+                String toContact = sc.nextLine();
+                System.out.println("Enter messageId to delete: ");
+                String messageId2 = sc.nextLine();
+                boolean response2 = om.deleteMessageSentToMember(toContact, messageId2)!=null;
+                if (response2) {
+                    System.out.println("Message Delete Succeeded.");
+                } else {
+                    System.out.println("Message Delete Failed.");
+                }
+                break;
+            default:
+                System.out.println("Pick from available options");
+                return;
+        }
+    }
 
     private static void printOptions() {
         System.out.println("Please type in your command with a valid numeric index(0 ~ 14): ");
