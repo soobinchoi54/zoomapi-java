@@ -111,7 +111,7 @@ To run multiple instances of the bot application using the same database, or in 
 <br> 2. Run botm1 as is, based on your original configuration defined in /bots/bot.ini file
 <br> 3. Once the first session is properly authorized, you may test the application
 <br> 4. To create a new instance of the bot, terminate the run on the first bot
-<br> 5. Duplicate /bots/bot.ini configuration file in the same file directory. Remaning it to bot2.ini
+<br> 5. Duplicate /bots/bot.ini configuration file in the same file directory. Renaming it to bot2.ini
 <br> 6. In the second configuration file, specify secondary client id and client secret credentials
 <br> 7. In the /bots/botm1.java file, edit the file path to the name of your new config file
 <br> ![New Session](/pics/m5/new-session.png)
