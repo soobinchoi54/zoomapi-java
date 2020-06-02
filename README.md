@@ -114,8 +114,8 @@ To run multiple instances of the bot application using the same database, or in 
 <br> 5. Duplicate /bots/bot.ini configuration file in the same file directory. Remaning it to bot2.ini
 <br> 6. In the second configuration file, specify secondary client id and client secret credentials
 <br> 7. In the /bots/botm1.java file, edit the file path to the name of your new config file
-<br> 8. Run botm1 again, you may test the application to verify that the database has persisted 
 <br> ![New Session](/pics/m5/new-session.png)
+8. Run botm1 again, you may test the application to verify that the database has persisted 
 
 ### Cache System: 
 For the final milestone, we modified one of our previous bots, botm1, to test the integration of a new cache system to our library. Instead of executing HTTP requests each time we want to test our zoom Channel and Message comoponents, we cache the queried data in a local cache memory organized into 4 different tables (Credentials, Channel, ChannelMember, and ChannelMessage). Below is a screenshot of our TableHelper.java class, which is a generically typed helper class that each of the four tables extends to implement its own table.  
