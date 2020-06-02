@@ -315,6 +315,7 @@ public class botm1{
                 if(option.toLowerCase().equals("n")) historyList = om.getChannelMessages(toChannel, fromDate, toDate);
                 else if(option.toLowerCase().equals("y")) historyList = om.getChannelMessages(toChannel,fromDate,toDate,true);
                 int number = 0;
+                System.out.println("=== All Messages ===");
                 for(ChannelMessage m:historyList){
                     number++;
                     System.out.println(number + ". " + m.toString());
@@ -328,6 +329,7 @@ public class botm1{
                 if(option2.toLowerCase().equals("n")) historyList = om.getMemberMessages(toContact, fromDate, toDate);
                 else if(option2.toLowerCase().equals("y")) historyList = om.getMemberMessages(toContact,fromDate,toDate,true);
                 int member = 0;
+                System.out.println("=== All Messages ===");
                 for(ChannelMessage m:historyList){
                     member++;
                     System.out.println(member + ". " + m.toString());

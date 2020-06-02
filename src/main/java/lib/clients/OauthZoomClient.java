@@ -64,13 +64,14 @@ public class OauthZoomClient extends ZoomClient{
             }
 
             calendar.setTime(stampDate);
-            calendar.add(Calendar.MINUTE, 30);
-            Date after =  calendar.getTime(); // the timeStamp time + 30 minutes
+            calendar.add(Calendar.MINUTE, 40);
+            Date after =  calendar.getTime(); // the timeStamp time + 40 minutes
 
             // compare `after` with now
-            if(now.before(after)) { // less than 30 minutes
+            if(now.before(after)) { // less than 40 minutes
                 token = user.getOauthToken();
                 this.config.put("token", token);
+                System.out.println("Token: "+token);
                 return;
             }
         }
