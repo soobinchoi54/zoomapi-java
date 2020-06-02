@@ -106,7 +106,7 @@ This bot exercises events that are subscribed to specific channels, or observabl
 There was a major restructuring and refactoring of our project to address the feedback provided in the previous milestones and to optimize the library based on the requirements of the final milestone. <br>The architecture of our final library system is provided in the following diagram. 
 <br> ![Zoom API Architecture](/pics/m5/zoom-api-architecture.png)
 ### To run:
-To configure the path of the cache database, open the /lib/cache/tables/config.ini file to define the final path of zoom.db. For example:  <br> 
+Before running the bot, configure the path of the cache database in the 'src/lib/cache/tables/config.ini' file to define the absolute path of zoom.db. For example:  <br> 
 ```
 database_path = jdbc:sqlite:/Users/Duo/Desktop/Github_upload/lib-java/src/main/java/lib/database/zoom.db
 ```
