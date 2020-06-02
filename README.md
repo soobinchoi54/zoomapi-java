@@ -112,17 +112,17 @@ database_path = jdbc:sqlite:/Users/Duo/Desktop/Github_upload/lib-java/src/main/j
 ```
 To run multiple instances of the bot application using the same database, or in other words to persist the database between sessions, you can do the following: 
 <br> 1. Connect to ngrok http tunnel and add the redirect URL to whitelist in Zoom developers
-<br> 2. Run botm1 as is, based on your original configuration defined in /bots/bot.ini file
+<br> 2. Run botm1 as is, based on your original configuration defined in `/bots/bot.ini` file
 <br> 3. Once the first session is properly authorized, you may test the application
 <br> 4. To create a new instance of the bot, terminate the run on the first bot
-<br> 5. Duplicate /bots/bot.ini configuration file in the same file directory. Renaming it to bot2.ini
+<br> 5. Duplicate `/bots/bot.ini` configuration file in the same file directory. Renaming it to `bot2.ini`
 <br> 6. In the second configuration file, specify secondary client id and client secret credentials
-<br> 7. In the /bots/botm1.java file, edit the file path to the name of your new config file
+<br> 7. In the `/bots/botm1.java` file, edit the file path to the name of your new config file
 <br> ![New Session](/pics/m5/new-session.png)
 8. Run botm1 again, you may test the application to verify that the database has persisted 
 
 ### Cache System: 
-For the final milestone, we modified one of our previous bots, botm1, to test the integration of a new cache system to our library. Instead of executing HTTP requests each time we want to test our zoom Channel and Message comoponents, we cache the queried data in a local cache memory organized into 4 different tables (Credentials, Channel, ChannelMember, and ChannelMessage). Below is a screenshot of our TableHelper.java class, which is a generically typed helper class that each of the four tables extends to implement its own table.  
+For the final milestone, we modified one of our previous bots, botm1, to test the integration of a new cache system to our library. Instead of executing HTTP requests each time we want to test our zoom Channel and Message comoponents, we cache the queried data in a local cache memory organized into 4 different tables (Credentials, Channel, ChannelMember, and ChannelMessage). Below is a screenshot of our TableHelper.java class, which is a generically typed helper class that each of the four tables extends to implement its own table. ***You can also run this class to see the data stored in our cache database***.
 <br> ![Cache Table](/pics/m5/table_helper.png)
 <br> The botm1 application provides options to exercise each of the Channel and Message APIs and with an additional option to query directly from local cache in relevant cases. By testing the application, you will notice that the response time is significantly reduced.
 <br> Below is what a successful request looks like.
