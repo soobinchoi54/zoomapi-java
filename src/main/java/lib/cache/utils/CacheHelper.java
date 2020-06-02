@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * CacheHelper class to help the BOT to update the local
+ * CacheHelper class to help the Oauth APIs to update the local
  * cache content (<S> Data </S>) from <T> Table </T>
  * **/
 public class CacheHelper<T, S>{
