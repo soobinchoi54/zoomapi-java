@@ -106,6 +106,10 @@ This bot exercises events that are subscribed to specific channels, or observabl
 There was a major restructuring and refactoring of our project to address the feedback provided in the previous milestones and to optimize the library based on the requirements of the final milestone. <br>The architecture of our final library system is provided in the following diagram. 
 <br> ![Zoom API Architecture](/pics/m5/zoom-api-architecture.png)
 ### To run:
+To configure the path of the cache database, open the /lib/cache/tables/config.ini file to define the final path of zoom.db. For example:  <br> 
+```
+database_path = jdbc:sqlite:/Users/Duo/Desktop/Github_upload/lib-java/src/main/java/lib/database/zoom.db
+```
 To run multiple instances of the bot application using the same database, or in other words to persist the database between sessions, you can do the following: 
 <br> 1. Connect to ngrok http tunnel and add the redirect URL to whitelist in Zoom developers
 <br> 2. Run botm1 as is, based on your original configuration defined in /bots/bot.ini file
